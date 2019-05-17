@@ -77,6 +77,7 @@ export class Column extends Component {
         editorValidator: PropTypes.func,
         onEditorSubmit: PropTypes.func,
         onEditorCancel: PropTypes.func,
+        onEditorOpen: PropTypes.func,
         editorValidatorEvent: PropTypes.string,
         excludeGlobalFilter: PropTypes.bool,
         rowReorder: PropTypes.bool,

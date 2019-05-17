@@ -48,7 +48,8 @@ export class BodyCell extends Component {
 
             if (this.props.editorValidatorEvent === 'click') {
                 this.bindDocumentEditListener();
-            }          
+            }
+            this.props.onEditorOpen && this.props.onEditorOpen(this.props)
         }
     }
 

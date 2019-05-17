@@ -75,8 +75,14 @@ function (_Component) {
     key: "onKeyDown",
     value: function onKeyDown(event) {
       if (event.which === 13 || event.which === 9) {
-        this.switchCellToViewMode();
+        // tab || enter
+        this.switchCellToViewMode(true);
       }
+
+      if (event.which === 27) // escape
+        {
+          this.switchCellToViewMode(false);
+        }
     }
   }, {
     key: "onClick",
@@ -97,7 +103,7 @@ function (_Component) {
     key: "onBlur",
     value: function onBlur() {
       if (this.state.editing && this.props.editorValidatorEvent === 'blur') {
-        this.switchCellToViewMode();
+        this.switchCellToViewMode(true);
       }
     }
   }, {
@@ -113,7 +119,7 @@ function (_Component) {
       if (!this.documentEditListener) {
         this.documentEditListener = function (event) {
           if (!_this2.editingCellClick) {
-            _this2.switchCellToViewMode();
+            _this2.switchCellToViewMode(true);
           }
 
           _this2.editingCellClick = false;
@@ -133,14 +139,25 @@ function (_Component) {
     }
   }, {
     key: "switchCellToViewMode",
-    value: function switchCellToViewMode() {
-      if (this.props.editorValidator) {
+    value: function switchCellToViewMode(submit) {
+      if (this.props.editorValidator && submit) {
         var valid = this.props.editorValidator(this.props);
 
         if (valid) {
+          if (this.props.onEditorSubmit) {
+            this.props.onEditorSubmit(this.props);
+          }
+
           this.closeCell();
-        }
+        } // as per previous version if not valid and another editor is open, keep invalid data editor open.
+
       } else {
+        if (submit && this.props.onEditorSubmit) {
+          this.props.onEditorSubmit(this.props);
+        } else if (this.props.onEditorCancel) {
+          this.props.onEditorCancel(this.props);
+        }
+
         this.closeCell();
       }
     }

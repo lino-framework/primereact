@@ -76,6 +76,8 @@ _defineProperty(Column, "defaultProps", {
   editor: null,
   editorValidator: null,
   editorValidatorEvent: 'click',
+  onEditorSubmit: null,
+  onEditorCancel: null,
   excludeGlobalFilter: false,
   rowReorder: false,
   rowReorderIcon: 'pi pi-bars'
@@ -113,6 +115,8 @@ _defineProperty(Column, "propTypes", {
   rowSpan: _propTypes.default.number,
   editor: _propTypes.default.func,
   editorValidator: _propTypes.default.func,
+  onEditorSubmit: _propTypes.default.func,
+  onEditorCancel: _propTypes.default.func,
   editorValidatorEvent: _propTypes.default.string,
   excludeGlobalFilter: _propTypes.default.bool,
   rowReorder: _propTypes.default.bool,

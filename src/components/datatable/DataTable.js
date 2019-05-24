@@ -1293,7 +1293,6 @@ export class DataTable extends Component {
 
         return (
             <div id={this.props.id} className={className} style={this.props.style} ref={(el) => {this.container = el;}}>
-                {loader}
                 {headerFacet}
                 {paginatorTop}
                 {tableContent}

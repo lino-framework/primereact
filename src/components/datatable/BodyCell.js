@@ -29,9 +29,17 @@ export class BodyCell extends Component {
     }
     
     onKeyDown(event) {
-        if (event.which === 13 || event.which === 9) { // tab || enter
+        if (event.which === 13 || event.which === 9) { // enter || tab
             this.switchCellToViewMode(true);
-        }
+            if (event.which === 13 ) {
+                let tr = event.target.closest("tr").nextSibling; // todo check for shift
+                if (tr) { //might be end of table
+                    tr.children[this.props.cellIndex].click()
+                    // if (helper.length) {
+                    //     helper[0].focus()
+                    }
+                }
+            }
         if (event.which === 27) // escape
         {
             this.switchCellToViewMode(false);

@@ -1470,7 +1470,7 @@ function (_Component) {
         ref: function ref(el) {
           _this6.container = el;
         }
-      }, loader, headerFacet, paginatorTop, tableContent, paginatorBottom, footerFacet, resizeHelper, resizeIndicatorUp, resizeIndicatorDown);
+      }, headerFacet, paginatorTop, tableContent, paginatorBottom, footerFacet, resizeHelper, resizeIndicatorUp, resizeIndicatorDown);
     }
   }]);
 

@@ -75,8 +75,18 @@ function (_Component) {
     key: "onKeyDown",
     value: function onKeyDown(event) {
       if (event.which === 13 || event.which === 9) {
-        // tab || enter
+        // enter || tab
         this.switchCellToViewMode(true);
+
+        if (event.which === 13) {
+          var tr = event.target.closest("tr").nextSibling; // todo check for shift
+
+          if (tr) {
+            //might be end of table
+            tr.children[this.props.cellIndex].click(); // if (helper.length) {
+            //     helper[0].focus()
+          }
+        }
       }
 
       if (event.which === 27) // escape

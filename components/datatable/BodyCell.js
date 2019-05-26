@@ -23,6 +23,14 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -74,19 +82,41 @@ function (_Component) {
   }, {
     key: "onKeyDown",
     value: function onKeyDown(event) {
+      var el = event.target,
+          tr = el.closest("tr");
+
       if (event.which === 13 || event.which === 9) {
         // enter || tab
+        event.preventDefault();
         this.switchCellToViewMode(true);
+      }
 
-        if (event.which === 13) {
-          var tr = event.target.closest("tr").nextSibling; // todo check for shift
+      if (event.which === 13) {
+        tr = event.shiftKey ? tr.previousSibling : tr.nextSibling;
 
-          if (tr) {
-            //might be end of table
-            tr.children[this.props.cellIndex].click(); // if (helper.length) {
-            //     helper[0].focus()
-          }
+        if (tr) {
+          //might be end of table
+          tr.children[this.props.cellIndex].getElementsByClassName("p-cell-editor-key-helper")[0].focus(); // if (helper.length) {
+          //     helper[0].focus()
         }
+      }
+
+      if (event.which === 9) {
+        var tbl = el.closest("table"); // bad logic, should just find all of that class, find the one containing self, and + / - 1 and focus.
+
+        var cols = Array.apply(void 0, _toConsumableArray(tbl.getElementsByClassName("p-cell-editor-key-helper"))),
+            i = cols.findIndex(function (n) {
+          return n.parentElement.contains(el);
+        });
+        i = event.shiftKey ? i - 1 : i + 1; // if (i === cols.length || i < 0) { // if out of index range of cols
+        // Gotta goto next tr..
+        // tr = event.shiftKey ? tr.previousSibling :
+        //                       tr.nextSibling;
+        // cols = Array(...tr.getElementsByClassName("p-cell-editor-key-helper"));
+        // i = i < 0 ? cols.length-1 : 0; // last or first col.
+        // }
+
+        cols[i].focus(); // Open next / prev editor
       }
 
       if (event.which === 27) // escape
@@ -266,7 +296,7 @@ function (_Component) {
       /* eslint-disable */
 
 
-      var editorKeyHelper = this.props.editor && _react.default.createElement("a", {
+      var editorKeyHelper = this.props.editor && (!this.props.isDisabled || !this.props.isDisabled(this.props)) && _react.default.createElement("a", {
         tabIndex: "0",
         ref: function ref(el) {
           _this4.keyHelper = el;

@@ -29,17 +29,37 @@ export class BodyCell extends Component {
     }
     
     onKeyDown(event) {
+        let el = event.target,
+            tr = el.closest("tr");
         if (event.which === 13 || event.which === 9) { // enter || tab
+            event.preventDefault();
             this.switchCellToViewMode(true);
-            if (event.which === 13 ) {
-                let tr = event.target.closest("tr").nextSibling; // todo check for shift
-                if (tr) { //might be end of table
-                    tr.children[this.props.cellIndex].click()
-                    // if (helper.length) {
-                    //     helper[0].focus()
-                    }
+        }
+        if (event.which === 13 ) {
+            tr = event.shiftKey ? tr.previousSibling :
+                                  tr.nextSibling;
+            if (tr) { //might be end of table
+                tr.children[this.props.cellIndex].getElementsByClassName("p-cell-editor-key-helper")[0].focus()
+                // if (helper.length) {
+                //     helper[0].focus()
                 }
             }
+        if (event.which === 9){
+            let tbl = el.closest("table");
+            // bad logic, should just find all of that class, find the one containing self, and + / - 1 and focus.
+            let cols = Array(...tbl.getElementsByClassName("p-cell-editor-key-helper")),
+                i = cols.findIndex((n) => n.parentElement.contains(el));
+            i = event.shiftKey ? i - 1 : i + 1;
+            // if (i === cols.length || i < 0) { // if out of index range of cols
+                // Gotta goto next tr..
+                // tr = event.shiftKey ? tr.previousSibling :
+                //                       tr.nextSibling;
+                // cols = Array(...tr.getElementsByClassName("p-cell-editor-key-helper"));
+                // i = i < 0 ? cols.length-1 : 0; // last or first col.
+            // }
+            cols[i].focus() // Open next / prev editor
+        }
+
         if (event.which === 27) // escape
         {
             this.switchCellToViewMode(false);
@@ -198,7 +218,7 @@ export class BodyCell extends Component {
         }
 
         /* eslint-disable */
-        let editorKeyHelper = this.props.editor && <a tabIndex="0" ref={(el) => {this.keyHelper = el;}} className="p-cell-editor-key-helper p-hidden-accessible" onFocus={this.onEditorFocus}><span></span></a>;
+        let editorKeyHelper = this.props.editor && ( !this.props.isDisabled || !this.props.isDisabled(this.props) ) && <a tabIndex="0" ref={(el) => {this.keyHelper = el;}} className="p-cell-editor-key-helper p-hidden-accessible" onFocus={this.onEditorFocus}><span></span></a>;
         /* eslint-enable */
                        
         return (

@@ -262,10 +262,10 @@ export class AutoComplete extends Component {
         
             if (this.props.appendTo) {
                 this.panel.element.style.minWidth = DomHandler.getWidth(target) + 'px';
-                DomHandler.absolutePosition(this.panel.element, target);
+                DomHandler.absolutePosition(this.panel.element, target, this.props.container);
             }
             else {
-                DomHandler.relativePosition(this.panel.element, target);
+                DomHandler.relativePosition(this.panel.element, target, this.props.container);
             }
         }
     }

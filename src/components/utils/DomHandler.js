@@ -209,14 +209,20 @@ export default class DomHandler {
         element.style.left = left + 'px';
     }
 
-    static relativePosition(element, target) {
+    static relativePosition(element, target, container) {
         let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
         const targetHeight = target.offsetHeight;
         const targetOffset = target.getBoundingClientRect();
         const viewport = this.getViewport();
+
+        let containerDimensions = container ? {
+            height : container.offsetHeight + container.getBoundingClientRect().top,
+            width : container.offsetWidth + container.getBoundingClientRect().left
+        } : viewport;
+
         let top, left;
 
-        if ((targetOffset.top + targetHeight + elementDimensions.height) > viewport.height) {
+        if ((targetOffset.top + targetHeight + elementDimensions.height) > containerDimensions.height) {
             top = -1 * (elementDimensions.height);
             if (targetOffset.top + top < 0) {
                 top = -1 * targetOffset.top;
@@ -226,13 +232,13 @@ export default class DomHandler {
             top = targetHeight;
         }
 
-        if (elementDimensions.width > viewport.width) {
-            // element wider then viewport and cannot fit on screen (align at left side of viewport)
+        if (elementDimensions.width > containerDimensions.width) {
+            // element wider then containerDimensions and cannot fit on screen (align at left side of containerDimensions)
             left = targetOffset.left * -1;
         }
-        else if ((targetOffset.left + elementDimensions.width) > viewport.width) {
-            // element wider then viewport but can be fit on screen (align at right side of viewport)
-            left = (targetOffset.left + elementDimensions.width - viewport.width) * -1;
+        else if ((targetOffset.left + elementDimensions.width) > containerDimensions.width) {
+            // element wider then containerDimensions but can be fit on screen (align at right side of containerDimensions)
+            left = (targetOffset.left + elementDimensions.width - containerDimensions.width) * -1;
         }
         else {
             // element fits on screen (align with target)

@@ -32,6 +32,7 @@ export class Dropdown extends Component {
         dataKey: null,
         inputId: null,
         showClear: false,
+        maxLength: null,
         tooltip: null,
         tooltipOptions: null,
         ariaLabel: null,
@@ -65,6 +66,7 @@ export class Dropdown extends Component {
         dataKey: PropTypes.string,
         inputId: PropTypes.string,
         showClear: PropTypes.bool,
+        maxLength: PropTypes.number,
         tooltip: PropTypes.string,
         tooltipOptions: PropTypes.object,
         ariaLabel: PropTypes.string,
@@ -277,6 +279,11 @@ export class Dropdown extends Component {
         }
 
         let option = this.props.options[i];
+
+        if (option.disabled) {
+            return this.findNextVisibleItem(i);
+        }
+
         if (this.hasFilter()) {
             if (this.filter(option))
                 return option;
@@ -295,6 +302,11 @@ export class Dropdown extends Component {
         }
 
         let option = this.props.options[i];
+        
+        if (option.disabled) {
+            return this.findPrevVisibleItem(i);
+        }
+
         if (this.hasFilter()) {
             if (this.filter(option))
                 return option;
@@ -331,8 +343,13 @@ export class Dropdown extends Component {
     }
     
     onOptionClick(event) {
-        this.selectItem(event);
-        this.focusInput.focus();
+        const option = event.option;
+
+        if (!option.disabled) {
+            this.selectItem(event);
+            this.focusInput.focus();
+        }
+
         setTimeout(() => {
             this.hide();
         }, 100);
@@ -513,7 +530,7 @@ export class Dropdown extends Component {
         if(this.props.editable) {
             let value = label||this.props.value||'';
             
-            return <input ref={(el) => this.editableInput = el} type="text" defaultValue={value} className="p-dropdown-label p-inputtext" disabled={this.props.disabled} placeholder={this.props.placeholder}
+            return <input ref={(el) => this.editableInput = el} type="text" defaultValue={value} className="p-dropdown-label p-inputtext" disabled={this.props.disabled} placeholder={this.props.placeholder} maxLength={this.props.maxLength}
                         onClick={this.onEditableInputClick} onInput={this.onEditableInputChange} onFocus={this.onEditableInputFocus} onBlur={this.onInputBlur} aria-label={this.props.ariaLabel} aria-labelledby={this.props.ariaLabelledBy}/>;
         }
         else {
@@ -527,7 +544,7 @@ export class Dropdown extends Component {
     }
 
     renderClearIcon() {
-        if(this.props.value && this.props.showClear && !this.props.disabled) {
+        if(this.props.value != null && this.props.showClear && !this.props.disabled) {
             return (
                 <i className="p-dropdown-clear-icon pi pi-times" onClick={this.clear}></i>
             );
@@ -556,7 +573,7 @@ export class Dropdown extends Component {
             return items.map((option) => {
                 let optionLabel = this.getOptionLabel(option);
                 return (
-                    <DropdownItem key={this.getOptionKey(option)} label={optionLabel} option={option} template={this.props.itemTemplate} selected={selectedOption === option} onClick={this.onOptionClick} />
+                    <DropdownItem key={this.getOptionKey(option)} label={optionLabel} option={option} template={this.props.itemTemplate} selected={selectedOption === option} disabled={option.disabled} onClick={this.onOptionClick} />
                 );
             });   
         }
@@ -586,23 +603,13 @@ export class Dropdown extends Component {
         return this.props.dataKey ? ObjectUtils.resolveFieldData(option, this.props.dataKey) : this.getOptionLabel(option);
     }
 
-    unbindWindowLoadListener() {
-        if (this.windowLoadListener) {
-            window.removeEventListener('load', this.windowLoadListener);
-        }
-    }
-
     checkValidity() {
         return this.nativeSelect.checkValidity;
     }
     
     componentDidMount() {
         if (this.props.autoFocus && this.focusInput) {
-            this.windowLoadListener = () => {
-                this.focusInput.focus();
-            }
-            
-            window.addEventListener('load', this.windowLoadListener);
+            this.focusInput.focus();
         }
 
         if (this.props.tooltip) {
@@ -612,7 +619,6 @@ export class Dropdown extends Component {
     
     componentWillUnmount() {
         this.unbindDocumentClickListener();
-        this.unbindWindowLoadListener();
 
         if (this.tooltip) {
             this.tooltip.destroy();

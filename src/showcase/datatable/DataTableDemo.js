@@ -397,6 +397,18 @@ export class DataTableDemo extends Component {
                             <td>Event to trigger the validation, possible values are "click" and "blur".</td>
                         </tr>
                         <tr>
+                            <td>onEditorSubmit</td>
+                            <td>function</td>
+                            <td>null</td>
+                            <td>Callback to execute when editor is submitted.</td>
+                        </tr>
+                        <tr>
+                            <td>onEditorCancel</td>
+                            <td>function</td>
+                            <td>null</td>
+                            <td>Callback to execute when editor is cancelled.</td>
+                        </tr>
+                        <tr>
                             <td>rowReorder</td>
                             <td>boolean</td>
                             <td>false</td>
@@ -1110,7 +1122,8 @@ saleDateEditor(props) {
 </CodeHighlight>
 
             <p>Clicking outside the cell or hitting enter key closes the cell, however this may not be desirable if the input is invalid. In order
-            to decide whether to keep the cell open or not, provide a <i>editorValidator</i> function that validates the value.</p>
+            to decide whether to keep the cell open or not, provide a <i>editorValidator</i> function that validates the value. Optionally <i>onEditorSubmit</i> and <i>onEditorCancel</i>
+            events are available at the column component to provide callbacks whenever an editor is submitted or cancelled.</p>
 
 <CodeHighlight className="language-jsx">
 {`
@@ -1196,7 +1209,8 @@ export class DataTableContextMenuDemo extends Component {
 
             <h3>Expandable Rows</h3>
             <p>Row expansion allows displaying detailed content for a particular row. To use this feature, add an <i>expander</i> column, define a <i>rowExpansionTemplate</i> as a function to return the expanded content and bind to
-                <i>expandedRows</i> property to read the expanded rows along with the <i>onRowToggle</i> property to update it.</p>
+                <i>expandedRows</i> property to read the expanded rows along with the <i>onRowToggle</i> property to update it. <i>expandedRows</i> property either accepts an array of row data or a map whose key is the dataKey of the record.
+                Using expandable rows with a dataKey is suggested for better performance.</p>
 
 <CodeHighlight className="language-javascript">
 {`
@@ -1204,7 +1218,10 @@ export class DataTableRowExpansionDemo extends Component {
 
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+            cars: null,
+            expandedRows: null
+        };
         this.carservice = new CarService();
         this.rowExpansionTemplate = this.rowExpansionTemplate.bind(this);
     }
@@ -1241,7 +1258,7 @@ export class DataTableRowExpansionDemo extends Component {
     render() {
         return (
             <DataTable value={this.state.cars} expandedRows={this.state.expandedRows} onRowToggle={(e) => this.setState({expandedRows:e.data})}     
-                    rowExpansionTemplate={this.rowExpansionTemplate}>
+                    rowExpansionTemplate={this.rowExpansionTemplate} dataKey="vin">
                 <Column expander={true} style={{width: '2em'}} />
                 <Column field="vin" header="Vin" />
                 <Column field="year" header="Year" />
@@ -1884,9 +1901,9 @@ export class DataTableStateDemo extends Component {
                         </tr>
                         <tr>
                             <td>expandedRows</td>
-                            <td>array</td>
+                            <td>array/object</td>
                             <td>null</td>
-                            <td>A collection of rows that are expanded.</td>
+                            <td>A collection of rows or a map object row data keys that are expanded.</td>
                         </tr>
                         <tr>
                             <td>responsive</td>

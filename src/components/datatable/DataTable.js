@@ -136,7 +136,7 @@ export class DataTable extends Component {
         frozenHeaderColumnGroup: PropTypes.any,
         frozenFooterColumnGroup: PropTypes.any,
         rowExpansionTemplate: PropTypes.func,
-        expandedRows: PropTypes.array,
+        expandedRows: PropTypes.oneOfType([PropTypes.array,PropTypes.object]),
         onRowToggle: PropTypes.func,
         responsive: PropTypes.bool,
         resizableColumns: PropTypes.bool,
@@ -435,7 +435,7 @@ export class DataTable extends Component {
         return (
             <Paginator first={this.getFirst()} rows={this.getRows()} pageLinkSize={this.props.pageLinkSize} className={className} onPageChange={this.onPageChange} template={this.props.paginatorTemplate}
                         totalRecords={totalRecords} rowsPerPageOptions={this.props.rowsPerPageOptions} currentPageReportTemplate={this.props.currentPageReportTemplate}
-                        leftContent={this.props.paginatorLeft} rightContent={this.props.paginatorRight} />
+                        leftContent={this.props.paginatorLeft} rightContent={this.props.paginatorRight} alwaysShow={this.props.alwaysShowPaginator} />
         );
     }
 
@@ -1001,9 +1001,9 @@ export class DataTable extends Component {
         }
     }
 
-    filterLocal(value) {
+    filterLocal(value, localFilters) {
         let filteredValue = [];
-        let filters = this.getFilters();
+        let filters = localFilters || this.getFilters();
         let columns = React.Children.toArray(this.props.children);
 
         for(let i = 0; i < value.length; i++) {
@@ -1212,6 +1212,19 @@ export class DataTable extends Component {
     
     getTotalRecords(data) {
         return this.props.lazy ? this.props.totalRecords : data ? data.length : 0;
+    }
+
+    resetColumnOrder() {
+        let columns = React.Children.toArray(this.props.children);
+        let columnOrder = [];
+
+        for(let column of columns) {
+            columnOrder.push(column.props.columnKey||column.props.field);
+        }
+        
+        this.setState({
+            columnOrder
+        });
     }
     
     renderLoader() {

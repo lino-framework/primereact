@@ -210,7 +210,8 @@ function (_Component3) {
         rowsPerPageOptions: this.props.rowsPerPageOptions,
         currentPageReportTemplate: this.props.currentPageReportTemplate,
         leftContent: this.props.paginatorLeft,
-        rightContent: this.props.paginatorRight
+        rightContent: this.props.paginatorRight,
+        alwaysShow: this.props.alwaysShowPaginator
       });
     }
   }, {

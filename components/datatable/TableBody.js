@@ -19,6 +19,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -345,28 +349,55 @@ function (_Component) {
   }, {
     key: "onRowToggle",
     value: function onRowToggle(event) {
-      var expandedRowIndex = this.findExpandedRowIndex(event.data);
-      var expandedRows = this.props.expandedRows ? _toConsumableArray(this.props.expandedRows) : [];
+      var expandedRows;
 
-      if (expandedRowIndex !== -1) {
-        expandedRows = expandedRows.filter(function (val, i) {
-          return i !== expandedRowIndex;
-        });
+      if (this.props.dataKey) {
+        var dataKeyValue = String(_ObjectUtils.default.resolveFieldData(event.data, this.props.dataKey));
+        expandedRows = this.props.expandedRows ? _objectSpread({}, this.props.expandedRows) : {};
 
-        if (this.props.onRowCollapse) {
-          this.props.onRowCollapse({
-            originalEvent: event,
-            data: event.data
-          });
+        if (expandedRows[dataKeyValue] != null) {
+          delete expandedRows[dataKeyValue];
+
+          if (this.props.onRowCollapse) {
+            this.props.onRowCollapse({
+              originalEvent: event,
+              data: event.data
+            });
+          }
+        } else {
+          expandedRows[dataKeyValue] = true;
+
+          if (this.props.onRowExpand) {
+            this.props.onRowExpand({
+              originalEvent: event,
+              data: event.data
+            });
+          }
         }
       } else {
-        expandedRows.push(event.data);
+        var expandedRowIndex = this.findExpandedRowIndex(event.data);
+        expandedRows = this.props.expandedRows ? _toConsumableArray(this.props.expandedRows) : [];
 
-        if (this.props.onRowExpand) {
-          this.props.onRowExpand({
-            originalEvent: event,
-            data: event.data
+        if (expandedRowIndex !== -1) {
+          expandedRows = expandedRows.filter(function (val, i) {
+            return i !== expandedRowIndex;
           });
+
+          if (this.props.onRowCollapse) {
+            this.props.onRowCollapse({
+              originalEvent: event,
+              data: event.data
+            });
+          }
+        } else {
+          expandedRows.push(event.data);
+
+          if (this.props.onRowExpand) {
+            this.props.onRowExpand({
+              originalEvent: event,
+              data: event.data
+            });
+          }
         }
       }
 
@@ -393,7 +424,12 @@ function (_Component) {
   }, {
     key: "isRowExpanded",
     value: function isRowExpanded(row) {
-      return this.findExpandedRowIndex(row) !== -1;
+      if (this.props.dataKey) {
+        var dataKeyValue = String(_ObjectUtils.default.resolveFieldData(row, this.props.dataKey));
+        return this.props.expandedRows && this.props.expandedRows[dataKeyValue] != null;
+      } else {
+        return this.findExpandedRowIndex(row) !== -1;
+      }
     }
   }, {
     key: "isSelectionEnabled",

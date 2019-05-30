@@ -236,7 +236,7 @@ function () {
     }
   }, {
     key: "relativePosition",
-    value: function relativePosition(element, target) {
+    value: function relativePosition(element, target, container) {
       var elementDimensions = element.offsetParent ? {
         width: element.offsetWidth,
         height: element.offsetHeight
@@ -244,9 +244,13 @@ function () {
       var targetHeight = target.offsetHeight;
       var targetOffset = target.getBoundingClientRect();
       var viewport = this.getViewport();
+      var containerDimensions = container ? {
+        height: container.offsetHeight + container.getBoundingClientRect().top,
+        width: container.offsetWidth + container.getBoundingClientRect().left
+      } : viewport;
       var top, left;
 
-      if (targetOffset.top + targetHeight + elementDimensions.height > viewport.height) {
+      if (targetOffset.top + targetHeight + elementDimensions.height > containerDimensions.height) {
         top = -1 * elementDimensions.height;
 
         if (targetOffset.top + top < 0) {
@@ -256,12 +260,12 @@ function () {
         top = targetHeight;
       }
 
-      if (elementDimensions.width > viewport.width) {
-        // element wider then viewport and cannot fit on screen (align at left side of viewport)
+      if (elementDimensions.width > containerDimensions.width) {
+        // element wider then containerDimensions and cannot fit on screen (align at left side of containerDimensions)
         left = targetOffset.left * -1;
-      } else if (targetOffset.left + elementDimensions.width > viewport.width) {
-        // element wider then viewport but can be fit on screen (align at right side of viewport)
-        left = (targetOffset.left + elementDimensions.width - viewport.width) * -1;
+      } else if (targetOffset.left + elementDimensions.width > containerDimensions.width) {
+        // element wider then containerDimensions but can be fit on screen (align at right side of containerDimensions)
+        left = (targetOffset.left + elementDimensions.width - containerDimensions.width) * -1;
       } else {
         // element fits on screen (align with target)
         left = 0;

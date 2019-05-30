@@ -915,6 +915,7 @@ function (_Component) {
       var prevMonthDaysLength = this.getDaysCountInPrevMonth(month, year);
       var dayNo = 1;
       var today = new Date();
+      var weekNumbers = [];
 
       for (var i = 0; i < 6; i++) {
         var week = [];
@@ -970,14 +971,29 @@ function (_Component) {
           }
         }
 
+        if (this.props.showWeek) {
+          weekNumbers.push(this.getWeekNumber(new Date(week[0].year, week[0].month, week[0].day)));
+        }
+
         dates.push(week);
       }
 
       return {
         month: month,
         year: year,
-        dates: dates
+        dates: dates,
+        weekNumbers: weekNumbers
       };
+    }
+  }, {
+    key: "getWeekNumber",
+    value: function getWeekNumber(date) {
+      var checkDate = new Date(date.getTime());
+      checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
+      var time = checkDate.getTime();
+      checkDate.setMonth(0);
+      checkDate.setDate(1);
+      return Math.floor(Math.round((time - checkDate.getTime()) / 86400000) / 7) + 1;
     }
   }, {
     key: "isSelectable",
@@ -1419,7 +1435,7 @@ function (_Component) {
       var tokens = value.split(':');
       var validTokenLength = this.props.showSeconds ? 3 : 2;
 
-      if (tokens.length !== validTokenLength || tokens[0].length !== 2 || tokens[1].length !== 2 || tokens[2].length !== 2) {
+      if (tokens.length !== validTokenLength || tokens[0].length !== 2 || tokens[1].length !== 2 || this.props.showSeconds && tokens[2].length !== 2) {
         throw new Error('Invalid time');
       }
 
@@ -1737,12 +1753,24 @@ function (_Component) {
   }, {
     key: "renderDayNames",
     value: function renderDayNames(weekDays) {
-      return weekDays.map(function (weekDay) {
+      var dayNames = weekDays.map(function (weekDay) {
         return _react.default.createElement("th", {
           key: weekDay,
           scope: "col"
         }, _react.default.createElement("span", null, weekDay));
       });
+
+      if (this.props.showWeek) {
+        var weekHeader = _react.default.createElement("th", {
+          scope: "col",
+          key: 'wn',
+          className: "p-datepicker-weekheader p-disabled"
+        }, _react.default.createElement("span", null, this.props.locale['weekHeader']));
+
+        return [weekHeader].concat(_toConsumableArray(dayNames));
+      } else {
+        return dayNames;
+      }
     }
   }, {
     key: "renderDateCellContent",
@@ -1759,10 +1787,10 @@ function (_Component) {
     }
   }, {
     key: "renderWeek",
-    value: function renderWeek(weekDates) {
+    value: function renderWeek(weekDates, weekNumber) {
       var _this10 = this;
 
-      return weekDates.map(function (date) {
+      var week = weekDates.map(function (date) {
         var selected = _this10.isSelected(date);
 
         var cellClassName = (0, _classnames.default)({
@@ -1781,6 +1809,19 @@ function (_Component) {
           className: cellClassName
         }, content);
       });
+
+      if (this.props.showWeek) {
+        var weekNumberCell = _react.default.createElement("td", {
+          key: 'wn' + weekNumber,
+          className: "p-datepicker-weeknumber"
+        }, _react.default.createElement("span", {
+          className: "p-disabled"
+        }, weekNumber));
+
+        return [weekNumberCell].concat(_toConsumableArray(week));
+      } else {
+        return week;
+      }
     }
   }, {
     key: "renderDates",
@@ -1790,7 +1831,7 @@ function (_Component) {
       return monthMetaData.dates.map(function (weekDates, index) {
         return _react.default.createElement("tr", {
           key: index
-        }, _this11.renderWeek(weekDates));
+        }, _this11.renderWeek(weekDates, monthMetaData.weekNumbers[index]));
       });
     }
   }, {
@@ -2175,6 +2216,7 @@ _defineProperty(Calendar, "defaultProps", {
   stepSecond: 1,
   shortYearCutoff: '+10',
   hideOnDateTimeSelect: false,
+  showWeek: false,
   locale: {
     firstDayOfWeek: 0,
     dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -2183,7 +2225,8 @@ _defineProperty(Calendar, "defaultProps", {
     monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
     monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     today: 'Today',
-    clear: 'Clear'
+    clear: 'Clear',
+    weekHeader: 'Wk'
   },
   dateFormat: 'mm/dd/yy',
   panelStyle: null,
@@ -2250,6 +2293,7 @@ _defineProperty(Calendar, "propTypes", {
   stepSecond: _propTypes.default.number,
   shortYearCutoff: _propTypes.default.string,
   hideOnDateTimeSelect: _propTypes.default.bool,
+  showWeek: _propTypes.default.bool,
   locale: _propTypes.default.object,
   dateFormat: _propTypes.default.string,
   panelStyle: _propTypes.default.object,

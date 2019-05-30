@@ -355,7 +355,8 @@ function (_Component) {
         rowsPerPageOptions: this.props.rowsPerPageOptions,
         currentPageReportTemplate: this.props.currentPageReportTemplate,
         leftContent: this.props.paginatorLeft,
-        rightContent: this.props.paginatorRight
+        rightContent: this.props.paginatorRight,
+        alwaysShow: this.props.alwaysShowPaginator
       });
     }
   }, {
@@ -980,9 +981,9 @@ function (_Component) {
     }
   }, {
     key: "filterLocal",
-    value: function filterLocal(value) {
+    value: function filterLocal(value, localFilters) {
       var filteredValue = [];
-      var filters = this.getFilters();
+      var filters = localFilters || this.getFilters();
 
       var columns = _react.default.Children.toArray(this.props.children);
 
@@ -1339,6 +1340,40 @@ function (_Component) {
       return this.props.lazy ? this.props.totalRecords : data ? data.length : 0;
     }
   }, {
+    key: "resetColumnOrder",
+    value: function resetColumnOrder() {
+      var columns = _react.default.Children.toArray(this.props.children);
+
+      var columnOrder = [];
+      var _iteratorNormalCompletion6 = true;
+      var _didIteratorError6 = false;
+      var _iteratorError6 = undefined;
+
+      try {
+        for (var _iterator6 = columns[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+          var column = _step6.value;
+          columnOrder.push(column.props.columnKey || column.props.field);
+        }
+      } catch (err) {
+        _didIteratorError6 = true;
+        _iteratorError6 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
+            _iterator6.return();
+          }
+        } finally {
+          if (_didIteratorError6) {
+            throw _iteratorError6;
+          }
+        }
+      }
+
+      this.setState({
+        columnOrder: columnOrder
+      });
+    }
+  }, {
     key: "renderLoader",
     value: function renderLoader() {
       var iconClassName = (0, _classnames.default)('p-datatable-loading-icon pi-spin', this.props.loadingIcon);
@@ -1603,7 +1638,7 @@ _defineProperty(DataTable, "propTypes", {
   frozenHeaderColumnGroup: _propTypes.default.any,
   frozenFooterColumnGroup: _propTypes.default.any,
   rowExpansionTemplate: _propTypes.default.func,
-  expandedRows: _propTypes.default.array,
+  expandedRows: _propTypes.default.oneOfType([_propTypes.default.array, _propTypes.default.object]),
   onRowToggle: _propTypes.default.func,
   responsive: _propTypes.default.bool,
   resizableColumns: _propTypes.default.bool,

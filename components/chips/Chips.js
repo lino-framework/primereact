@@ -197,13 +197,21 @@ function (_Component) {
     }
   }, {
     key: "onFocus",
-    value: function onFocus() {
+    value: function onFocus(event) {
       _DomHandler.default.addClass(this.listElement, 'p-focus');
+
+      if (this.props.onFocus) {
+        this.props.onFocus(event);
+      }
     }
   }, {
     key: "onBlur",
-    value: function onBlur() {
+    value: function onBlur(event) {
       _DomHandler.default.removeClass(this.listElement, 'p-focus');
+
+      if (this.props.onBlur) {
+        this.props.onBlur(event);
+      }
     }
   }, {
     key: "isMaxedOut",
@@ -321,7 +329,9 @@ _defineProperty(Chips, "defaultProps", {
   itemTemplate: null,
   onAdd: null,
   onRemove: null,
-  onChange: null
+  onChange: null,
+  onFocus: null,
+  onBlur: null
 });
 
 _defineProperty(Chips, "propTypes", {
@@ -338,5 +348,7 @@ _defineProperty(Chips, "propTypes", {
   itemTemplate: _propTypes.default.func,
   onAdd: _propTypes.default.func,
   onRemove: _propTypes.default.func,
-  onChange: _propTypes.default.func
+  onChange: _propTypes.default.func,
+  onFocus: _propTypes.default.func,
+  onBlur: _propTypes.default.func
 });

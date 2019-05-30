@@ -174,91 +174,95 @@ function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var className = (0, _classnames.default)('p-paginator p-component p-unselectable-text', this.props.className);
-      var paginatorElements = this.props.template.split(' ').map(function (value) {
-        var key = value.trim();
-        var element;
+      if (!this.props.alwaysShow && this.getPageCount() === 1) {
+        return null;
+      } else {
+        var className = (0, _classnames.default)('p-paginator p-component p-unselectable-text', this.props.className);
+        var paginatorElements = this.props.template.split(' ').map(function (value) {
+          var key = value.trim();
+          var element;
 
-        switch (key) {
-          case 'FirstPageLink':
-            element = _react.default.createElement(_FirstPageLink.FirstPageLink, {
-              key: key,
-              onClick: _this2.changePageToFirst,
-              disabled: _this2.isFirstPage()
-            });
-            break;
+          switch (key) {
+            case 'FirstPageLink':
+              element = _react.default.createElement(_FirstPageLink.FirstPageLink, {
+                key: key,
+                onClick: _this2.changePageToFirst,
+                disabled: _this2.isFirstPage()
+              });
+              break;
 
-          case 'PrevPageLink':
-            element = _react.default.createElement(_PrevPageLink.PrevPageLink, {
-              key: key,
-              onClick: _this2.changePageToPrev,
-              disabled: _this2.isFirstPage()
-            });
-            break;
+            case 'PrevPageLink':
+              element = _react.default.createElement(_PrevPageLink.PrevPageLink, {
+                key: key,
+                onClick: _this2.changePageToPrev,
+                disabled: _this2.isFirstPage()
+              });
+              break;
 
-          case 'NextPageLink':
-            element = _react.default.createElement(_NextPageLink.NextPageLink, {
-              key: key,
-              onClick: _this2.changePageToNext,
-              disabled: _this2.isLastPage()
-            });
-            break;
+            case 'NextPageLink':
+              element = _react.default.createElement(_NextPageLink.NextPageLink, {
+                key: key,
+                onClick: _this2.changePageToNext,
+                disabled: _this2.isLastPage()
+              });
+              break;
 
-          case 'LastPageLink':
-            element = _react.default.createElement(_LastPageLink.LastPageLink, {
-              key: key,
-              onClick: _this2.changePageToLast,
-              disabled: _this2.isLastPage()
-            });
-            break;
+            case 'LastPageLink':
+              element = _react.default.createElement(_LastPageLink.LastPageLink, {
+                key: key,
+                onClick: _this2.changePageToLast,
+                disabled: _this2.isLastPage()
+              });
+              break;
 
-          case 'PageLinks':
-            element = _react.default.createElement(_PageLinks.PageLinks, {
-              key: key,
-              value: _this2.updatePageLinks(),
-              page: _this2.getPage(),
-              onClick: _this2.onPageLinkClick
-            });
-            break;
+            case 'PageLinks':
+              element = _react.default.createElement(_PageLinks.PageLinks, {
+                key: key,
+                value: _this2.updatePageLinks(),
+                page: _this2.getPage(),
+                onClick: _this2.onPageLinkClick
+              });
+              break;
 
-          case 'RowsPerPageDropdown':
-            element = _react.default.createElement(_RowsPerPageDropdown.RowsPerPageDropdown, {
-              key: key,
-              value: _this2.props.rows,
-              options: _this2.props.rowsPerPageOptions,
-              onChange: _this2.onRowsChange
-            });
-            break;
+            case 'RowsPerPageDropdown':
+              element = _react.default.createElement(_RowsPerPageDropdown.RowsPerPageDropdown, {
+                key: key,
+                value: _this2.props.rows,
+                options: _this2.props.rowsPerPageOptions,
+                onChange: _this2.onRowsChange
+              });
+              break;
 
-          case 'CurrentPageReport':
-            element = _react.default.createElement(_CurrentPageReport.CurrentPageReport, {
-              template: _this2.props.currentPageReportTemplate,
-              key: key,
-              page: _this2.getPage(),
-              pageCount: _this2.getPageCount()
-            });
-            break;
+            case 'CurrentPageReport':
+              element = _react.default.createElement(_CurrentPageReport.CurrentPageReport, {
+                template: _this2.props.currentPageReportTemplate,
+                key: key,
+                page: _this2.getPage(),
+                pageCount: _this2.getPageCount()
+              });
+              break;
 
-          default:
-            element = null;
-            break;
-        }
+            default:
+              element = null;
+              break;
+          }
 
-        return element;
-      });
+          return element;
+        });
 
-      var leftContent = this.props.leftContent && _react.default.createElement("div", {
-        className: "p-paginator-left-content"
-      }, this.props.leftContent);
+        var leftContent = this.props.leftContent && _react.default.createElement("div", {
+          className: "p-paginator-left-content"
+        }, this.props.leftContent);
 
-      var rightContent = this.props.rightContent && _react.default.createElement("div", {
-        className: "p-paginator-right-content"
-      }, this.props.rightContent);
+        var rightContent = this.props.rightContent && _react.default.createElement("div", {
+          className: "p-paginator-right-content"
+        }, this.props.rightContent);
 
-      return _react.default.createElement("div", {
-        className: className,
-        style: this.props.style
-      }, leftContent, paginatorElements, rightContent);
+        return _react.default.createElement("div", {
+          className: className,
+          style: this.props.style
+        }, leftContent, paginatorElements, rightContent);
+      }
     }
   }]);
 
@@ -279,7 +283,8 @@ _defineProperty(Paginator, "defaultProps", {
   onPageChange: null,
   leftContent: null,
   rightContent: null,
-  currentPageReportTemplate: '({currentPage} of {totalPages})'
+  currentPageReportTemplate: '({currentPage} of {totalPages})',
+  alwaysShow: true
 });
 
 _defineProperty(Paginator, "propTypes", {
@@ -294,5 +299,6 @@ _defineProperty(Paginator, "propTypes", {
   onPageChange: _propTypes.default.func,
   leftContent: _propTypes.default.any,
   rightContent: _propTypes.default.any,
-  currentPageReportTemplate: _propTypes.default.any
+  currentPageReportTemplate: _propTypes.default.any,
+  alwaysShow: _propTypes.default.bool
 });

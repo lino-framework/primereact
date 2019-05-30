@@ -288,6 +288,15 @@ function (_Component) {
       }
     }
   }, {
+    key: "renderIconsTemplate",
+    value: function renderIconsTemplate() {
+      if (this.props.iconsTemplate) {
+        return this.props.iconsTemplate(this);
+      } else {
+        return null;
+      }
+    }
+  }, {
     key: "renderHeader",
     value: function renderHeader() {
       var _this4 = this;
@@ -295,6 +304,7 @@ function (_Component) {
       if (this.props.showHeader) {
         var closeIcon = this.renderCloseIcon();
         var maximizeIcon = this.renderMaximizeIcon();
+        var iconsTemplate = this.renderIconsTemplate();
         return _react.default.createElement("div", {
           ref: function ref(el) {
             return _this4.headerElement = el;
@@ -305,7 +315,7 @@ function (_Component) {
           className: "p-dialog-title"
         }, this.props.header), _react.default.createElement("div", {
           className: "p-dialog-titlebar-icons"
-        }, maximizeIcon, closeIcon));
+        }, iconsTemplate, maximizeIcon, closeIcon));
       } else {
         return null;
       }
@@ -401,7 +411,8 @@ _defineProperty(Dialog, "defaultProps", {
   appendTo: null,
   baseZIndex: 0,
   maximizable: false,
-  blockScroll: true
+  blockScroll: true,
+  iconsTemplate: null
 });
 
 _defineProperty(Dialog, "propTypes", {
@@ -423,5 +434,6 @@ _defineProperty(Dialog, "propTypes", {
   appendTo: _propTypes.default.object,
   baseZIndex: _propTypes.default.number,
   maximizable: _propTypes.default.bool,
-  blockScroll: _propTypes.default.bool
+  blockScroll: _propTypes.default.bool,
+  iconsTemplate: _propTypes.default.func
 });

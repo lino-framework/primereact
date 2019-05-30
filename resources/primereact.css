@@ -4229,6 +4229,23 @@ button.p-button::-moz-focus-inner {
     left: 100%;
     top: 0;
 }
+.p-toolbar {
+    padding: .25em .5em;
+}
+
+.p-toolbar:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.p-toolbar-group-left {
+    float:left
+}
+
+.p-toolbar-group-right {
+    float:right
+}
 .p-tooltip {
     position:absolute;
     display:none;
@@ -4295,23 +4312,6 @@ button.p-button::-moz-focus-inner {
     margin-left: -.25em;
     border-width: 0 .25em .25em;
     border-bottom-color: rgb(76, 76, 76);
-}
-.p-toolbar {
-    padding: .25em .5em;
-}
-
-.p-toolbar:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-.p-toolbar-group-left {
-    float:left
-}
-
-.p-toolbar-group-right {
-    float:right
 }
 .p-tree {
     width: 24em;

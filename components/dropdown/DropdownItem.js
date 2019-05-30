@@ -65,6 +65,7 @@ function (_Component) {
     value: function render() {
       var className = (0, _classnames.default)('p-dropdown-item', {
         'p-highlight': this.props.selected,
+        'p-disabled': this.props.disabled,
         'p-dropdown-item-empty': !this.props.label || this.props.label.length === 0
       });
       var content = this.props.template ? this.props.template(this.props.option) : this.props.label;
@@ -85,6 +86,7 @@ _defineProperty(DropdownItem, "defaultProps", {
   label: null,
   template: null,
   selected: false,
+  disabled: false,
   onClick: null
 });
 
@@ -93,5 +95,6 @@ _defineProperty(DropdownItem, "propTypes", {
   label: _propTypes.default.any,
   template: _propTypes.default.func,
   selected: _propTypes.default.bool,
+  disabled: _propTypes.default.bool,
   onClick: _propTypes.default.func
 });

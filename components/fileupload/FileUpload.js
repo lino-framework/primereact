@@ -202,11 +202,20 @@ function (_Component) {
     key: "validate",
     value: function validate(file) {
       if (this.props.maxFileSize && file.size > this.props.maxFileSize) {
-        this.messagesUI.show({
+        var message = {
           severity: 'error',
           summary: this.props.invalidFileSizeMessageSummary.replace('{0}', file.name),
           detail: this.props.invalidFileSizeMessageDetail.replace('{0}', this.formatSize(this.props.maxFileSize))
-        });
+        };
+
+        if (this.props.mode === 'advanced') {
+          this.messagesUI.show(message);
+        }
+
+        if (this.props.onValidationFail) {
+          this.props.onValidationFail(file);
+        }
+
         return false;
       }
 
@@ -561,7 +570,8 @@ _defineProperty(FileUpload, "defaultProps", {
   onError: null,
   onClear: null,
   onSelect: null,
-  onProgress: null
+  onProgress: null,
+  onValidationFail: null
 });
 
 _defineProperty(FileUpload, "propTypes", {
@@ -589,5 +599,6 @@ _defineProperty(FileUpload, "propTypes", {
   onError: _propTypes.default.func,
   onClear: _propTypes.default.func,
   onSelect: _propTypes.default.func,
-  onProgress: _propTypes.default.func
+  onProgress: _propTypes.default.func,
+  onValidationFail: _propTypes.default.func
 });

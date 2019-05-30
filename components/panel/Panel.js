@@ -116,6 +116,7 @@ function (_Component) {
       if (this.props.toggleable) {
         var id = this.id + '_label';
         var ariaControls = this.id + '_content';
+        var toggleIcon = collapsed ? this.props.expandIcon : this.props.collapseIcon;
         return _react.default.createElement("a", {
           href: '#' + ariaControls,
           className: "p-panel-titlebar-icon p-panel-titlebar-toggler",
@@ -125,10 +126,7 @@ function (_Component) {
           "aria-expanded": !collapsed,
           role: "tab"
         }, _react.default.createElement("span", {
-          className: (0, _classnames.default)('pi', {
-            'pi-plus': collapsed,
-            'pi-minus': !collapsed
-          })
+          className: toggleIcon
         }));
       } else {
         return null;
@@ -198,6 +196,8 @@ _defineProperty(Panel, "defaultProps", {
   style: null,
   className: null,
   collapsed: null,
+  expandIcon: 'pi pi-plus',
+  collapseIcon: 'pi pi-minus',
   onExpand: null,
   onCollapse: null,
   onToggle: null
@@ -210,6 +210,8 @@ _defineProperty(Panel, "propTypes", {
   style: _propTypes.default.object,
   className: _propTypes.default.string,
   collapsed: _propTypes.default.bool,
+  expandIcon: _propTypes.default.string,
+  collapseIcon: _propTypes.default.string,
   onExpand: _propTypes.default.func,
   onCollapse: _propTypes.default.func,
   onToggle: _propTypes.default.func

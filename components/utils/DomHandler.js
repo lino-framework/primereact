@@ -244,17 +244,20 @@ function () {
       var targetHeight = target.offsetHeight;
       var targetOffset = target.getBoundingClientRect();
       var viewport = this.getViewport();
+      viewport.top = 0;
       var containerDimensions = container ? {
         height: container.offsetHeight + container.getBoundingClientRect().top,
-        width: container.offsetWidth + container.getBoundingClientRect().left
+        width: container.offsetWidth + container.getBoundingClientRect().left,
+        top: container.getBoundingClientRect().top
       } : viewport;
-      var top, left;
+      var top, left, max_height;
 
       if (targetOffset.top + targetHeight + elementDimensions.height > containerDimensions.height) {
         top = -1 * elementDimensions.height;
 
-        if (targetOffset.top + top < 0) {
-          top = -1 * targetOffset.top;
+        if (targetOffset.top + top < containerDimensions.top) {
+          top = targetHeight;
+          max_height = containerDimensions.height - targetHeight - targetOffset.top;
         }
       } else {
         top = targetHeight;
@@ -273,6 +276,7 @@ function () {
 
       element.style.top = top + 'px';
       element.style.left = left + 'px';
+      if (max_height) element.style["max-height"] = max_height + 'px';
     }
   }, {
     key: "getHiddenElementOuterHeight",

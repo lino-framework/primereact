@@ -214,18 +214,20 @@ export default class DomHandler {
         const targetHeight = target.offsetHeight;
         const targetOffset = target.getBoundingClientRect();
         const viewport = this.getViewport();
-
+        viewport.top = 0;
         let containerDimensions = container ? {
             height : container.offsetHeight + container.getBoundingClientRect().top,
-            width : container.offsetWidth + container.getBoundingClientRect().left
+            width : container.offsetWidth + container.getBoundingClientRect().left,
+            top : container.getBoundingClientRect().top
         } : viewport;
 
-        let top, left;
+        let top, left, max_height;
 
         if ((targetOffset.top + targetHeight + elementDimensions.height) > containerDimensions.height) {
             top = -1 * (elementDimensions.height);
-            if (targetOffset.top + top < 0) {
-                top = -1 * targetOffset.top;
+            if (targetOffset.top + top < containerDimensions.top) {
+                top = targetHeight;
+                max_height = containerDimensions.height - targetHeight - targetOffset.top
             }
         }
         else {
@@ -247,6 +249,8 @@ export default class DomHandler {
 
         element.style.top = top + 'px';
         element.style.left = left + 'px';
+        if (max_height) element.style["max-height"] = max_height + 'px';
+
     }
     static getHiddenElementOuterHeight(element) {
         element.style.visibility = 'hidden';

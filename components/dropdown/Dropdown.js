@@ -477,7 +477,7 @@ function (_Component) {
       if (this.props.appendTo) {
         this.panel.element.style.minWidth = _DomHandler.default.getWidth(this.container) + 'px';
 
-        _DomHandler.default.absolutePosition(this.panel.element, this.container);
+        _DomHandler.default.absolutePosition(this.panel.element, this.container, this.props.container);
       } else {
         _DomHandler.default.relativePosition(this.panel.element, this.container, this.props.container);
       }

@@ -228,6 +228,39 @@ button {
 .p-accordion .p-accordion-content-wrapper-expanding {
     overflow: hidden;
 }
+/** Breadcrumb **/
+.p-breadcrumb {
+    margin: 0;
+    padding: 0;
+    padding: .5em;
+}
+
+.p-breadcrumb ul {
+    margin: 0;
+    padding: 0;
+}
+
+.p-breadcrumb ul li {
+    display: inline-block;
+    margin: 0 .25em;
+}
+
+.p-breadcrumb-chevron, .p-breadcrumb-home {
+    vertical-align: middle;
+}
+
+.p-breadcrumb ul li .p-menuitem-link {
+    text-decoration: none;
+}
+
+.p-breadcrumb .p-menuitem-icon {
+    margin-right: .25em;
+    vertical-align: middle;
+}
+
+.p-breadcrumb .p-menuitem-text {
+    vertical-align: middle;
+}
 .p-autocomplete {
     width: auto;
     zoom: 1;
@@ -391,38 +424,116 @@ button {
 .p-fluid .p-autocomplete .p-autocomplete-dropdown.p-button {
     width: 2em;
 }
-/** Breadcrumb **/
-.p-breadcrumb {
-    margin: 0;
-    padding: 0;
-    padding: .5em;
-}
-
-.p-breadcrumb ul {
-    margin: 0;
-    padding: 0;
-}
-
-.p-breadcrumb ul li {
+/* Button */
+.p-button {
     display: inline-block;
-    margin: 0 .25em;
+    position: relative;
+    padding: 0;
+    text-decoration: none !important;
+    cursor: pointer;
+    text-align: center;
+    zoom: 1;
+    overflow: visible; /* the overflow property removes extra width in IE */
+    margin-right: 0.25em;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
-.p-breadcrumb-chevron, .p-breadcrumb-home {
-    vertical-align: middle;
+/*button text element */
+.p-button .p-button-text {
+    display: block;
+    line-height: normal;
 }
 
-.p-breadcrumb ul li .p-menuitem-link {
-    text-decoration: none;
+.p-button-text-only .p-button-text {
+    padding: .25em 1em;
 }
 
-.p-breadcrumb .p-menuitem-icon {
-    margin-right: .25em;
-    vertical-align: middle;
+.p-button-icon-only .p-button-text,
+.p-button-text-empty .p-button-text {
+    padding: .25em;
+    text-indent: -9999999px;
 }
 
-.p-breadcrumb .p-menuitem-text {
-    vertical-align: middle;
+.p-button-text-icon-left .p-button-text {
+    padding: .25em 1em .25em 2.1em;
+}
+
+.p-button-text-icon-right .p-button-text {
+    padding: .25em 2.1em .25em 1em;
+}
+
+/*button icon element(s) */
+.p-button-icon-only .p-button-icon-left,
+.p-button-text-icon-left .p-button-icon-left,
+.p-button-text-icon-right .p-button-icon-right {
+    position: absolute;
+    top: 50%;
+    margin-top: -.5em;
+    height: 1em;
+}
+
+.p-button-icon-only .p-button-icon-left {
+    top: 50%;
+    left: 50%;
+    margin-top: -.5em;
+    margin-left: -.5em;
+    width: 1em;
+    height: 1em;
+}
+
+.p-button-icon-left {
+    left: .5em;
+}
+
+.p-button-icon-right {
+    right: .5em;
+}
+
+/*button sets*/
+.p-buttonset .p-button {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* workarounds */
+button.p-button::-moz-focus-inner {
+    border: 0; padding: 0; /* reset extra padding in Firefox */
+}
+
+/** Fluid **/
+.p-fluid .p-button {
+    width: 100%;
+}
+
+.p-fluid .p-button-text-icon-left .p-button-text,
+.p-fluid .p-button-text-icon-right .p-button-text {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/** ButtonSet **/
+.p-fluid .p-buttonset {
+    width: 100%;
+}
+
+.p-fluid .p-buttonset.p-buttonset-1 .p-button {width: 100%;}
+.p-fluid .p-buttonset.p-buttonset-2 .p-button {width: 50%;}
+.p-fluid .p-buttonset.p-buttonset-3 .p-button {width: 33.3%;}
+.p-fluid .p-buttonset.p-buttonset-4 .p-button {width: 25%;}
+.p-fluid .p-buttonset.p-buttonset-5 .p-button {width: 20%;}
+.p-fluid .p-buttonset.p-buttonset-6 .p-button {width: 16.6%;}
+
+@media (max-width: 640px) {
+    .p-fluid .p-buttonset.p-buttonset-1 .p-button,
+    .p-fluid .p-buttonset.p-buttonset-2 .p-button,
+    .p-fluid .p-buttonset.p-buttonset-3 .p-button,
+    .p-fluid .p-buttonset.p-buttonset-4 .p-button,
+    .p-fluid .p-buttonset.p-buttonset-5 .p-button,
+    .p-fluid .p-buttonset.p-buttonset-6 .p-button {
+        width: 100%;
+    }
 }
 .p-calendar {
     position: relative;
@@ -700,117 +811,6 @@ input[type=text]::-ms-clear {
     }
 }
 
-/* Button */
-.p-button {
-    display: inline-block;
-    position: relative;
-    padding: 0;
-    text-decoration: none !important;
-    cursor: pointer;
-    text-align: center;
-    zoom: 1;
-    overflow: visible; /* the overflow property removes extra width in IE */
-    margin-right: 0.25em;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-}
-
-/*button text element */
-.p-button .p-button-text {
-    display: block;
-    line-height: normal;
-}
-
-.p-button-text-only .p-button-text {
-    padding: .25em 1em;
-}
-
-.p-button-icon-only .p-button-text,
-.p-button-text-empty .p-button-text {
-    padding: .25em;
-    text-indent: -9999999px;
-}
-
-.p-button-text-icon-left .p-button-text {
-    padding: .25em 1em .25em 2.1em;
-}
-
-.p-button-text-icon-right .p-button-text {
-    padding: .25em 2.1em .25em 1em;
-}
-
-/*button icon element(s) */
-.p-button-icon-only .p-button-icon-left,
-.p-button-text-icon-left .p-button-icon-left,
-.p-button-text-icon-right .p-button-icon-right {
-    position: absolute;
-    top: 50%;
-    margin-top: -.5em;
-    height: 1em;
-}
-
-.p-button-icon-only .p-button-icon-left {
-    top: 50%;
-    left: 50%;
-    margin-top: -.5em;
-    margin-left: -.5em;
-    width: 1em;
-    height: 1em;
-}
-
-.p-button-icon-left {
-    left: .5em;
-}
-
-.p-button-icon-right {
-    right: .5em;
-}
-
-/*button sets*/
-.p-buttonset .p-button {
-    margin-left: 0;
-    margin-right: 0;
-}
-
-/* workarounds */
-button.p-button::-moz-focus-inner {
-    border: 0; padding: 0; /* reset extra padding in Firefox */
-}
-
-/** Fluid **/
-.p-fluid .p-button {
-    width: 100%;
-}
-
-.p-fluid .p-button-text-icon-left .p-button-text,
-.p-fluid .p-button-text-icon-right .p-button-text {
-    padding-left: 1em;
-    padding-right: 1em;
-}
-
-/** ButtonSet **/
-.p-fluid .p-buttonset {
-    width: 100%;
-}
-
-.p-fluid .p-buttonset.p-buttonset-1 .p-button {width: 100%;}
-.p-fluid .p-buttonset.p-buttonset-2 .p-button {width: 50%;}
-.p-fluid .p-buttonset.p-buttonset-3 .p-button {width: 33.3%;}
-.p-fluid .p-buttonset.p-buttonset-4 .p-button {width: 25%;}
-.p-fluid .p-buttonset.p-buttonset-5 .p-button {width: 20%;}
-.p-fluid .p-buttonset.p-buttonset-6 .p-button {width: 16.6%;}
-
-@media (max-width: 640px) {
-    .p-fluid .p-buttonset.p-buttonset-1 .p-button,
-    .p-fluid .p-buttonset.p-buttonset-2 .p-button,
-    .p-fluid .p-buttonset.p-buttonset-3 .p-button,
-    .p-fluid .p-buttonset.p-buttonset-4 .p-button,
-    .p-fluid .p-buttonset.p-buttonset-5 .p-button,
-    .p-fluid .p-buttonset.p-buttonset-6 .p-button {
-        width: 100%;
-    }
-}
 .p-card-header img {
     width: 100%;
 }
@@ -3834,6 +3834,42 @@ button.p-button::-moz-focus-inner {
     width: 100%;
     bottom: 0;
 }
+.p-splitbutton {
+    position: relative;
+    display: inline-block;
+    zoom: 1;
+}
+
+.p-splitbutton .p-button.p-splitbutton-menubutton {
+    width: 2em;
+    vertical-align: top;
+}
+
+.p-splitbutton.p-disabled button {
+    cursor: default;
+}
+
+.p-fluid .p-splitbutton {
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
+}
+
+.p-fluid .p-splitbutton .p-button:first-child {
+    width: calc(100% - 2em);
+}
+
+.p-fluid .p-splitbutton .p-button.p-splitbutton-menubutton {
+    width: 2em;
+    box-sizing: border-box;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
+}
+
+.p-splitbutton.p-button-secondary .p-button:first-child {
+    border-right: 0 none;
+}
 .p-spinner {
     display: inline-block;
     overflow: visible;
@@ -3886,42 +3922,6 @@ button.p-button::-moz-focus-inner {
 }
 .p-fluid .p-spinner .p-spinner-button .p-spinner-button-icon {
     left: .375em;
-}
-.p-splitbutton {
-    position: relative;
-    display: inline-block;
-    zoom: 1;
-}
-
-.p-splitbutton .p-button.p-splitbutton-menubutton {
-    width: 2em;
-    vertical-align: top;
-}
-
-.p-splitbutton.p-disabled button {
-    cursor: default;
-}
-
-.p-fluid .p-splitbutton {
-    width: 100%;
-    box-sizing: border-box;
-    -webkit-box-sizing:border-box;
-    -moz-box-sizing: border-box;
-}
-
-.p-fluid .p-splitbutton .p-button:first-child {
-    width: calc(100% - 2em);
-}
-
-.p-fluid .p-splitbutton .p-button.p-splitbutton-menubutton {
-    width: 2em;
-    box-sizing: border-box;
-    -webkit-box-sizing:border-box;
-    -moz-box-sizing: border-box;
-}
-
-.p-splitbutton.p-button-secondary .p-button:first-child {
-    border-right: 0 none;
 }
 .p-steps ul {
     list-style-type: none;

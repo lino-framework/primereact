@@ -129,7 +129,7 @@ function (_Component) {
     value: function onClick() {
       this.editingCellClick = true;
 
-      if (this.props.editor && !this.state.editing) {
+      if (this.props.editor && !this.state.editing && (!this.props.isDisabled || !this.props.isDisabled(this.props))) {
         this.setState({
           editing: true
         });
@@ -227,7 +227,7 @@ function (_Component) {
             focusable.focus();
           }
 
-          this.keyHelper.tabIndex = -1;
+          this.keyHelper && (this.keyHelper.tabIndex = -1);
         } else {
           this.tabindexTimeout = setTimeout(function () {
             if (_this3.keyHelper) {

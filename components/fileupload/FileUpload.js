@@ -309,10 +309,14 @@ function (_Component) {
       xhr.open('POST', this.props.url, true);
 
       if (this.props.onBeforeSend) {
-        this.props.onBeforeSend({
+        var doSend = this.props.onBeforeSend({
           'xhr': xhr,
           'formData': formData
         });
+
+        if (doSend === false) {
+          return;
+        }
       }
 
       xhr.withCredentials = this.props.withCredentials;
@@ -520,7 +524,7 @@ function (_Component) {
         className: iconClassName
       }), _react.default.createElement("span", {
         className: "p-button-text p-clickable"
-      }, this.props.auto ? this.props.chooseLabel : this.hasFiles() ? this.state.files[0].name : this.props.chooseLabel), _react.default.createElement("input", {
+      }, this.hasFiles() ? this.state.files[0].name : this.props.chooseLabel), _react.default.createElement("input", {
         ref: function ref(el) {
           return _this7.fileInput = el;
         },

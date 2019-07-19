@@ -234,10 +234,13 @@ export class FileUpload extends Component {
         xhr.open('POST', this.props.url, true);
 		
         if(this.props.onBeforeSend) {
-            this.props.onBeforeSend({
+            let doSend = this.props.onBeforeSend({
                 'xhr': xhr,
                 'formData': formData 
             });
+            if (doSend === false) {
+                return
+            }
         }
         
         xhr.withCredentials = this.props.withCredentials;
@@ -377,7 +380,7 @@ export class FileUpload extends Component {
         return (
             <span className={buttonClassName} onMouseUp={this.onSimpleUploaderClick}>
                 <span className={iconClassName}></span>
-                <span className="p-button-text p-clickable">{this.props.auto ? this.props.chooseLabel : this.hasFiles() ? this.state.files[0].name : this.props.chooseLabel}</span>
+                <span className="p-button-text p-clickable">{this.hasFiles() ? this.state.files[0].name : this.props.chooseLabel}</span>
                 <input ref={(el) => this.fileInput = el} type="file" multiple={this.props.multiple} accept={this.props.accept} disabled={this.props.disabled}
                     onChange={this.onFileSelect} onFocus={this.onFocus} onBlur={this.onBlur} />
              </span>

@@ -391,6 +391,39 @@ button {
 .p-fluid .p-autocomplete .p-autocomplete-dropdown.p-button {
     width: 2em;
 }
+/** Breadcrumb **/
+.p-breadcrumb {
+    margin: 0;
+    padding: 0;
+    padding: .5em;
+}
+
+.p-breadcrumb ul {
+    margin: 0;
+    padding: 0;
+}
+
+.p-breadcrumb ul li {
+    display: inline-block;
+    margin: 0 .25em;
+}
+
+.p-breadcrumb-chevron, .p-breadcrumb-home {
+    vertical-align: middle;
+}
+
+.p-breadcrumb ul li .p-menuitem-link {
+    text-decoration: none;
+}
+
+.p-breadcrumb .p-menuitem-icon {
+    margin-right: .25em;
+    vertical-align: middle;
+}
+
+.p-breadcrumb .p-menuitem-text {
+    vertical-align: middle;
+}
 /* Button */
 .p-button {
     display: inline-block;
@@ -501,39 +534,6 @@ button.p-button::-moz-focus-inner {
     .p-fluid .p-buttonset.p-buttonset-6 .p-button {
         width: 100%;
     }
-}
-/** Breadcrumb **/
-.p-breadcrumb {
-    margin: 0;
-    padding: 0;
-    padding: .5em;
-}
-
-.p-breadcrumb ul {
-    margin: 0;
-    padding: 0;
-}
-
-.p-breadcrumb ul li {
-    display: inline-block;
-    margin: 0 .25em;
-}
-
-.p-breadcrumb-chevron, .p-breadcrumb-home {
-    vertical-align: middle;
-}
-
-.p-breadcrumb ul li .p-menuitem-link {
-    text-decoration: none;
-}
-
-.p-breadcrumb .p-menuitem-icon {
-    margin-right: .25em;
-    vertical-align: middle;
-}
-
-.p-breadcrumb .p-menuitem-text {
-    vertical-align: middle;
 }
 .p-calendar {
     position: relative;
@@ -2806,6 +2806,105 @@ input[type=text]::-ms-clear {
 .p-organizationchart .p-organizationchart-node-content.p-organizationchart-selectable-node {
     cursor: pointer;
 }
+.p-paginator {
+    margin: 0;
+    text-align: center;
+    padding: .125em;
+}
+
+.p-paginator .p-paginator-top {
+    border-bottom: 0 none;
+}
+
+.p-paginator .p-paginator-bottom {
+    border-top:0 none;
+}
+
+.p-paginator .p-paginator-left-content {
+    float: left;
+}
+
+.p-paginator .p-paginator-right-content {
+    float: right;
+}
+
+.p-paginator .p-paginator-page,
+.p-paginator .p-paginator-pages,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last,
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-current {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+	zoom: 1;
+	margin-left: .063em;
+	margin-right: .063em;
+	text-decoration: none;
+    vertical-align: middle;
+    text-align: center;
+    position: relative;
+}
+
+.p-paginator .p-paginator-pages {
+    width: auto;
+    line-height: 1;
+}
+
+.p-paginator .p-paginator-icon {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1em;
+    height: 1em;
+    margin-top: -.5em;
+    margin-left: -.5em;
+}
+
+.p-paginator .p-paginator-page,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last,
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev{
+    cursor: pointer;
+}
+
+.p-paginator .p-paginator-current,
+.p-paginator .p-paginator-rpp-options {
+	margin-left: 1em;
+	margin-right: 1em;
+    background-image: none;
+}
+
+.p-paginator .p-paginator-jtp-select option,
+.p-paginator .p-paginator-rpp-options option {
+    background-image: none;
+    border: 0 none;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.p-paginator a.p-disabled {
+    outline: 0 none;
+}
+
+.p-paginator .p-dropdown {
+    min-width: 4em;
+    margin-left: .375em;
+}
+
+.p-fluid .p-paginator .p-dropdown {
+    width: auto;
+}
+
+.p-paginator .p-paginator-current {
+    width: auto;
+    height: auto;
+}
 .p-overlaypanel {
     padding: 0;
     margin: 0;
@@ -2905,105 +3004,6 @@ input[type=text]::-ms-clear {
 	border-width: 1px 0 0;
 	padding: .25em .5em;
 	text-align:left;
-}
-.p-paginator {
-    margin: 0;
-    text-align: center;
-    padding: .125em;
-}
-
-.p-paginator .p-paginator-top {
-    border-bottom: 0 none;
-}
-
-.p-paginator .p-paginator-bottom {
-    border-top:0 none;
-}
-
-.p-paginator .p-paginator-left-content {
-    float: left;
-}
-
-.p-paginator .p-paginator-right-content {
-    float: right;
-}
-
-.p-paginator .p-paginator-page,
-.p-paginator .p-paginator-pages,
-.p-paginator .p-paginator-next,
-.p-paginator .p-paginator-last,
-.p-paginator .p-paginator-first,
-.p-paginator .p-paginator-prev,
-.p-paginator .p-paginator-current {
-    display: inline-block;
-    width: 1.5em;
-    height: 1.5em;
-    line-height: 1.5em;
-	zoom: 1;
-	margin-left: .063em;
-	margin-right: .063em;
-	text-decoration: none;
-    vertical-align: middle;
-    text-align: center;
-    position: relative;
-}
-
-.p-paginator .p-paginator-pages {
-    width: auto;
-    line-height: 1;
-}
-
-.p-paginator .p-paginator-icon {
-    display: block;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 1em;
-    height: 1em;
-    margin-top: -.5em;
-    margin-left: -.5em;
-}
-
-.p-paginator .p-paginator-page,
-.p-paginator .p-paginator-next,
-.p-paginator .p-paginator-last,
-.p-paginator .p-paginator-first,
-.p-paginator .p-paginator-prev{
-    cursor: pointer;
-}
-
-.p-paginator .p-paginator-current,
-.p-paginator .p-paginator-rpp-options {
-	margin-left: 1em;
-	margin-right: 1em;
-    background-image: none;
-}
-
-.p-paginator .p-paginator-jtp-select option,
-.p-paginator .p-paginator-rpp-options option {
-    background-image: none;
-    border: 0 none;
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-}
-
-.p-paginator a.p-disabled {
-    outline: 0 none;
-}
-
-.p-paginator .p-dropdown {
-    min-width: 4em;
-    margin-left: .375em;
-}
-
-.p-fluid .p-paginator .p-dropdown {
-    width: auto;
-}
-
-.p-paginator .p-paginator-current {
-    width: auto;
-    height: auto;
 }
 .p-panelmenu {
     width: auto;
@@ -3456,6 +3456,18 @@ input[type=text]::-ms-clear {
     }
 }
 
+.p-rating .p-rating-icon {
+    cursor: pointer;
+}
+
+.p-rating {
+    font-size: 1.25em;
+}
+
+.p-rating.p-disabled .p-rating-icon,
+.p-rating.p-rating-readonly .p-rating-icon {
+    cursor: default;
+}
 .p-radiobutton {
     display:inline-block;
     cursor: pointer;
@@ -3490,18 +3502,6 @@ input[type=text]::-ms-clear {
  
 .p-radiobutton + label {
     vertical-align: middle;
-}
-.p-rating .p-rating-icon {
-    cursor: pointer;
-}
-
-.p-rating {
-    font-size: 1.25em;
-}
-
-.p-rating.p-disabled .p-rating-icon,
-.p-rating.p-rating-readonly .p-rating-icon {
-    cursor: default;
 }
 .p-scrollpanel-wrapper {
     overflow: hidden;

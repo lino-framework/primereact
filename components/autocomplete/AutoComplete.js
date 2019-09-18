@@ -394,6 +394,10 @@ function (_Component) {
             break;
         }
       }
+
+      if (this.props.onKeyDown) {
+        this.props.onKeyDown(event);
+      }
     }
   }, {
     key: "onInputFocus",
@@ -784,6 +788,7 @@ _defineProperty(AutoComplete, "defaultProps", {
   onMouseDown: null,
   onKeyUp: null,
   onKeyPress: null,
+  onKeyDown: null,
   onContextMenu: null,
   onClear: null
 });
@@ -828,6 +833,7 @@ _defineProperty(AutoComplete, "propTypes", {
   onMouseDown: _propTypes.default.func,
   onKeyUp: _propTypes.default.func,
   onKeyPress: _propTypes.default.func,
+  onKeyDown: _propTypes.default.func,
   onContextMenu: _propTypes.default.func,
   onClear: _propTypes.default.func
 });

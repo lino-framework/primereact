@@ -51,6 +51,7 @@ export class AutoComplete extends Component {
         onMouseDown: null,
         onKeyUp: null,
         onKeyPress: null,
+        onKeyDown: null,
         onContextMenu: null,
         onClear: null
     }
@@ -95,6 +96,7 @@ export class AutoComplete extends Component {
         onMouseDown: PropTypes.func,
         onKeyUp: PropTypes.func,
         onKeyPress: PropTypes.func,
+        onKeyDown: PropTypes.func,
         onContextMenu: PropTypes.func,
         onClear: PropTypes.func
     };
@@ -405,6 +407,7 @@ export class AutoComplete extends Component {
                 break;
             }
         }
+        if (this.props.onKeyDown) {this.props.onKeyDown(event)}
     }
 
     onInputFocus(event) {

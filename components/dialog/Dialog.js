@@ -96,6 +96,8 @@ function (_Component) {
   }, {
     key: "show",
     value: function show() {
+      this.unbindMaskClickListener();
+      this.unbindGlobalListeners();
       this.bindGlobalListeners();
 
       if (this.props.onShow) {

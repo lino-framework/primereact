@@ -93,6 +93,9 @@ export class Dialog extends Component {
     }
 
     show() {
+        this.unbindMaskClickListener();
+        this.unbindGlobalListeners();
+
         this.bindGlobalListeners();
         
         if (this.props.onShow) {

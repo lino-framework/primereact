@@ -1101,6 +1101,10 @@ function (_Component) {
   }, {
     key: "isDateEquals",
     value: function isDateEquals(value, dateMeta) {
+      if (value && _typeof(value) === _typeof("String")) {
+        value = this.props.convertValueToDate(value);
+      }
+
       if (value && value instanceof Date) return value.getDate() === dateMeta.day && value.getMonth() === dateMeta.month && value.getFullYear() === dateMeta.year;else return false;
     }
   }, {
@@ -2258,7 +2262,10 @@ _defineProperty(Calendar, "defaultProps", {
   onChange: null,
   onViewDateChange: null,
   onTodayButtonClick: null,
-  onClearButtonClick: null
+  onClearButtonClick: null,
+  convertValueToDate: function convertValueToDate() {
+    return undefined;
+  }
 });
 
 _defineProperty(Calendar, "propTypes", {
@@ -2325,5 +2332,6 @@ _defineProperty(Calendar, "propTypes", {
   onChange: _propTypes.default.func,
   onViewDateChange: _propTypes.default.func,
   onTodayButtonClick: _propTypes.default.func,
-  onClearButtonClick: _propTypes.default.func
+  onClearButtonClick: _propTypes.default.func,
+  convertValueToDate: _propTypes.default.func
 });

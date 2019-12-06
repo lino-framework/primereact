@@ -519,11 +519,15 @@ function (_Component) {
     key: "showLoader",
     value: function showLoader() {
       this.loader.style.visibility = 'visible';
+      console.log("show");
+      this.props.onShowLoader && this.props.onShowLoader();
     }
   }, {
     key: "hideLoader",
     value: function hideLoader() {
       this.loader.style.visibility = 'hidden';
+      console.log("hide");
+      this.props.onHideLoader && this.props.onHideLoader();
     }
   }, {
     key: "renderTooltip",

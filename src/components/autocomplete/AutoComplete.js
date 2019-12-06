@@ -520,10 +520,14 @@ export class AutoComplete extends Component {
 
     showLoader() {
         this.loader.style.visibility = 'visible';
+        console.log("show");
+        this.props.onShowLoader  && this.props.onShowLoader()
     }
 
     hideLoader() {
         this.loader.style.visibility = 'hidden';
+        console.log("hide");
+        this.props.onHideLoader  && this.props.onHideLoader()
     }
 
     renderTooltip() {

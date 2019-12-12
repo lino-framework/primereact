@@ -105,7 +105,10 @@ function (_Component) {
       }
 
       this.container.style.zIndex = String(this.props.baseZIndex + _DomHandler.default.generateZIndex());
-      this.focus();
+
+      if (this.props.focusOnShow) {
+        this.focus();
+      }
 
       if (this.props.modal) {
         this.enableModality();
@@ -262,6 +265,7 @@ function (_Component) {
       if (this.props.closable) {
         return _react.default.createElement("button", {
           className: "p-dialog-titlebar-icon p-dialog-titlebar-close p-link",
+          "aria-label": this.props.ariaCloseIconLabel,
           onClick: this.onClose
         }, _react.default.createElement("span", {
           className: "p-dialog-titlebar-close-icon pi pi-times"
@@ -414,7 +418,9 @@ _defineProperty(Dialog, "defaultProps", {
   baseZIndex: 0,
   maximizable: false,
   blockScroll: true,
-  iconsTemplate: null
+  iconsTemplate: null,
+  ariaCloseIconLabel: 'Close',
+  focusOnShow: true
 });
 
 _defineProperty(Dialog, "propTypes", {
@@ -437,5 +443,7 @@ _defineProperty(Dialog, "propTypes", {
   baseZIndex: _propTypes.default.number,
   maximizable: _propTypes.default.bool,
   blockScroll: _propTypes.default.bool,
-  iconsTemplate: _propTypes.default.func
+  iconsTemplate: _propTypes.default.func,
+  ariaCloseIconLabel: _propTypes.default.string,
+  focusOnShow: _propTypes.default.bool
 });

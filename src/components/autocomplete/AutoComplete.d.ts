@@ -5,6 +5,7 @@ interface AutoCompleteProps {
     id?: string;
     value?: any;
     name?: string;
+    type?: string;
     suggestions?: any[];
     field?: string;
     scrollHeight?: string;
@@ -25,6 +26,7 @@ interface AutoCompleteProps {
     size?: number;
     appendTo?: any;
     tabindex?: number;
+    autoFocus?: boolean;
     tooltip?: any;
     tooltipOptions?: TooltipOptions;
     completeMethod?(e: {originalEvent: Event, query: string}): void;

@@ -16,6 +16,7 @@ export class Sidebar extends Component {
         baseZIndex: 0,
         dismissable: true,
         showCloseIcon: true,
+        closeOnEscape: true,
         iconsTemplate: null,
         modal: true,
         onShow: null,
@@ -33,6 +34,7 @@ export class Sidebar extends Component {
         baseZIndex: PropTypes.number,
         dismissable: PropTypes.bool,
         showCloseIcon: PropTypes.bool,
+        closeOnEscape: PropTypes.bool,
         iconsTemplate: PropTypes.func,
         modal: PropTypes.bool,
         onShow: PropTypes.func,
@@ -62,6 +64,15 @@ export class Sidebar extends Component {
             else
                 this.onHide();
         }
+
+        if (this.mask && prevProps.dismissable !== this.props.dismissable) {
+            if (this.props.dismissable) {
+                this.bindMaskClickListener();
+            }
+            else {
+                this.unbindMaskClickListener();
+            }
+        }
     }
 
     onShow() {
@@ -69,6 +80,10 @@ export class Sidebar extends Component {
 
         if (this.props.modal) {
             this.enableModality();
+        }
+
+        if (this.props.closeOnEscape) {
+            this.bindDocumentEscapeListener();
         }
 
         if (this.closeIcon) {
@@ -84,7 +99,12 @@ export class Sidebar extends Component {
         if (!this.mask) {
             this.mask = document.createElement('div');
             this.mask.style.zIndex = String(parseInt(this.container.style.zIndex, 10) - 1);
-            DomHandler.addMultipleClasses(this.mask, 'p-component-overlay p-sidebar-mask');
+            let maskStyleClass = 'p-component-overlay p-sidebar-mask';
+            if(this.props.blockScroll) {
+                maskStyleClass += ' p-sidebar-mask-scrollblocker';
+            }
+            DomHandler.addMultipleClasses(this.mask, maskStyleClass);
+
             if (this.props.dismissable) {
                 this.bindMaskClickListener();
             }
@@ -101,8 +121,21 @@ export class Sidebar extends Component {
         if (this.mask) {
             this.unbindMaskClickListener();
             document.body.removeChild(this.mask);
+
             if (this.props.blockScroll) {
-                DomHandler.removeClass(document.body, 'p-overflow-hidden');
+                let bodyChildren = document.body.children;
+                let hasBlockerMasks;
+                for (let i = 0; i < bodyChildren.length; i++) {
+                    let bodyChild = bodyChildren[i];
+                    if (DomHandler.hasClass(bodyChild, 'p-sidebar-mask-scrollblocker')) {
+                        hasBlockerMasks = true;
+                        break;
+                    }
+                }
+                
+                if (!hasBlockerMasks) {
+                    DomHandler.removeClass(document.body, 'p-overflow-hidden');
+                }
             }
             this.mask = null;
         }
@@ -115,9 +148,28 @@ export class Sidebar extends Component {
 
     onHide() {
         this.unbindMaskClickListener();
+        this.unbindDocumentEscapeListener();
 
         if (this.props.modal) {
             this.disableModality();
+        }
+    }
+
+    bindDocumentEscapeListener() {
+        this.documentEscapeListener = (event) => {
+            if (event.which === 27) {
+                if (parseInt(this.container.style.zIndex, 10) === (DomHandler.getCurrentZIndex() + this.props.baseZIndex)) {
+                    this.onCloseClick(event);
+                }
+            }
+        };
+        document.addEventListener('keydown', this.documentEscapeListener);
+    }
+    
+    unbindDocumentEscapeListener() {
+        if (this.documentEscapeListener) {
+            document.removeEventListener('keydown', this.documentEscapeListener);
+            this.documentEscapeListener = null;
         }
     }
 

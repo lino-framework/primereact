@@ -190,6 +190,9 @@ export class Calendar extends Component {
         this.incrementSecond = this.incrementSecond.bind(this);
         this.decrementSecond= this.decrementSecond.bind(this);
         this.toggleAmPm = this.toggleAmPm.bind(this);
+        this.onTimePickerElementMouseDown = this.onTimePickerElementMouseDown.bind(this);
+        this.onTimePickerElementMouseUp = this.onTimePickerElementMouseUp.bind(this);
+        this.onTimePickerElementMouseLeave = this.onTimePickerElementMouseLeave.bind(this);
     }
 
     componentDidMount() {
@@ -199,11 +202,29 @@ export class Calendar extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+        if (prevProps.tooltip !== this.props.tooltip) {
             if (this.tooltip)
                 this.tooltip.updateContent(this.props.tooltip);
             else
                 this.renderTooltip();
+        }
+
+        if (!this.props.onViewDateChange && !this.viewStateChanged) {            
+            let propValue = this.props.value;
+            if (Array.isArray(propValue)) {
+                propValue = propValue[0];
+            }
+
+            let prevPropValue = prevProps.value;
+            if (Array.isArray(prevPropValue)) {
+                prevPropValue = prevPropValue[0];
+            }
+
+            if ((!prevPropValue && propValue) || (propValue && propValue instanceof Date && propValue.getTime() !== prevPropValue.getTime())) {
+                this.setState({
+                    viewDate: (this.props.viewDate || propValue || new Date())
+                });
+            }
         }
     }
 
@@ -396,6 +417,68 @@ export class Calendar extends Component {
 
         if (this.props.onClearButtonClick) {
             this.props.onClearButtonClick(event);
+        }
+    }
+
+    onTimePickerElementMouseDown(event, type, direction) {
+        if (!this.props.disabled) {
+            this.repeat(event, null, type, direction);
+            event.preventDefault();
+        }
+    }
+
+    onTimePickerElementMouseUp() {
+        if (!this.props.disabled) {
+            this.clearTimePickerTimer();
+        }
+    }
+
+    onTimePickerElementMouseLeave() {
+        if (!this.props.disabled) {
+            this.clearTimePickerTimer();
+        }
+    }
+
+    repeat(event, interval, type, direction) {
+        event.persist();
+        
+        let i = interval||500;
+
+        this.clearTimePickerTimer();
+        this.timePickerTimer = setTimeout(() => {
+            this.repeat(event, 100, type, direction);
+        }, i);
+
+        switch(type) {
+            case 0:
+                if (direction === 1)
+                    this.incrementHour(event);
+                else
+                    this.decrementHour(event);
+            break;
+
+            case 1:
+                if (direction === 1)
+                    this.incrementMinute(event);
+                else
+                    this.decrementMinute(event);
+            break;
+
+            case 2:
+                if (direction === 1)
+                    this.incrementSecond(event);
+                else
+                    this.decrementSecond(event);
+            break;
+
+            default:
+                break;
+        }
+    }
+
+    clearTimePickerTimer() {
+        if (this.timePickerTimer) {
+            clearTimeout(this.timePickerTimer);
         }
     }
 
@@ -600,6 +683,7 @@ export class Calendar extends Component {
             });
         }
         else {
+            this.viewStateChanged = true;
             this.setState({
                 viewDate: value
             });
@@ -651,11 +735,11 @@ export class Calendar extends Component {
         }
 
         if(this.props.minDate && this.props.minDate > date) {
-            date = this.minDate;
+            date = this.props.minDate;
         }
-
-        if(this.maxDate && this.maxDate < date) {
-            date = this.maxDate;
+        
+        if(this.props.maxDate && this.props.maxDate < date) {
+            date = this.props.maxDate;
         }
 
         if (this.isSingleSelection()) {
@@ -710,6 +794,8 @@ export class Calendar extends Component {
                     value: value
                 }
             });
+
+            this.viewStateChanged = true;
         }
     }
 
@@ -946,7 +1032,7 @@ export class Calendar extends Component {
         let dayNo = 1;
         let today = new Date();
         let weekNumbers = [];
-
+        
         for(let i = 0; i < 6; i++) {
             let week = [];
 
@@ -1878,11 +1964,11 @@ export class Calendar extends Component {
 
         return (
             <div className="p-hour-picker">
-                <button className="p-link" onClick={this.incrementHour}>
+                <button className="p-link" onMouseDown={(e) => this.onTimePickerElementMouseDown(e, 0, 1)} onMouseUp={this.onTimePickerElementMouseUp} onMouseLeave={this.onTimePickerElementMouseLeave}>
                     <span className="pi pi-chevron-up"></span>
                 </button>
                 <span>{hourDisplay}</span>
-                <button className="p-link" onClick={this.decrementHour}>
+                <button className="p-link" onMouseDown={(e) => this.onTimePickerElementMouseDown(e, 0, -1)} onMouseUp={this.onTimePickerElementMouseUp} onMouseLeave={this.onTimePickerElementMouseLeave}>
                     <span className="pi pi-chevron-down"></span>
                 </button>
             </div>
@@ -1896,11 +1982,11 @@ export class Calendar extends Component {
 
         return (
             <div className="p-minute-picker">
-                <button className="p-link" onClick={this.incrementMinute}>
+                <button className="p-link" onMouseDown={(e) => this.onTimePickerElementMouseDown(e, 1, 1)} onMouseUp={this.onTimePickerElementMouseUp} onMouseLeave={this.onTimePickerElementMouseLeave}>
                     <span className="pi pi-chevron-up"></span>
                 </button>
                 <span>{minuteDisplay}</span>
-                <button className="p-link" onClick={this.decrementMinute}>
+                <button className="p-link" onMouseDown={(e) => this.onTimePickerElementMouseDown(e, 1, -1)} onMouseUp={this.onTimePickerElementMouseUp} onMouseLeave={this.onTimePickerElementMouseLeave}>
                     <span className="pi pi-chevron-down"></span>
                 </button>
             </div>
@@ -1915,11 +2001,11 @@ export class Calendar extends Component {
 
             return (
                 <div className="p-second-picker">
-                    <button className="p-link" onClick={this.incrementSecond}>
+                    <button className="p-link" onMouseDown={(e) => this.onTimePickerElementMouseDown(e, 2, 1)} onMouseUp={this.onTimePickerElementMouseUp} onMouseLeave={this.onTimePickerElementMouseLeave}>
                         <span className="pi pi-chevron-up"></span>
                     </button>
                     <span>{secondDisplay}</span>
-                    <button className="p-link" onClick={this.decrementSecond}>
+                    <button className="p-link" onMouseDown={(e) => this.onTimePickerElementMouseDown(e, 2, -1)} onMouseUp={this.onTimePickerElementMouseUp} onMouseLeave={this.onTimePickerElementMouseLeave}>
                         <span className="pi pi-chevron-down"></span>
                     </button>
                 </div>
@@ -2019,7 +2105,7 @@ export class Calendar extends Component {
             return (
                 <div className="p-datepicker-buttonbar">
                     <Button type="button" label={this.props.locale.today} onClick={this.onTodayButtonClick} className={this.props.todayButtonClassName} />
-                    <Button type="button" label={this.props.locale.clear} onClick={this.onClearButtonClick} className={this.props.todayButtonClassName} />
+                    <Button type="button" label={this.props.locale.clear} onClick={this.onClearButtonClick} className={this.props.clearButtonStyleClass} />
                 </div>
             );
         }

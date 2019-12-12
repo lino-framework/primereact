@@ -75,7 +75,7 @@ function (_Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
       }
     }
@@ -196,6 +196,7 @@ function (_Component) {
           return _react.default.createElement(_SelectButtonItem.SelectButtonItem, {
             key: optionLabel,
             label: optionLabel,
+            className: option.className,
             option: option,
             onClick: _this3.onOptionClick,
             selected: _this3.isSelected(option),

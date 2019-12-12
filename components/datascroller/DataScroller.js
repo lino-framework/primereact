@@ -168,9 +168,7 @@ function (_Component) {
     value: function componentDidMount() {
       var _this3 = this;
 
-      if (this.props.lazy) {
-        this.load();
-      }
+      this.load();
 
       if (this.props.loader) {
         this.scrollFunction = function () {

@@ -22,6 +22,7 @@ function () {
     _classCallCheck(this, Tooltip);
 
     this.target = props.target;
+    this.targetContainer = props.targetContainer;
     this.content = props.content;
     this.options = props.options || {};
     this.options.event = this.options.event || 'hover';
@@ -243,7 +244,8 @@ function () {
   }, {
     key: "getHostOffset",
     value: function getHostOffset() {
-      var offset = this.target.getBoundingClientRect();
+      var target = this.targetContainer || this.target;
+      var offset = target.getBoundingClientRect();
 
       var targetLeft = offset.left + _DomHandler.default.getWindowScrollLeft();
 
@@ -258,11 +260,12 @@ function () {
     key: "alignRight",
     value: function alignRight() {
       this.preAlign('right');
+      var target = this.targetContainer || this.target;
       var hostOffset = this.getHostOffset();
 
-      var left = hostOffset.left + _DomHandler.default.getOuterWidth(this.target);
+      var left = hostOffset.left + _DomHandler.default.getOuterWidth(target);
 
-      var top = hostOffset.top + (_DomHandler.default.getOuterHeight(this.target) - _DomHandler.default.getOuterHeight(this.container)) / 2;
+      var top = hostOffset.top + (_DomHandler.default.getOuterHeight(target) - _DomHandler.default.getOuterHeight(this.container)) / 2;
       this.container.style.left = left + 'px';
       this.container.style.top = top + 'px';
     }
@@ -270,11 +273,12 @@ function () {
     key: "alignLeft",
     value: function alignLeft() {
       this.preAlign('left');
+      var target = this.targetContainer || this.target;
       var hostOffset = this.getHostOffset();
 
       var left = hostOffset.left - _DomHandler.default.getOuterWidth(this.container);
 
-      var top = hostOffset.top + (_DomHandler.default.getOuterHeight(this.target) - _DomHandler.default.getOuterHeight(this.container)) / 2;
+      var top = hostOffset.top + (_DomHandler.default.getOuterHeight(target) - _DomHandler.default.getOuterHeight(this.container)) / 2;
       this.container.style.left = left + 'px';
       this.container.style.top = top + 'px';
     }
@@ -282,8 +286,9 @@ function () {
     key: "alignTop",
     value: function alignTop() {
       this.preAlign('top');
+      var target = this.targetContainer || this.target;
       var hostOffset = this.getHostOffset();
-      var left = hostOffset.left + (_DomHandler.default.getOuterWidth(this.target) - _DomHandler.default.getOuterWidth(this.container)) / 2;
+      var left = hostOffset.left + (_DomHandler.default.getOuterWidth(target) - _DomHandler.default.getOuterWidth(this.container)) / 2;
 
       var top = hostOffset.top - _DomHandler.default.getOuterHeight(this.container);
 
@@ -294,10 +299,11 @@ function () {
     key: "alignBottom",
     value: function alignBottom() {
       this.preAlign('bottom');
+      var target = this.targetContainer || this.target;
       var hostOffset = this.getHostOffset();
-      var left = hostOffset.left + (_DomHandler.default.getOuterWidth(this.target) - _DomHandler.default.getOuterWidth(this.container)) / 2;
+      var left = hostOffset.left + (_DomHandler.default.getOuterWidth(target) - _DomHandler.default.getOuterWidth(this.container)) / 2;
 
-      var top = hostOffset.top + _DomHandler.default.getOuterHeight(this.target);
+      var top = hostOffset.top + _DomHandler.default.getOuterHeight(target);
 
       this.container.style.left = left + 'px';
       this.container.style.top = top + 'px';
@@ -308,7 +314,7 @@ function () {
       this.container.style.left = -999 + 'px';
       this.container.style.top = -999 + 'px';
       var defaultClassName = 'p-tooltip p-component p-tooltip-' + position;
-      this.container.className = this.tooltipStyleClass ? defaultClassName + ' ' + this.tooltipStyleClass : defaultClassName;
+      this.container.className = this.options.className ? defaultClassName + ' ' + this.options.className : defaultClassName;
     }
   }, {
     key: "isOutOfBounds",
@@ -350,6 +356,7 @@ function () {
       this.unbindEvents();
       this.remove();
       this.target = null;
+      this.targetContainer = null;
     }
   }]);
 

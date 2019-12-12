@@ -55,9 +55,24 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Spinner).call(this, props));
 
-    if (Math.floor(_this.props.step) === 0) {
+    if (_this.props.value && _this.props.value.toString().indexOf('.') > 0) {
+      _this.precision = _this.props.value.toString().split(/[.]/)[1].length;
+    } else if (_this.props.step % 1 !== 0) {
+      // If step is not an integer then extract the length of the decimal part
       _this.precision = _this.props.step.toString().split(/[,]|[.]/)[1].length;
     }
+
+    if (_this.props.formatInput) {
+      _this.localeDecimalSeparator = 1.1.toLocaleString().substring(1, 2);
+      _this.localeThousandSeparator = 1000 .toLocaleString().substring(1, 2);
+      _this.thousandRegExp = new RegExp("[".concat(_this.props.thousandSeparator || _this.localeThousandSeparator, "]"), 'gim');
+
+      if (_this.props.decimalSeparator && _this.props.thousandSeparator && _this.props.decimalSeparator === _this.props.thousandSeparator) {
+        console.warn("thousandSeparator and decimalSeparator cannot have the same value.");
+      }
+    }
+
+    _this.formatValue(_this.props.value);
 
     _this.onInputKeyDown = _this.onInputKeyDown.bind(_assertThisInitialized(_this));
     _this.onInputChange = _this.onInputChange.bind(_assertThisInitialized(_this));
@@ -222,7 +237,16 @@ function (_Component) {
       if (val === '') {
         value = this.props.min != null ? this.props.min : null;
       } else {
-        if (this.precision) value = parseFloat(val.replace(',', '.'));else value = parseInt(val, 10);
+        if (this.props.formatInput) {
+          val = val.replace(this.thousandRegExp, '');
+        }
+
+        if (this.precision) {
+          val = this.props.formatInput ? val.replace(this.props.decimalSeparator || this.localeDecimalSeparator, '.') : val.replace(',', '.');
+          value = parseFloat(val);
+        } else {
+          value = parseInt(val, 10);
+        }
 
         if (!isNaN(value)) {
           if (this.props.max !== null && value > this.props.max) {
@@ -286,6 +310,33 @@ function (_Component) {
       }
     }
   }, {
+    key: "formatValue",
+    value: function formatValue(value) {
+      if (value != null) {
+        if (this.props.formatInput) {
+          value = value.toLocaleString(undefined, {
+            maximumFractionDigits: 20
+          });
+
+          if (this.props.decimalSeparator && this.props.thousandSeparator) {
+            value = value.split(this.localeDecimalSeparator);
+
+            if (this.precision && value[1]) {
+              value[1] = (this.props.decimalSeparator || this.localeDecimalSeparator) + value[1];
+            }
+
+            if (this.props.thousandSeparator && value[0].length > 3) {
+              value[0] = value[0].replace(new RegExp("[".concat(this.localeThousandSeparator, "]"), 'gim'), this.props.thousandSeparator);
+            }
+
+            value = value.join('');
+          }
+        }
+
+        this.formattedValue = value.toString();
+      }
+    }
+  }, {
     key: "clearTimer",
     value: function clearTimer() {
       if (this.timer) {
@@ -300,9 +351,18 @@ function (_Component) {
       }
     }
   }, {
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate(nextProps) {
+      if (this.props.value !== nextProps.value) {
+        this.formatValue(nextProps.value);
+      }
+
+      return true;
+    }
+  }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
       }
     }
@@ -336,11 +396,15 @@ function (_Component) {
         id: this.props.inputId,
         style: this.props.inputStyle,
         className: className,
-        value: this.props.value == null ? '' : this.props.value,
+        value: this.formattedValue || '',
         type: "text",
         size: this.props.size,
+        tabIndex: this.props.tabIndex,
         maxLength: this.props.maxlength,
         disabled: this.props.disabled,
+        required: this.props.required,
+        pattern: this.props.pattern,
+        placeholder: this.props.placeholder,
         readOnly: this.props.readonly,
         name: this.props.name,
         onKeyDown: this.onInputKeyDown,
@@ -363,7 +427,8 @@ function (_Component) {
         onMouseUp: this.onUpButtonMouseUp,
         onKeyDown: this.onUpButtonKeyDown,
         onKeyUp: this.onUpButtonKeyUp,
-        disabled: this.props.disabled
+        disabled: this.props.disabled,
+        tabIndex: this.props.tabIndex
       }, _react.default.createElement("span", {
         className: "p-spinner-button-icon pi pi-caret-up"
       }));
@@ -382,7 +447,8 @@ function (_Component) {
         onMouseUp: this.onDownButtonMouseUp,
         onKeyDown: this.onDownButtonKeyDown,
         onKeyUp: this.onDownButtonKeyUp,
-        disabled: this.props.disabled
+        disabled: this.props.disabled,
+        tabIndex: this.props.tabIndex
       }, _react.default.createElement("span", {
         className: "p-spinner-button-icon pi pi-caret-down"
       }));
@@ -421,7 +487,14 @@ _defineProperty(Spinner, "defaultProps", {
   step: 1,
   min: null,
   max: null,
+  formatInput: false,
+  decimalSeparator: null,
+  thousandSeparator: null,
   disabled: false,
+  required: false,
+  tabIndex: null,
+  pattern: null,
+  placeholder: null,
   readonly: false,
   maxlength: null,
   size: null,
@@ -438,12 +511,19 @@ _defineProperty(Spinner, "defaultProps", {
 
 _defineProperty(Spinner, "propTypes", {
   id: _propTypes.default.string,
-  value: _propTypes.default.number,
+  value: _propTypes.default.any,
   name: _propTypes.default.string,
   step: _propTypes.default.number,
   min: _propTypes.default.number,
   max: _propTypes.default.number,
+  formatInput: _propTypes.default.bool,
+  decimalSeparator: _propTypes.default.string,
+  thousandSeparator: _propTypes.default.string,
   disabled: _propTypes.default.bool,
+  required: _propTypes.default.bool,
+  tabIndex: _propTypes.default.number,
+  pattern: _propTypes.default.string,
+  placeholder: _propTypes.default.string,
   readonly: _propTypes.default.bool,
   maxlength: _propTypes.default.number,
   size: _propTypes.default.number,

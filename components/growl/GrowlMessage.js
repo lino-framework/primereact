@@ -138,7 +138,7 @@ function (_Component) {
         className: "p-growl-message"
       }, _react.default.createElement("span", {
         className: "p-growl-title"
-      }, this.props.message.summary), _react.default.createElement("p", null, this.props.message.detail))));
+      }, this.props.message.summary), _react.default.createElement("div", null, this.props.message.detail))));
     }
   }]);
 

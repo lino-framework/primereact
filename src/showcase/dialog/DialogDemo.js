@@ -239,6 +239,18 @@ const myIcon = (
                             <td>null</td>
                             <td>Custom icons template for the header.</td>
                         </tr>
+                        <tr>
+                            <td>ariaCloseIconLabel</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Defines a string that labels the close icon.</td>
+                        </tr>
+                        <tr>
+                            <td>focusOnShow</td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>When enabled, first button receives focus on show.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

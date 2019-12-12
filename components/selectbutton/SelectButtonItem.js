@@ -97,7 +97,7 @@ function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var className = (0, _classnames.default)('p-button p-component p-button-text-only', {
+      var className = (0, _classnames.default)('p-button p-component p-button-text-only', this.props.className, {
         'p-highlight': this.props.selected,
         'p-disabled': this.props.disabled,
         'p-focus': this.state.focused
@@ -136,6 +136,7 @@ exports.SelectButtonItem = SelectButtonItem;
 _defineProperty(SelectButtonItem, "defaultProps", {
   option: null,
   label: null,
+  className: null,
   selected: null,
   tabIndex: null,
   onClick: null
@@ -144,6 +145,7 @@ _defineProperty(SelectButtonItem, "defaultProps", {
 _defineProperty(SelectButtonItem, "propTypes", {
   option: _propTypes.default.object,
   label: _propTypes.default.string,
+  className: _propTypes.default.string,
   selected: _propTypes.default.bool,
   tabIndex: _propTypes.default.number,
   onClick: _propTypes.default.func

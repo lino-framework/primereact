@@ -21,18 +21,26 @@ function () {
   _createClass(DomHandler, null, [{
     key: "innerWidth",
     value: function innerWidth(el) {
-      var width = el.offsetWidth;
-      var style = getComputedStyle(el);
-      width += parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-      return width;
+      if (el) {
+        var width = el.offsetWidth;
+        var style = getComputedStyle(el);
+        width += parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+        return width;
+      }
+
+      return 0;
     }
   }, {
     key: "width",
     value: function width(el) {
-      var width = el.offsetWidth;
-      var style = getComputedStyle(el);
-      width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-      return width;
+      if (el) {
+        var width = el.offsetWidth;
+        var style = getComputedStyle(el);
+        width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+        return width;
+      }
+
+      return 0;
     }
   }, {
     key: "getWindowScrollTop",
@@ -58,9 +66,9 @@ function () {
         }
 
         return width;
-      } else {
-        return 0;
       }
+
+      return 0;
     }
   }, {
     key: "getOuterHeight",
@@ -74,9 +82,9 @@ function () {
         }
 
         return height;
-      } else {
-        return 0;
       }
+
+      return 0;
     }
   }, {
     key: "getClientHeight",
@@ -90,9 +98,9 @@ function () {
         }
 
         return height;
-      } else {
-        return 0;
       }
+
+      return 0;
     }
   }, {
     key: "getViewport",
@@ -111,10 +119,17 @@ function () {
   }, {
     key: "getOffset",
     value: function getOffset(el) {
-      var rect = el.getBoundingClientRect();
+      if (el) {
+        var rect = el.getBoundingClientRect();
+        return {
+          top: rect.top + document.body.scrollTop,
+          left: rect.left + document.body.scrollLeft
+        };
+      }
+
       return {
-        top: rect.top + document.body.scrollTop,
-        left: rect.left + document.body.scrollLeft
+        top: 'auto',
+        left: 'auto'
       };
     }
   }, {
@@ -131,12 +146,14 @@ function () {
   }, {
     key: "index",
     value: function index(element) {
-      var children = element.parentNode.childNodes;
-      var num = 0;
+      if (element) {
+        var children = element.parentNode.childNodes;
+        var num = 0;
 
-      for (var i = 0; i < children.length; i++) {
-        if (children[i] === element) return num;
-        if (children[i].nodeType === 1) num++;
+        for (var i = 0; i < children.length; i++) {
+          if (children[i] === element) return num;
+          if (children[i].nodeType === 1) num++;
+        }
       }
 
       return -1;
@@ -144,39 +161,47 @@ function () {
   }, {
     key: "addMultipleClasses",
     value: function addMultipleClasses(element, className) {
-      if (element.classList) {
-        var styles = className.split(' ');
+      if (element) {
+        if (element.classList) {
+          var styles = className.split(' ');
 
-        for (var i = 0; i < styles.length; i++) {
-          element.classList.add(styles[i]);
-        }
-      } else {
-        var _styles = className.split(' ');
+          for (var i = 0; i < styles.length; i++) {
+            element.classList.add(styles[i]);
+          }
+        } else {
+          var _styles = className.split(' ');
 
-        for (var _i = 0; _i < _styles.length; _i++) {
-          element.className += ' ' + _styles[_i];
+          for (var _i = 0; _i < _styles.length; _i++) {
+            element.className += ' ' + _styles[_i];
+          }
         }
       }
     }
   }, {
     key: "addClass",
     value: function addClass(element, className) {
-      if (element.classList) element.classList.add(className);else element.className += ' ' + className;
+      if (element) {
+        if (element.classList) element.classList.add(className);else element.className += ' ' + className;
+      }
     }
   }, {
     key: "removeClass",
     value: function removeClass(element, className) {
-      if (element.classList) element.classList.remove(className);else element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      if (element) {
+        if (element.classList) element.classList.remove(className);else element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      }
     }
   }, {
     key: "hasClass",
     value: function hasClass(element, className) {
-      if (element.classList) return element.classList.contains(className);else return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
+      if (element) {
+        if (element.classList) return element.classList.contains(className);else return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
+      }
     }
   }, {
     key: "find",
     value: function find(element, selector) {
-      return Array.from(element.querySelectorAll(selector));
+      return element ? Array.from(element.querySelectorAll(selector)) : [];
     }
   }, {
     key: "findSingle",
@@ -190,49 +215,59 @@ function () {
   }, {
     key: "getHeight",
     value: function getHeight(el) {
-      var height = el.offsetHeight;
-      var style = getComputedStyle(el);
-      height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
-      return height;
+      if (el) {
+        var height = el.offsetHeight;
+        var style = getComputedStyle(el);
+        height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+        return height;
+      }
+
+      return 0;
     }
   }, {
     key: "getWidth",
     value: function getWidth(el) {
-      var width = el.offsetWidth;
-      var style = getComputedStyle(el);
-      width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
-      return width;
+      if (el) {
+        var width = el.offsetWidth;
+        var style = getComputedStyle(el);
+        width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+        return width;
+      }
+
+      return 0;
     }
   }, {
     key: "absolutePosition",
     value: function absolutePosition(element, target) {
-      var elementDimensions = element.offsetParent ? {
-        width: element.offsetWidth,
-        height: element.offsetHeight
-      } : this.getHiddenElementDimensions(element);
-      var elementOuterHeight = elementDimensions.height;
-      var elementOuterWidth = elementDimensions.width;
-      var targetOuterHeight = target.offsetHeight;
-      var targetOuterWidth = target.offsetWidth;
-      var targetOffset = target.getBoundingClientRect();
-      var windowScrollTop = this.getWindowScrollTop();
-      var windowScrollLeft = this.getWindowScrollLeft();
-      var viewport = this.getViewport();
-      var top, left;
+      if (element) {
+        var elementDimensions = element.offsetParent ? {
+          width: element.offsetWidth,
+          height: element.offsetHeight
+        } : this.getHiddenElementDimensions(element);
+        var elementOuterHeight = elementDimensions.height;
+        var elementOuterWidth = elementDimensions.width;
+        var targetOuterHeight = target.offsetHeight;
+        var targetOuterWidth = target.offsetWidth;
+        var targetOffset = target.getBoundingClientRect();
+        var windowScrollTop = this.getWindowScrollTop();
+        var windowScrollLeft = this.getWindowScrollLeft();
+        var viewport = this.getViewport();
+        var top, left;
 
-      if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
-        top = targetOffset.top + windowScrollTop - elementOuterHeight;
+        if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
+          top = targetOffset.top + windowScrollTop - elementOuterHeight;
 
-        if (top < 0) {
-          top = windowScrollTop;
+          if (top < 0) {
+            top = windowScrollTop;
+          }
+        } else {
+          top = targetOuterHeight + targetOffset.top + windowScrollTop;
         }
-      } else {
-        top = targetOuterHeight + targetOffset.top + windowScrollTop;
-      }
 
-      if (targetOffset.left + targetOuterWidth + elementOuterWidth > viewport.width) left = Math.max(0, targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth);else left = targetOffset.left + windowScrollLeft;
-      element.style.top = top + 'px';
-      element.style.left = left + 'px';
+        if (targetOffset.left + targetOuterWidth + elementOuterWidth > viewport.width) left = Math.max(0, targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth);else left = targetOffset.left + windowScrollLeft;
+        element.style.top = top + 'px';
+        element.style.left = left + 'px';
+      }
     }
   }, {
     key: "relativePosition",
@@ -281,71 +316,87 @@ function () {
   }, {
     key: "getHiddenElementOuterHeight",
     value: function getHiddenElementOuterHeight(element) {
-      element.style.visibility = 'hidden';
-      element.style.display = 'block';
-      var elementHeight = element.offsetHeight;
-      element.style.display = 'none';
-      element.style.visibility = 'visible';
-      return elementHeight;
+      if (element) {
+        element.style.visibility = 'hidden';
+        element.style.display = 'block';
+        var elementHeight = element.offsetHeight;
+        element.style.display = 'none';
+        element.style.visibility = 'visible';
+        return elementHeight;
+      }
+
+      return 0;
     }
   }, {
     key: "getHiddenElementOuterWidth",
     value: function getHiddenElementOuterWidth(element) {
-      element.style.visibility = 'hidden';
-      element.style.display = 'block';
-      var elementWidth = element.offsetWidth;
-      element.style.display = 'none';
-      element.style.visibility = 'visible';
-      return elementWidth;
+      if (element) {
+        element.style.visibility = 'hidden';
+        element.style.display = 'block';
+        var elementWidth = element.offsetWidth;
+        element.style.display = 'none';
+        element.style.visibility = 'visible';
+        return elementWidth;
+      }
+
+      return 0;
     }
   }, {
     key: "getHiddenElementDimensions",
     value: function getHiddenElementDimensions(element) {
       var dimensions = {};
-      element.style.visibility = 'hidden';
-      element.style.display = 'block';
-      dimensions.width = element.offsetWidth;
-      dimensions.height = element.offsetHeight;
-      element.style.display = 'none';
-      element.style.visibility = 'visible';
+
+      if (element) {
+        element.style.visibility = 'hidden';
+        element.style.display = 'block';
+        dimensions.width = element.offsetWidth;
+        dimensions.height = element.offsetHeight;
+        element.style.display = 'none';
+        element.style.visibility = 'visible';
+      }
+
       return dimensions;
     }
   }, {
     key: "fadeIn",
     value: function fadeIn(element, duration) {
-      element.style.opacity = 0;
-      var last = +new Date();
-      var opacity = 0;
+      if (element) {
+        element.style.opacity = 0;
+        var last = +new Date();
+        var opacity = 0;
 
-      var tick = function tick() {
-        opacity = +element.style.opacity + (new Date().getTime() - last) / duration;
-        element.style.opacity = opacity;
-        last = +new Date();
+        var tick = function tick() {
+          opacity = +element.style.opacity + (new Date().getTime() - last) / duration;
+          element.style.opacity = opacity;
+          last = +new Date();
 
-        if (+opacity < 1) {
-          window.requestAnimationFrame && requestAnimationFrame(tick) || setTimeout(tick, 16);
-        }
-      };
+          if (+opacity < 1) {
+            window.requestAnimationFrame && requestAnimationFrame(tick) || setTimeout(tick, 16);
+          }
+        };
 
-      tick();
+        tick();
+      }
     }
   }, {
     key: "fadeOut",
     value: function fadeOut(element, ms) {
-      var opacity = 1,
-          interval = 50,
-          duration = ms,
-          gap = interval / duration;
-      var fading = setInterval(function () {
-        opacity -= gap;
+      if (element) {
+        var opacity = 1,
+            interval = 50,
+            duration = ms,
+            gap = interval / duration;
+        var fading = setInterval(function () {
+          opacity -= gap;
 
-        if (opacity <= 0) {
-          opacity = 0;
-          clearInterval(fading);
-        }
+          if (opacity <= 0) {
+            opacity = 0;
+            clearInterval(fading);
+          }
 
-        element.style.opacity = opacity;
-      }, interval);
+          element.style.opacity = opacity;
+        }, interval);
+      }
     }
   }, {
     key: "getUserAgent",
@@ -454,7 +505,7 @@ function () {
   }, {
     key: "isVisible",
     value: function isVisible(element) {
-      return element.offsetParent != null;
+      return element && element.offsetParent != null;
     }
   }]);
 

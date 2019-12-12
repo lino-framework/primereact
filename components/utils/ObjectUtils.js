@@ -111,6 +111,20 @@ function () {
       return !!(obj && obj.constructor && obj.call && obj.apply);
     }
   }, {
+    key: "findDiffKeys",
+    value: function findDiffKeys(obj1, obj2) {
+      if (!obj1 || !obj2) {
+        return {};
+      }
+
+      return Object.keys(obj1).filter(function (key) {
+        return !obj2.hasOwnProperty(key);
+      }).reduce(function (result, current) {
+        result[current] = obj1[current];
+        return result;
+      }, {});
+    }
+  }, {
     key: "filter",
     value: function filter(value, fields, filterValue) {
       var filteredItems = [];

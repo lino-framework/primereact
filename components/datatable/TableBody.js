@@ -86,16 +86,18 @@ function (_Component) {
       if (this.props.selectionMode) {
         var rowData = event.data;
         var rowIndex = event.index;
+        var selection;
 
         if (this.isMultipleSelectionMode() && event.originalEvent.shiftKey && this.anchorRowIndex !== null) {
-          _DomHandler.default.clearSelection(); //todo: shift key
+          _DomHandler.default.clearSelection();
 
+          this.rangeRowIndex = rowIndex;
+          selection = this.selectRange(event);
         } else {
           var selected = this.isSelected(rowData);
           var metaSelection = this.rowTouched ? false : this.props.metaKeySelection;
           this.anchorRowIndex = rowIndex;
           this.rangeRowIndex = rowIndex;
-          var selection;
 
           if (metaSelection) {
             var metaKey = event.originalEvent.metaKey || event.originalEvent.ctrlKey;
@@ -184,17 +186,56 @@ function (_Component) {
               }
             }
           }
+        }
 
-          if (this.props.onSelectionChange) {
-            this.props.onSelectionChange({
-              originalEvent: event.originalEvent,
-              value: selection
-            });
-          }
+        if (this.props.onSelectionChange) {
+          this.props.onSelectionChange({
+            originalEvent: event.originalEvent,
+            value: selection
+          });
         }
       }
 
       this.rowTouched = false;
+    }
+  }, {
+    key: "selectRange",
+    value: function selectRange(event) {
+      var rangeStart, rangeEnd;
+
+      if (this.rangeRowIndex > this.anchorRowIndex) {
+        rangeStart = this.anchorRowIndex;
+        rangeEnd = this.rangeRowIndex;
+      } else if (this.rangeRowIndex < this.anchorRowIndex) {
+        rangeStart = this.rangeRowIndex;
+        rangeEnd = this.anchorRowIndex;
+      } else {
+        rangeStart = this.rangeRowIndex;
+        rangeEnd = this.rangeRowIndex;
+      }
+
+      if (this.props.lazy && this.props.paginator) {
+        rangeStart -= this.first;
+        rangeEnd -= this.first;
+      }
+
+      var value = this.props.value;
+      var selection = [];
+
+      for (var i = rangeStart; i <= rangeEnd; i++) {
+        var rangeRowData = value[i];
+        selection.push(rangeRowData);
+
+        if (this.props.onRowSelect) {
+          this.props.onRowSelect({
+            originalEvent: event.originalEvent,
+            data: rangeRowData,
+            type: 'row'
+          });
+        }
+      }
+
+      return selection;
     }
   }, {
     key: "onRowTouchEnd",
@@ -595,7 +636,7 @@ function (_Component) {
 
             var _currentRowFieldData = _ObjectUtils.default.resolveFieldData(rowData, _this2.props.sortField);
 
-            var shouldCountRowSpan = i === 0 || _ObjectUtils.default.resolveFieldData(_this2.props.value[i - 1], _this2.props.sortField) !== _currentRowFieldData;
+            var shouldCountRowSpan = i === startIndex || _ObjectUtils.default.resolveFieldData(_this2.props.value[i - 1], _this2.props.sortField) !== _currentRowFieldData;
 
             if (shouldCountRowSpan) {
               var nextRowFieldData = _currentRowFieldData;
@@ -645,7 +686,12 @@ function (_Component) {
             },
             onDragLeave: _this2.onRowDragLeave,
             onDrop: _this2.onRowDrop,
-            virtualRowHeight: _this2.props.virtualRowHeight
+            virtualRowHeight: _this2.props.virtualRowHeight,
+            editMode: _this2.props.editMode,
+            rowEditorValidator: _this2.props.rowEditorValidator,
+            onRowEditInit: _this2.props.onRowEditInit,
+            onRowEditSave: _this2.props.onRowEditSave,
+            onRowEditCancel: _this2.props.onRowEditCancel
           }, _this2.props.children);
 
           rows.push(bodyRow); //row expansion

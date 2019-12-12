@@ -69,7 +69,7 @@ function (_Component) {
     key: "show",
     value: function show(value) {
       if (value) {
-        var newMessages;
+        var newMessages = [];
 
         if (Array.isArray(value)) {
           for (var i = 0; i < value.length; i++) {
@@ -94,6 +94,17 @@ function (_Component) {
       });
     }
   }, {
+    key: "replace",
+    value: function replace(value) {
+      var _this2 = this;
+
+      this.setState({
+        messages: []
+      }, function () {
+        return _this2.show(value);
+      });
+    }
+  }, {
     key: "onClose",
     value: function onClose(message) {
       var newMessages = this.state.messages.filter(function (msg) {
@@ -110,7 +121,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _react.default.createElement("div", {
         id: this.props.id,
@@ -126,8 +137,8 @@ function (_Component) {
           }
         }, _react.default.createElement(_UIMessage.UIMessage, {
           message: message,
-          onClick: _this2.props.onClick,
-          onClose: _this2.onClose
+          onClick: _this3.props.onClick,
+          onClose: _this3.onClose
         }));
       })));
     }

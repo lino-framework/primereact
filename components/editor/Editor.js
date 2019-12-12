@@ -65,7 +65,7 @@ function (_Component) {
         }, this.props.modules),
         placeholder: this.props.placeholder,
         readOnly: this.props.readOnly,
-        theme: 'snow',
+        theme: this.props.theme,
         formats: this.props.formats
       });
 
@@ -231,6 +231,7 @@ _defineProperty(Editor, "defaultProps", {
   readOnly: false,
   modules: null,
   formats: null,
+  theme: 'snow',
   headerTemplate: null,
   onTextChange: null,
   onSelectionChange: null
@@ -245,6 +246,7 @@ _defineProperty(Editor, "propTypes", {
   readOnly: _propTypes.default.bool,
   modules: _propTypes.default.object,
   formats: _propTypes.default.array,
+  theme: _propTypes.default.string,
   headerTemplate: _propTypes.default.any,
   onTextChange: _propTypes.default.func,
   onSelectionChange: _propTypes.default.func

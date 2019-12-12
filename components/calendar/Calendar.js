@@ -97,6 +97,9 @@ function (_Component) {
     _this.incrementSecond = _this.incrementSecond.bind(_assertThisInitialized(_this));
     _this.decrementSecond = _this.decrementSecond.bind(_assertThisInitialized(_this));
     _this.toggleAmPm = _this.toggleAmPm.bind(_assertThisInitialized(_this));
+    _this.onTimePickerElementMouseDown = _this.onTimePickerElementMouseDown.bind(_assertThisInitialized(_this));
+    _this.onTimePickerElementMouseUp = _this.onTimePickerElementMouseUp.bind(_assertThisInitialized(_this));
+    _this.onTimePickerElementMouseLeave = _this.onTimePickerElementMouseLeave.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -110,8 +113,28 @@ function (_Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
+      }
+
+      if (!this.props.onViewDateChange && !this.viewStateChanged) {
+        var propValue = this.props.value;
+
+        if (Array.isArray(propValue)) {
+          propValue = propValue[0];
+        }
+
+        var prevPropValue = prevProps.value;
+
+        if (Array.isArray(prevPropValue)) {
+          prevPropValue = prevPropValue[0];
+        }
+
+        if (!prevPropValue && propValue || propValue && propValue instanceof Date && propValue.getTime() !== prevPropValue.getTime()) {
+          this.setState({
+            viewDate: this.props.viewDate || propValue || new Date()
+          });
+        }
       }
     }
   }, {
@@ -315,6 +338,64 @@ function (_Component) {
 
       if (this.props.onClearButtonClick) {
         this.props.onClearButtonClick(event);
+      }
+    }
+  }, {
+    key: "onTimePickerElementMouseDown",
+    value: function onTimePickerElementMouseDown(event, type, direction) {
+      if (!this.props.disabled) {
+        this.repeat(event, null, type, direction);
+        event.preventDefault();
+      }
+    }
+  }, {
+    key: "onTimePickerElementMouseUp",
+    value: function onTimePickerElementMouseUp() {
+      if (!this.props.disabled) {
+        this.clearTimePickerTimer();
+      }
+    }
+  }, {
+    key: "onTimePickerElementMouseLeave",
+    value: function onTimePickerElementMouseLeave() {
+      if (!this.props.disabled) {
+        this.clearTimePickerTimer();
+      }
+    }
+  }, {
+    key: "repeat",
+    value: function repeat(event, interval, type, direction) {
+      var _this2 = this;
+
+      event.persist();
+      var i = interval || 500;
+      this.clearTimePickerTimer();
+      this.timePickerTimer = setTimeout(function () {
+        _this2.repeat(event, 100, type, direction);
+      }, i);
+
+      switch (type) {
+        case 0:
+          if (direction === 1) this.incrementHour(event);else this.decrementHour(event);
+          break;
+
+        case 1:
+          if (direction === 1) this.incrementMinute(event);else this.decrementMinute(event);
+          break;
+
+        case 2:
+          if (direction === 1) this.incrementSecond(event);else this.decrementSecond(event);
+          break;
+
+        default:
+          break;
+      }
+    }
+  }, {
+    key: "clearTimePickerTimer",
+    value: function clearTimePickerTimer() {
+      if (this.timePickerTimer) {
+        clearTimeout(this.timePickerTimer);
       }
     }
   }, {
@@ -528,6 +609,7 @@ function (_Component) {
           value: value
         });
       } else {
+        this.viewStateChanged = true;
         this.setState({
           viewDate: value
         });
@@ -536,7 +618,7 @@ function (_Component) {
   }, {
     key: "onDateSelect",
     value: function onDateSelect(event, dateMeta) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.props.disabled || !dateMeta.selectable) {
         event.preventDefault();
@@ -546,7 +628,7 @@ function (_Component) {
       if (this.isMultipleSelection()) {
         if (this.isSelected(dateMeta)) {
           var value = this.props.value.filter(function (date, i) {
-            return !_this2.isDateEquals(date, dateMeta);
+            return !_this3.isDateEquals(date, dateMeta);
           });
           this.updateModel(event, value);
         } else if (!this.props.maxDateCount || !this.props.value || this.props.maxDateCount > this.props.value.length) {
@@ -558,7 +640,7 @@ function (_Component) {
 
       if (!this.props.inline && this.isSingleSelection() && (!this.props.showTime || this.props.hideOnDateTimeSelect)) {
         setTimeout(function () {
-          _this2.hideOverlay();
+          _this3.hideOverlay();
         }, 100);
 
         if (this.mask) {
@@ -581,11 +663,11 @@ function (_Component) {
       }
 
       if (this.props.minDate && this.props.minDate > date) {
-        date = this.minDate;
+        date = this.props.minDate;
       }
 
-      if (this.maxDate && this.maxDate < date) {
-        date = this.maxDate;
+      if (this.props.maxDate && this.props.maxDate < date) {
+        date = this.props.maxDate;
       }
 
       if (this.isSingleSelection()) {
@@ -643,12 +725,13 @@ function (_Component) {
             value: value
           }
         });
+        this.viewStateChanged = true;
       }
     }
   }, {
     key: "showOverlay",
     value: function showOverlay() {
-      var _this3 = this;
+      var _this4 = this;
 
       if (this.props.autoZIndex) {
         this.panel.style.zIndex = String(this.props.baseZIndex + _DomHandler.default.generateZIndex());
@@ -656,9 +739,9 @@ function (_Component) {
 
       this.panel.style.display = 'block';
       setTimeout(function () {
-        _DomHandler.default.addClass(_this3.panel, 'p-input-overlay-visible');
+        _DomHandler.default.addClass(_this4.panel, 'p-input-overlay-visible');
 
-        _DomHandler.default.removeClass(_this3.panel, 'p-input-overlay-hidden');
+        _DomHandler.default.removeClass(_this4.panel, 'p-input-overlay-hidden');
       }, 1);
       this.alignPanel();
       this.bindDocumentClickListener();
@@ -667,7 +750,7 @@ function (_Component) {
   }, {
     key: "hideOverlay",
     value: function hideOverlay() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.panel) {
         _DomHandler.default.addClass(this.panel, 'p-input-overlay-hidden');
@@ -677,21 +760,21 @@ function (_Component) {
         this.unbindDocumentClickListener();
         this.unbindDocumentResizeListener();
         this.hideTimeout = setTimeout(function () {
-          _this4.panel.style.display = 'none';
+          _this5.panel.style.display = 'none';
 
-          _DomHandler.default.removeClass(_this4.panel, 'p-input-overlay-hidden');
+          _DomHandler.default.removeClass(_this5.panel, 'p-input-overlay-hidden');
         }, 150);
       }
     }
   }, {
     key: "bindDocumentClickListener",
     value: function bindDocumentClickListener() {
-      var _this5 = this;
+      var _this6 = this;
 
       if (!this.documentClickListener) {
         this.documentClickListener = function (event) {
-          if (_this5.isOutsideClicked(event)) {
-            _this5.hideOverlay();
+          if (_this6.isOutsideClicked(event)) {
+            _this6.hideOverlay();
           }
         };
 
@@ -757,7 +840,7 @@ function (_Component) {
   }, {
     key: "enableModality",
     value: function enableModality() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (!this.mask) {
         this.mask = document.createElement('div');
@@ -766,7 +849,7 @@ function (_Component) {
         _DomHandler.default.addMultipleClasses(this.mask, 'p-component-overlay p-datepicker-mask p-datepicker-mask-scrollblocker');
 
         this.maskClickListener = function () {
-          _this6.disableModality();
+          _this7.disableModality();
         };
 
         this.mask.addEventListener('click', this.maskClickListener);
@@ -1683,7 +1766,7 @@ function (_Component) {
   }, {
     key: "renderTitleMonthElement",
     value: function renderTitleMonthElement(month) {
-      var _this7 = this;
+      var _this8 = this;
 
       if (this.props.monthNavigator && this.props.view !== 'month') {
         var viewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
@@ -1693,7 +1776,7 @@ function (_Component) {
           onChange: this.onMonthDropdownChange,
           value: viewMonth
         }, this.props.locale.monthNames.map(function (month, index) {
-          if ((!_this7.isInMinYear(viewDate) || index >= _this7.props.minDate.getMonth()) && (!_this7.isInMaxYear(viewDate) || index <= _this7.props.maxDate.getMonth())) {
+          if ((!_this8.isInMinYear(viewDate) || index >= _this8.props.minDate.getMonth()) && (!_this8.isInMaxYear(viewDate) || index <= _this8.props.maxDate.getMonth())) {
             return _react.default.createElement("option", {
               key: month,
               value: index
@@ -1711,7 +1794,7 @@ function (_Component) {
   }, {
     key: "renderTitleYearElement",
     value: function renderTitleYearElement(year) {
-      var _this8 = this;
+      var _this9 = this;
 
       if (this.props.yearNavigator) {
         var yearOptions = [];
@@ -1730,7 +1813,7 @@ function (_Component) {
           onChange: this.onYearDropdownChange,
           value: viewYear
         }, yearOptions.map(function (year) {
-          if (!(_this8.props.minDate && _this8.props.minDate.getFullYear() > year) && !(_this8.props.maxDate && _this8.props.maxDate.getFullYear() < year)) {
+          if (!(_this9.props.minDate && _this9.props.minDate.getFullYear() > year) && !(_this9.props.maxDate && _this9.props.maxDate.getFullYear() < year)) {
             return _react.default.createElement("option", {
               key: year,
               value: year
@@ -1779,23 +1862,23 @@ function (_Component) {
   }, {
     key: "renderDateCellContent",
     value: function renderDateCellContent(date, className) {
-      var _this9 = this;
+      var _this10 = this;
 
       var content = this.props.dateTemplate ? this.props.dateTemplate(date) : date.day;
       return _react.default.createElement("span", {
         className: className,
         onClick: function onClick(e) {
-          return _this9.onDateSelect(e, date);
+          return _this10.onDateSelect(e, date);
         }
       }, content);
     }
   }, {
     key: "renderWeek",
     value: function renderWeek(weekDates, weekNumber) {
-      var _this10 = this;
+      var _this11 = this;
 
       var week = weekDates.map(function (date) {
-        var selected = _this10.isSelected(date);
+        var selected = _this11.isSelected(date);
 
         var cellClassName = (0, _classnames.default)({
           'p-datepicker-other-month': date.otherMonth,
@@ -1806,7 +1889,7 @@ function (_Component) {
           'p-disabled': !date.selectable
         });
 
-        var content = _this10.renderDateCellContent(date, dateClassName);
+        var content = _this11.renderDateCellContent(date, dateClassName);
 
         return _react.default.createElement("td", {
           key: date.day,
@@ -1830,12 +1913,12 @@ function (_Component) {
   }, {
     key: "renderDates",
     value: function renderDates(monthMetaData) {
-      var _this11 = this;
+      var _this12 = this;
 
       return monthMetaData.dates.map(function (weekDates, index) {
         return _react.default.createElement("tr", {
           key: index
-        }, _this11.renderWeek(weekDates, monthMetaData.weekNumbers[index]));
+        }, _this12.renderWeek(weekDates, monthMetaData.weekNumbers[index]));
       });
     }
   }, {
@@ -1868,10 +1951,10 @@ function (_Component) {
   }, {
     key: "renderMonths",
     value: function renderMonths(monthsMetaData) {
-      var _this12 = this;
+      var _this13 = this;
 
       return monthsMetaData.map(function (monthMetaData, index) {
-        return _this12.renderMonth(monthMetaData, index);
+        return _this13.renderMonth(monthMetaData, index);
       });
     }
   }, {
@@ -1885,7 +1968,7 @@ function (_Component) {
   }, {
     key: "renderMonthViewMonth",
     value: function renderMonthViewMonth(index) {
-      var _this13 = this;
+      var _this14 = this;
 
       var className = (0, _classnames.default)('p-monthpicker-month', {
         'p-highlight': this.isMonthSelected(index)
@@ -1895,7 +1978,7 @@ function (_Component) {
         key: monthName,
         className: className,
         onClick: function onClick(event) {
-          return _this13.onMonthSelect(event, index);
+          return _this14.onMonthSelect(event, index);
         }
       }, monthName);
     }
@@ -1941,6 +2024,8 @@ function (_Component) {
   }, {
     key: "renderHourPicker",
     value: function renderHourPicker() {
+      var _this15 = this;
+
       var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
       var hour = currentTime.getHours();
 
@@ -1953,12 +2038,20 @@ function (_Component) {
         className: "p-hour-picker"
       }, _react.default.createElement("button", {
         className: "p-link",
-        onClick: this.incrementHour
+        onMouseDown: function onMouseDown(e) {
+          return _this15.onTimePickerElementMouseDown(e, 0, 1);
+        },
+        onMouseUp: this.onTimePickerElementMouseUp,
+        onMouseLeave: this.onTimePickerElementMouseLeave
       }, _react.default.createElement("span", {
         className: "pi pi-chevron-up"
       })), _react.default.createElement("span", null, hourDisplay), _react.default.createElement("button", {
         className: "p-link",
-        onClick: this.decrementHour
+        onMouseDown: function onMouseDown(e) {
+          return _this15.onTimePickerElementMouseDown(e, 0, -1);
+        },
+        onMouseUp: this.onTimePickerElementMouseUp,
+        onMouseLeave: this.onTimePickerElementMouseLeave
       }, _react.default.createElement("span", {
         className: "pi pi-chevron-down"
       })));
@@ -1966,6 +2059,8 @@ function (_Component) {
   }, {
     key: "renderMinutePicker",
     value: function renderMinutePicker() {
+      var _this16 = this;
+
       var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
       var minute = currentTime.getMinutes();
       var minuteDisplay = minute < 10 ? '0' + minute : minute;
@@ -1973,12 +2068,20 @@ function (_Component) {
         className: "p-minute-picker"
       }, _react.default.createElement("button", {
         className: "p-link",
-        onClick: this.incrementMinute
+        onMouseDown: function onMouseDown(e) {
+          return _this16.onTimePickerElementMouseDown(e, 1, 1);
+        },
+        onMouseUp: this.onTimePickerElementMouseUp,
+        onMouseLeave: this.onTimePickerElementMouseLeave
       }, _react.default.createElement("span", {
         className: "pi pi-chevron-up"
       })), _react.default.createElement("span", null, minuteDisplay), _react.default.createElement("button", {
         className: "p-link",
-        onClick: this.decrementMinute
+        onMouseDown: function onMouseDown(e) {
+          return _this16.onTimePickerElementMouseDown(e, 1, -1);
+        },
+        onMouseUp: this.onTimePickerElementMouseUp,
+        onMouseLeave: this.onTimePickerElementMouseLeave
       }, _react.default.createElement("span", {
         className: "pi pi-chevron-down"
       })));
@@ -1986,6 +2089,8 @@ function (_Component) {
   }, {
     key: "renderSecondPicker",
     value: function renderSecondPicker() {
+      var _this17 = this;
+
       if (this.props.showSeconds) {
         var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
         var second = currentTime.getSeconds();
@@ -1994,12 +2099,20 @@ function (_Component) {
           className: "p-second-picker"
         }, _react.default.createElement("button", {
           className: "p-link",
-          onClick: this.incrementSecond
+          onMouseDown: function onMouseDown(e) {
+            return _this17.onTimePickerElementMouseDown(e, 2, 1);
+          },
+          onMouseUp: this.onTimePickerElementMouseUp,
+          onMouseLeave: this.onTimePickerElementMouseLeave
         }, _react.default.createElement("span", {
           className: "pi pi-chevron-up"
         })), _react.default.createElement("span", null, secondDisplay), _react.default.createElement("button", {
           className: "p-link",
-          onClick: this.decrementSecond
+          onMouseDown: function onMouseDown(e) {
+            return _this17.onTimePickerElementMouseDown(e, 2, -1);
+          },
+          onMouseUp: this.onTimePickerElementMouseUp,
+          onMouseLeave: this.onTimePickerElementMouseLeave
         }, _react.default.createElement("span", {
           className: "pi pi-chevron-down"
         })));
@@ -2060,14 +2173,14 @@ function (_Component) {
   }, {
     key: "renderInputElement",
     value: function renderInputElement() {
-      var _this14 = this;
+      var _this18 = this;
 
       if (!this.props.inline) {
         var className = (0, _classnames.default)('p-inputtext p-component', this.props.inputClassName);
         var value = this.getValueToRender();
         return _react.default.createElement(_InputText.InputText, {
           ref: function ref(el) {
-            return _this14.inputElement = _reactDom.default.findDOMNode(el);
+            return _this18.inputElement = _reactDom.default.findDOMNode(el);
           },
           id: this.props.inputId,
           name: this.props.name,
@@ -2121,7 +2234,7 @@ function (_Component) {
           type: "button",
           label: this.props.locale.clear,
           onClick: this.onClearButtonClick,
-          className: this.props.todayButtonClassName
+          className: this.props.clearButtonStyleClass
         }));
       } else {
         return null;
@@ -2142,7 +2255,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this15 = this;
+      var _this19 = this;
 
       var className = (0, _classnames.default)('p-calendar', this.props.className, {
         'p-calendar-w-btn': this.props.showIcon,
@@ -2167,14 +2280,14 @@ function (_Component) {
       var footer = this.renderFooter();
       return _react.default.createElement("span", {
         ref: function ref(el) {
-          return _this15.container = el;
+          return _this19.container = el;
         },
         id: this.props.id,
         className: className,
         style: this.props.style
       }, input, button, _react.default.createElement(_CalendarPanel.CalendarPanel, {
         ref: function ref(el) {
-          return _this15.panel = _reactDom.default.findDOMNode(el);
+          return _this19.panel = _reactDom.default.findDOMNode(el);
         },
         className: panelClassName,
         style: this.props.panelStyle,

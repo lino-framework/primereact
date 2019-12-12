@@ -49,10 +49,11 @@ function (_Component) {
   _createClass(ProgressBar, [{
     key: "renderLabel",
     value: function renderLabel() {
-      if (this.props.showValue && this.props.value) {
+      if (this.props.showValue && this.props.value != null) {
+        var label = this.props.displayValueTemplate ? this.props.displayValueTemplate(this.props.value) : this.props.value + this.props.unit;
         return _react.default.createElement("div", {
           className: "p-progressbar-label"
-        }, this.props.value + this.props.unit);
+        }, label);
       } else {
         return null;
       }
@@ -113,7 +114,8 @@ _defineProperty(ProgressBar, "defaultProps", {
   unit: '%',
   style: null,
   className: null,
-  mode: 'determinate'
+  mode: 'determinate',
+  displayValueTemplate: null
 });
 
 _defineProperty(ProgressBar, "propTypes", {
@@ -123,5 +125,6 @@ _defineProperty(ProgressBar, "propTypes", {
   unit: _propTypes.default.string,
   style: _propTypes.default.object,
   className: _propTypes.default.string,
-  mode: _propTypes.default.string
+  mode: _propTypes.default.string,
+  displayValueTemplate: _propTypes.default.func
 });

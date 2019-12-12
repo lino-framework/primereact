@@ -410,6 +410,7 @@ function (_Component) {
         index: index,
         last: last,
         path: String(index),
+        disabled: this.props.disabled,
         selectionMode: this.props.selectionMode,
         selectionKeys: this.props.selectionKeys,
         onSelectionChange: this.props.onSelectionChange,
@@ -493,7 +494,8 @@ function (_Component) {
           className: "p-tree-filter p-inputtext p-component",
           placeholder: this.props.filterPlaceholder,
           onKeyDown: this.onFilterInputKeyDown,
-          onChange: this.onFilterInputChange
+          onChange: this.onFilterInputChange,
+          disabled: this.props.disabled
         }), _react.default.createElement("span", {
           className: "p-tree-filter-icon pi pi-search"
         }));
@@ -504,9 +506,10 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var className = (0, _classnames.default)('p-tree p-component', {
+      var className = (0, _classnames.default)('p-tree p-component', this.props.className, {
         'p-tree-selectable': this.props.selectionMode,
-        'p-tree-loading': this.props.loading
+        'p-tree-loading': this.props.loading,
+        'p-disabled': this.props.disabled
       });
       var loader = this.renderLoader();
       var content = this.renderModel();
@@ -527,6 +530,7 @@ exports.Tree = Tree;
 _defineProperty(Tree, "defaultProps", {
   id: null,
   value: null,
+  disabled: false,
   selectionMode: null,
   selectionKeys: null,
   onSelectionChange: null,
@@ -560,6 +564,7 @@ _defineProperty(Tree, "defaultProps", {
 _defineProperty(Tree, "propTypes", {
   id: _propTypes.default.string,
   value: _propTypes.default.any,
+  disabled: _propTypes.default.bool,
   selectionMode: _propTypes.default.string,
   selectionKeys: _propTypes.default.any,
   onSelectionChange: _propTypes.default.func,

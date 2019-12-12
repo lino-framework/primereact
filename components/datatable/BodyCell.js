@@ -58,7 +58,9 @@ function (_Component) {
     _classCallCheck(this, BodyCell);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(BodyCell).call(this, props));
-    _this.state = {};
+    _this.state = {
+      editing: _this.props.editing
+    };
     _this.onExpanderClick = _this.onExpanderClick.bind(_assertThisInitialized(_this));
     _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
     _this.onBlur = _this.onBlur.bind(_assertThisInitialized(_this));
@@ -127,24 +129,26 @@ function (_Component) {
   }, {
     key: "onClick",
     value: function onClick() {
-      this.editingCellClick = true;
+      if (this.props.editMode !== 'row') {
+        this.editingCellClick = true;
 
-      if (this.props.editor && !this.state.editing && (!this.props.isDisabled || !this.props.isDisabled(this.props))) {
-        this.setState({
-          editing: true
-        });
+        if (this.props.editor && !this.state.editing && (!this.props.isDisabled || !this.props.isDisabled(this.props))) {
+          this.setState({
+            editing: true
+          });
 
-        if (this.props.editorValidatorEvent === 'click') {
-          this.bindDocumentEditListener();
+          if (this.props.editorValidatorEvent === 'click') {
+            this.bindDocumentEditListener();
+          }
+
+          this.props.onEditorOpen && this.props.onEditorOpen(this.props);
         }
-
-        this.props.onEditorOpen && this.props.onEditorOpen(this.props);
       }
     }
   }, {
     key: "onBlur",
     value: function onBlur() {
-      if (this.state.editing && this.props.editorValidatorEvent === 'blur') {
+      if (this.props.editMode !== 'row' && this.state.editing && this.props.editorValidatorEvent === 'blur') {
         this.switchCellToViewMode(true);
       }
     }
@@ -216,7 +220,7 @@ function (_Component) {
     value: function componentDidUpdate() {
       var _this3 = this;
 
-      if (this.container && this.props.editor) {
+      if (this.props.editMode !== 'row' && this.container && this.props.editor) {
         clearTimeout(this.tabindexTimeout);
 
         if (this.state.editing) {
@@ -247,11 +251,11 @@ function (_Component) {
     value: function render() {
       var _this4 = this;
 
-      var content, header;
+      var content, header, editorKeyHelper;
       var cellClassName = (0, _classnames.default)(this.props.bodyClassName || this.props.className, {
         'p-selection-column': this.props.selectionMode,
         'p-editable-column': this.props.editor,
-        'p-cell-editing': this.state.editing
+        'p-cell-editing': this.state.editing && this.props.editor
       });
 
       if (this.props.expander) {
@@ -280,9 +284,30 @@ function (_Component) {
         content = _react.default.createElement("i", {
           className: reorderIcon
         });
-      } else {
+      } else if (this.props.rowEditor) {
         if (this.state.editing) {
-          if (this.props.editor) content = this.props.editor(this.props);else throw new Error("Editor is not found on column.");
+          content = _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("button", {
+            onClick: this.props.onRowEditSave,
+            className: "p-row-editor-save p-link"
+          }, _react.default.createElement("span", {
+            className: "p-row-editor-save-icon pi pi-fw pi-check p-clickable"
+          })), _react.default.createElement("button", {
+            onClick: this.props.onRowEditCancel,
+            className: "p-row-editor-cancel p-link"
+          }, _react.default.createElement("span", {
+            className: "p-row-editor-cancel-icon pi pi-fw pi-times p-clickable"
+          })));
+        } else {
+          content = _react.default.createElement("button", {
+            onClick: this.props.onRowEditInit,
+            className: "p-row-editor-init p-link"
+          }, _react.default.createElement("span", {
+            className: "p-row-editor-init-icon pi pi-fw pi-pencil p-clickable"
+          }));
+        }
+      } else {
+        if (this.state.editing && this.props.editor) {
+          content = this.props.editor(this.props);
         } else {
           if (this.props.body) content = this.props.body(this.props.rowData, this.props);else content = _ObjectUtils.default.resolveFieldData(this.props.rowData, this.props.field);
         }
@@ -296,7 +321,7 @@ function (_Component) {
       /* eslint-disable */
 
 
-      var editorKeyHelper = this.props.editor && (!this.props.isDisabled || !this.props.isDisabled(this.props)) && _react.default.createElement("a", {
+      editorKeyHelper = this.props.editor && (!this.props.isDisabled || !this.props.isDisabled(this.props)) && _react.default.createElement("a", {
         tabIndex: "0",
         ref: function ref(el) {
           _this4.keyHelper = el;
@@ -305,7 +330,6 @@ function (_Component) {
         onFocus: this.onEditorFocus
       }, _react.default.createElement("span", null));
       /* eslint-enable */
-
 
       return _react.default.createElement("td", {
         ref: function ref(el) {
@@ -318,6 +342,17 @@ function (_Component) {
         rowSpan: this.props.rowSpan,
         onBlur: this.onBlur
       }, header, editorKeyHelper, content);
+    }
+  }], [{
+    key: "getDerivedStateFromProps",
+    value: function getDerivedStateFromProps(nextProps, prevState) {
+      if (nextProps.editMode === 'row' && nextProps.editing !== prevState.editing) {
+        return {
+          editing: nextProps.editing
+        };
+      }
+
+      return null;
     }
   }]);
 

@@ -599,13 +599,14 @@ function (_Component) {
         className = _objectSpread({}, className, rowClassName);
       }
 
-      className = (0, _classnames.default)(className);
+      className = (0, _classnames.default)(className, this.props.node.className);
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("tr", {
         ref: function ref(el) {
           return _this4.container = el;
         },
         tabIndex: "0",
         className: className,
+        style: this.props.node.style,
         onClick: this.onClick,
         onTouchEnd: this.onTouchEnd,
         onContextMenu: this.onRightClick,

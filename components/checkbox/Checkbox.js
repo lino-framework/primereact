@@ -76,6 +76,7 @@ function (_Component) {
         });
         this.input.checked = !this.props.checked;
         this.input.focus();
+        e.preventDefault();
       }
     }
   }, {
@@ -98,7 +99,7 @@ function (_Component) {
     value: function componentDidUpdate(prevProps) {
       this.input.checked = this.props.checked;
 
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
       }
     }
@@ -171,7 +172,8 @@ function (_Component) {
         onFocus: this.onFocus,
         onBlur: this.onBlur,
         disabled: this.props.disabled,
-        readOnly: this.props.readOnly
+        readOnly: this.props.readOnly,
+        required: this.props.required
       })), _react.default.createElement("div", {
         className: boxClass,
         ref: function ref(el) {
@@ -199,6 +201,7 @@ _defineProperty(Checkbox, "defaultProps", {
   style: null,
   className: null,
   disabled: false,
+  required: false,
   readOnly: false,
   tooltip: null,
   tooltipOptions: null,
@@ -216,6 +219,7 @@ _defineProperty(Checkbox, "propTypes", {
   style: _propTypes.default.object,
   className: _propTypes.default.string,
   disabled: _propTypes.default.bool,
+  required: _propTypes.default.bool,
   readOnly: _propTypes.default.bool,
   tooltip: _propTypes.default.string,
   tooltipOptions: _propTypes.default.object,

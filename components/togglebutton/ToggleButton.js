@@ -106,7 +106,7 @@ function (_Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
       }
     }
@@ -165,7 +165,8 @@ function (_Component) {
         type: "checkbox",
         onFocus: this.onFocus,
         onBlur: this.onBlur,
-        onKeyDown: this.onKeyDown
+        onKeyDown: this.onKeyDown,
+        tabIndex: this.props.tabIndex
       })), this.props.onIcon && this.props.offIcon && _react.default.createElement("span", {
         className: iconStyleClass
       }), _react.default.createElement("span", {
@@ -188,6 +189,7 @@ _defineProperty(ToggleButton, "defaultProps", {
   style: null,
   className: null,
   checked: false,
+  tabIndex: 0,
   tooltip: null,
   tooltipOptions: null,
   onChange: null
@@ -202,6 +204,7 @@ _defineProperty(ToggleButton, "propTypes", {
   style: _propTypes.default.object,
   className: _propTypes.default.string,
   checked: _propTypes.default.bool,
+  tabIndex: _propTypes.default.number,
   tooltip: _propTypes.default.string,
   tooltipOptions: _propTypes.default.object,
   onChange: _propTypes.default.func

@@ -17,6 +17,8 @@ var _Tooltip = _interopRequireDefault(require("../tooltip/Tooltip"));
 
 var _DomHandler = _interopRequireDefault(require("../utils/DomHandler"));
 
+var _ObjectUtils = _interopRequireDefault(require("../utils/ObjectUtils"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -97,7 +99,7 @@ function (_Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
       }
     }
@@ -127,13 +129,9 @@ function (_Component) {
         'p-disabled': this.props.disabled,
         'p-filled': this.props.value != null && this.props.value.toString().length > 0 || this.props.defaultValue != null && this.props.defaultValue.toString().length > 0
       });
-      var inputProps = Object.assign({}, this.props);
-      delete inputProps.onInput;
-      delete inputProps.onKeyPress;
-      delete inputProps.keyfilter;
-      delete inputProps.validateOnly;
-      delete inputProps.tooltip;
-      delete inputProps.tooltipOptions;
+
+      var inputProps = _ObjectUtils.default.findDiffKeys(this.props, InputText.defaultProps);
+
       return _react.default.createElement("input", _extends({
         ref: function ref(el) {
           return _this2.element = el;

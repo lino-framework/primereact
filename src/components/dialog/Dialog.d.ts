@@ -18,6 +18,8 @@ interface DialogProps {
     baseZIndex?: number;
     maximizable?: boolean;
     blockScroll?: boolean;
+    ariaCloseIconLabel?: string;
+    focusOnShow?: boolean;
     onHide(): void;
     onShow?(): void;
     iconsTemplate?(): JSX.Element | undefined;

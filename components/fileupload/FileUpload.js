@@ -226,86 +226,107 @@ function (_Component) {
     value: function upload() {
       var _this3 = this;
 
-      this.setState({
-        msgs: []
-      });
-      var xhr = new XMLHttpRequest();
-      var formData = new FormData();
-
-      if (this.props.onBeforeUpload) {
-        this.props.onBeforeUpload({
-          'xhr': xhr,
-          'formData': formData
+      if (this.props.customUpload) {
+        if (this.props.uploadHandler) {
+          this.props.uploadHandler({
+            files: this.state.files
+          });
+        }
+      } else {
+        this.setState({
+          msgs: []
         });
-      }
 
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
+        var _xhr = new XMLHttpRequest();
 
-      try {
-        for (var _iterator2 = this.state.files[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var file = _step2.value;
-          formData.append(this.props.name, file, file.name);
+        var _formData = new FormData();
+
+        if (this.props.onBeforeUpload) {
+          this.props.onBeforeUpload({
+            'xhr': _xhr,
+            'formData': _formData
+          });
         }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
+
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
         try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-            _iterator2.return();
+          for (var _iterator2 = this.state.files[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var file = _step2.value;
+
+            _formData.append(this.props.name, file, file.name);
           }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
         } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
           }
+        }
+
+        _xhr.upload.addEventListener('progress', function (event) {
+          if (event.lengthComputable) {
+            _this3.setState({
+              progress: Math.round(event.loaded * 100 / event.total)
+            });
+          }
+
+          if (_this3.props.onProgress) {
+            _this3.props.onProgress({
+              originalEvent: event,
+              progress: _this3.progress
+            });
+          }
+
+          ;
+        });
+
+        _xhr.onreadystatechange = function () {
+          if (_xhr.readyState === 4) {
+            _this3.setState({
+              progress: 0
+            });
+
+            if (_xhr.status >= 200 && _xhr.status < 300) {
+              if (_this3.props.onUpload) {
+                _this3.props.onUpload({
+                  xhr: _xhr,
+                  files: _this3.files
+                });
+              }
+            } else {
+              if (_this3.props.onError) {
+                _this3.props.onError({
+                  xhr: _xhr,
+                  files: _this3.files
+                });
+              }
+            }
+
+            _this3.clear();
+          }
+        };
+
+        _xhr.open('POST', this.props.url, true);
+
+        if (this.props.onBeforeSend) {
+          this.props.onBeforeSend({
+            'xhr': _xhr,
+            'formData': _formData
+          });
         }
       }
 
-      xhr.upload.addEventListener('progress', function (event) {
-        if (event.lengthComputable) {
-          _this3.setState({
-            progress: Math.round(event.loaded * 100 / event.total)
-          });
-        }
-
-        if (_this3.props.onProgress) {
-          _this3.props.onProgress({
-            originalEvent: event,
-            progress: _this3.progress
-          });
-        }
-
-        ;
-      });
-
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-          _this3.setState({
-            progress: 0
-          });
-
-          if (xhr.status >= 200 && xhr.status < 300) {
-            if (_this3.props.onUpload) {
-              _this3.props.onUpload({
-                xhr: xhr,
-                files: _this3.files
-              });
-            }
-          } else {
-            if (_this3.props.onError) {
-              _this3.props.onError({
-                xhr: xhr,
-                files: _this3.files
-              });
-            }
-          }
-
-          _this3.clear();
-        }
-      };
-
+      ;
       xhr.open('POST', this.props.url, true);
 
       if (this.props.onBeforeSend) {
@@ -318,9 +339,6 @@ function (_Component) {
           return;
         }
       }
-
-      xhr.withCredentials = this.props.withCredentials;
-      xhr.send(formData);
     }
   }, {
     key: "clear",
@@ -568,6 +586,7 @@ _defineProperty(FileUpload, "defaultProps", {
   chooseLabel: 'Choose',
   uploadLabel: 'Upload',
   cancelLabel: 'Cancel',
+  customUpload: false,
   onBeforeUpload: null,
   onBeforeSend: null,
   onUpload: null,
@@ -575,7 +594,8 @@ _defineProperty(FileUpload, "defaultProps", {
   onClear: null,
   onSelect: null,
   onProgress: null,
-  onValidationFail: null
+  onValidationFail: null,
+  uploadHandler: null
 });
 
 _defineProperty(FileUpload, "propTypes", {
@@ -597,6 +617,7 @@ _defineProperty(FileUpload, "propTypes", {
   chooseLabel: _propTypes.default.string,
   uploadLabel: _propTypes.default.string,
   cancelLabel: _propTypes.default.string,
+  customUpload: _propTypes.default.bool,
   onBeforeUpload: _propTypes.default.func,
   onBeforeSend: _propTypes.default.func,
   onUpload: _propTypes.default.func,
@@ -604,5 +625,6 @@ _defineProperty(FileUpload, "propTypes", {
   onClear: _propTypes.default.func,
   onSelect: _propTypes.default.func,
   onProgress: _propTypes.default.func,
-  onValidationFail: _propTypes.default.func
+  onValidationFail: _propTypes.default.func,
+  uploadHandler: _propTypes.default.func
 });

@@ -312,7 +312,7 @@ function (_Component2) {
         style: item.style
       }, _react.default.createElement("a", {
         href: item.url || '#',
-        className: "p-panelmenu-header-link ng-tns-c2-1 ng-star-inserted",
+        className: "p-panelmenu-header-link",
         onClick: function onClick(e) {
           return _this5.onItemClick(e, item);
         }

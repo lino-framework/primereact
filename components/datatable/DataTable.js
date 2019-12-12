@@ -33,6 +33,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -72,29 +76,25 @@ function (_Component) {
     _classCallCheck(this, DataTable);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(DataTable).call(this, props));
-    var state = {};
+    _this.state = {};
 
     if (!_this.props.onPage) {
-      state.first = props.first;
-      state.rows = props.rows;
+      _this.state.first = props.first;
+      _this.state.rows = props.rows;
     }
 
     if (!_this.props.onSort) {
-      state.sortField = props.sortField;
-      state.sortOrder = props.sortOrder;
-      state.multiSortMeta = props.multiSortMeta;
+      _this.state.sortField = props.sortField;
+      _this.state.sortOrder = props.sortOrder;
+      _this.state.multiSortMeta = props.multiSortMeta;
     }
 
     if (!_this.props.onFilter) {
-      state.filters = props.filters;
+      _this.state.filters = props.filters;
     }
 
     if (_this.isStateful()) {
-      _this.restoreState(state);
-    }
-
-    if (Object.keys(state).length) {
-      _this.state = state;
+      _this.restoreState(_this.state);
     }
 
     _this.onPageChange = _this.onPageChange.bind(_assertThisInitialized(_this));
@@ -303,8 +303,8 @@ function (_Component) {
           if (this.props.scrollable) {
             this.setScrollableItemsWidthOnExpandResize(null, this.tableWidthState, 0);
           } else {
-            this.tableViewChild.nativeElement.style.width = this.tableWidthState;
-            this.containerViewChild.nativeElement.style.width = this.tableWidthState;
+            this.table.style.width = this.tableWidthState;
+            this.container.style.width = this.tableWidthState;
           }
         }
 
@@ -363,7 +363,7 @@ function (_Component) {
     key: "onSort",
     value: function onSort(event) {
       var sortField = event.sortField;
-      var sortOrder = this.getSortField() === event.sortField ? this.getSortOrder() * -1 : this.props.defaultSortOrder;
+      var sortOrder = this.props.defaultSortOrder;
       var multiSortMeta;
       this.columnSortable = event.sortable;
       this.columnSortFunction = event.sortFunction;
@@ -371,6 +371,13 @@ function (_Component) {
       if (this.props.sortMode === 'multiple') {
         var metaKey = event.originalEvent.metaKey || event.originalEvent.ctrlKey;
         multiSortMeta = this.getMultiSortMeta();
+
+        if (multiSortMeta && multiSortMeta instanceof Array) {
+          var sortMeta = multiSortMeta.find(function (sortMeta) {
+            return sortMeta.field === sortField;
+          });
+          sortOrder = sortMeta ? sortMeta.order * -1 : sortOrder;
+        }
 
         if (!multiSortMeta || !metaKey) {
           multiSortMeta = [];
@@ -380,6 +387,8 @@ function (_Component) {
           field: sortField,
           order: sortOrder
         }, multiSortMeta);
+      } else {
+        sortOrder = this.getSortField() === sortField ? this.getSortOrder() * -1 : sortOrder;
       }
 
       if (this.props.onSort) {
@@ -521,7 +530,7 @@ function (_Component) {
   }, {
     key: "hasFilter",
     value: function hasFilter() {
-      var filters = this.getFilters();
+      var filters = this.getFilters() || this.props.globalFilter;
       return filters && Object.keys(filters).length > 0;
     }
   }, {
@@ -540,19 +549,28 @@ function (_Component) {
         if (this.props.footerColumnGroup) {
           return true;
         } else {
-          if (this.props.children instanceof Array) {
-            for (var i = 0; i < this.props.children.length; i++) {
-              if (this.props.children[i].props.footer) {
-                return true;
-              }
-            }
-          } else {
-            return this.props.children.props.footer !== null;
-          }
+          return this.hasChildrenFooter(this.props.children);
         }
       } else {
         return false;
       }
+    }
+  }, {
+    key: "hasChildrenFooter",
+    value: function hasChildrenFooter(children) {
+      var hasFooter = false;
+
+      if (children) {
+        if (children instanceof Array) {
+          for (var i = 0; i < children.length; i++) {
+            hasFooter = hasFooter || this.hasChildrenFooter(children[i]);
+          }
+        } else {
+          return children.props && children.props.footer !== null;
+        }
+      }
+
+      return hasFooter;
     }
   }, {
     key: "onColumnResizeStart",
@@ -865,6 +883,7 @@ function (_Component) {
 
           if (this.props.onColReorder) {
             this.props.onColReorder({
+              originalEvent: event,
               dragIndex: dragIndex,
               dropIndex: dropIndex,
               columns: columns
@@ -923,8 +942,22 @@ function (_Component) {
         csv += '\n';
 
         for (var _i = 0; _i < columns.length; _i++) {
-          if (columns[_i].props.field) {
-            csv += '"' + _ObjectUtils.default.resolveFieldData(record, columns[_i].props.field) + '"';
+          var column = columns[_i],
+              field = column.props.field;
+
+          if (column.props.exportable && field) {
+            var cellData = _ObjectUtils.default.resolveFieldData(record, field);
+
+            if (cellData != null) {
+              if (_this5.props.exportFunction) {
+                cellData = _this5.props.exportFunction({
+                  data: cellData,
+                  field: field
+                });
+              } else cellData = String(cellData).replace(/"/g, '""');
+            } else cellData = '';
+
+            csv += '"' + cellData + '"';
 
             if (_i < columns.length - 1) {
               csv += _this5.props.csvSeparator;
@@ -958,7 +991,9 @@ function (_Component) {
   }, {
     key: "closeEditingCell",
     value: function closeEditingCell() {
-      document.body.click();
+      if (this.props.editMode !== "row") {
+        document.body.click();
+      }
     }
   }, {
     key: "onHeaderCheckboxClick",
@@ -973,10 +1008,13 @@ function (_Component) {
       }
 
       if (this.props.onSelectionChange) {
-        this.props.onSelectionChange({
-          originalEvent: event,
+        var originalEvent = event.originalEvent,
+            rest = _objectWithoutProperties(event, ["originalEvent"]);
+
+        this.props.onSelectionChange(_objectSpread({
+          originalEvent: originalEvent,
           value: selection
-        });
+        }, rest));
       }
     }
   }, {
@@ -1198,6 +1236,7 @@ function (_Component) {
         first: this.getFirst(),
         rows: this.getRows(),
         lazy: this.props.lazy,
+        paginator: this.props.paginator,
         dataKey: this.props.dataKey,
         compareSelectionBy: this.props.compareSelectionBy,
         selectionMode: this.props.selectionMode,
@@ -1228,7 +1267,12 @@ function (_Component) {
         rowGroupFooterTemplate: this.props.rowGroupFooterTemplate,
         sortField: this.getSortField(),
         rowClassName: this.props.rowClassName,
-        onRowReorder: this.props.onRowReorder
+        onRowReorder: this.props.onRowReorder,
+        editMode: this.props.editMode,
+        rowEditorValidator: this.props.rowEditorValidator,
+        onRowEditInit: this.props.onRowEditInit,
+        onRowEditSave: this.props.onRowEditSave,
+        onRowEditCancel: this.props.onRowEditCancel
       }, columns);
     }
   }, {
@@ -1338,6 +1382,32 @@ function (_Component) {
     key: "getTotalRecords",
     value: function getTotalRecords(data) {
       return this.props.lazy ? this.props.totalRecords : data ? data.length : 0;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      var state = {};
+
+      if (!this.props.onPage) {
+        state.first = this.props.first;
+        state.rows = this.props.rows;
+      }
+
+      if (!this.props.onSort) {
+        state.sortField = this.props.sortField;
+        state.sortOrder = this.props.sortOrder;
+        state.multiSortMeta = this.props.multiSortMeta;
+      }
+
+      if (!this.props.onFilter) {
+        state.filters = this.props.filters;
+      }
+
+      this.resetColumnOrder();
+
+      if (Object.keys(state).length) {
+        this.setState(state);
+      }
     }
   }, {
     key: "resetColumnOrder",
@@ -1469,33 +1539,35 @@ function (_Component) {
         loader = this.renderLoader();
       }
 
-      if (this.props.scrollable) {
-        this.frozenSelectionMode = this.frozenSelectionMode || this.getFrozenSelectionModeInColumn(columns);
-        var frozenColumns = this.getFrozenColumns(columns);
-        var scrollableColumns = frozenColumns ? this.getScrollableColumns(columns) : columns;
-        var frozenView, scrollableView;
+      if (Array.isArray(columns)) {
+        if (this.props.scrollable) {
+          this.frozenSelectionMode = this.frozenSelectionMode || this.getFrozenSelectionModeInColumn(columns);
+          var frozenColumns = this.getFrozenColumns(columns);
+          var scrollableColumns = frozenColumns ? this.getScrollableColumns(columns) : columns;
+          var frozenView, scrollableView;
 
-        if (frozenColumns) {
-          frozenView = this.createScrollableView(value, frozenColumns, true, this.props.frozenHeaderColumnGroup, this.props.frozenFooterColumnGroup, totalRecords);
-        }
-
-        scrollableView = this.createScrollableView(value, scrollableColumns, false, this.props.headerColumnGroup, this.props.footerColumnGroup, totalRecords);
-        tableContent = _react.default.createElement("div", {
-          className: "p-datatable-scrollable-wrapper"
-        }, frozenView, scrollableView);
-      } else {
-        var tableHeader = this.createTableHeader(value, columns, this.props.headerColumnGroup);
-        var tableBody = this.createTableBody(value, columns);
-        var tableFooter = this.createTableFooter(columns, this.props.footerColumnGroup);
-        tableContent = _react.default.createElement("div", {
-          className: "p-datatable-wrapper"
-        }, _react.default.createElement("table", {
-          style: this.props.tableStyle,
-          className: this.props.tableClassName,
-          ref: function ref(el) {
-            _this6.table = el;
+          if (frozenColumns) {
+            frozenView = this.createScrollableView(value, frozenColumns, true, this.props.frozenHeaderColumnGroup, this.props.frozenFooterColumnGroup, totalRecords);
           }
-        }, tableHeader, tableFooter, tableBody));
+
+          scrollableView = this.createScrollableView(value, scrollableColumns, false, this.props.headerColumnGroup, this.props.footerColumnGroup, totalRecords);
+          tableContent = _react.default.createElement("div", {
+            className: "p-datatable-scrollable-wrapper"
+          }, frozenView, scrollableView);
+        } else {
+          var tableHeader = this.createTableHeader(value, columns, this.props.headerColumnGroup);
+          var tableBody = this.createTableBody(value, columns);
+          var tableFooter = this.createTableFooter(columns, this.props.footerColumnGroup);
+          tableContent = _react.default.createElement("div", {
+            className: "p-datatable-wrapper"
+          }, _react.default.createElement("table", {
+            style: this.props.tableStyle,
+            className: this.props.tableClassName,
+            ref: function ref(el) {
+              _this6.table = el;
+            }
+          }, tableHeader, tableFooter, tableBody));
+        }
       }
 
       return _react.default.createElement("div", {
@@ -1582,6 +1654,7 @@ _defineProperty(DataTable, "defaultProps", {
   tabIndex: '0',
   stateKey: null,
   stateStorage: 'session',
+  editMode: 'cell',
   onColumnResizeEnd: null,
   onSort: null,
   onPage: null,
@@ -1596,7 +1669,12 @@ _defineProperty(DataTable, "defaultProps", {
   onContextMenu: null,
   onColReorder: null,
   onRowReorder: null,
-  onValueChange: null
+  onValueChange: null,
+  rowEditorValidator: null,
+  onRowEditInit: null,
+  onRowEditSave: null,
+  onRowEditCancel: null,
+  exportFunction: null
 });
 
 _defineProperty(DataTable, "propTypes", {
@@ -1665,6 +1743,7 @@ _defineProperty(DataTable, "propTypes", {
   tabIndex: _propTypes.default.string,
   stateKey: _propTypes.default.string,
   stateStorage: _propTypes.default.string,
+  editMode: _propTypes.default.string,
   onColumnResizeEnd: _propTypes.default.func,
   onSort: _propTypes.default.func,
   onPage: _propTypes.default.func,
@@ -1679,5 +1758,10 @@ _defineProperty(DataTable, "propTypes", {
   onContextMenu: _propTypes.default.func,
   onColReorder: _propTypes.default.func,
   onRowReorder: _propTypes.default.func,
-  onValueChange: _propTypes.default.func
+  onValueChange: _propTypes.default.func,
+  rowEditorValidator: _propTypes.default.func,
+  onRowEditInit: _propTypes.default.func,
+  onRowEditSave: _propTypes.default.func,
+  onRowEditCancel: _propTypes.default.func,
+  exportFunction: _propTypes.default.func
 });

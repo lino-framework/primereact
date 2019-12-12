@@ -589,11 +589,13 @@ function (_Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
       }
 
-      if (this.input.value !== this.props.value) {
+      var isValueUpdated = this.props.unmask ? this.props.value !== this.getUnmaskedValue() : this.input.value !== this.props.value;
+
+      if (isValueUpdated) {
         this.updateValue();
       }
     }
@@ -604,15 +606,6 @@ function (_Component) {
         this.tooltip.destroy();
         this.tooltip = null;
       }
-    }
-  }, {
-    key: "shouldComponentUpdate",
-    value: function shouldComponentUpdate(nextProps, nextState) {
-      if (nextProps.value === this.props.value) {
-        return false;
-      }
-
-      return true;
     }
   }, {
     key: "renderTooltip",

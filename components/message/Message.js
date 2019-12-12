@@ -55,7 +55,7 @@ function (_Component) {
         'p-message-error': this.props.severity === 'error',
         'p-message-success': this.props.severity === 'success',
         'p-message-icon-only': !this.props.text
-      });
+      }, this.props.className);
       var icon = (0, _classnames.default)('p-message-icon pi pi-fw', {
         'pi-info-circle': this.props.severity === 'info',
         'pi-exclamation-triangle': this.props.severity === 'warn',

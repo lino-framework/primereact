@@ -99,6 +99,10 @@ function (_Component) {
   }, {
     key: "onTogglerClick",
     value: function onTogglerClick(event) {
+      if (this.props.disabled) {
+        return;
+      }
+
       if (this.isExpanded()) this.collapse(event);else this.expand(event);
     }
   }, {
@@ -128,6 +132,10 @@ function (_Component) {
   }, {
     key: "onNodeKeyDown",
     value: function onNodeKeyDown(event) {
+      if (this.props.disabled) {
+        return;
+      }
+
       var nodeElement = event.target.parentElement;
 
       switch (event.which) {
@@ -235,7 +243,7 @@ function (_Component) {
   }, {
     key: "onClick",
     value: function onClick(event) {
-      if (event.target.className && event.target.className.indexOf('p-tree-toggler') === 0) {
+      if (event.target.className && event.target.className.indexOf('p-tree-toggler') === 0 || this.props.disabled) {
         return;
       }
 
@@ -379,6 +387,10 @@ function (_Component) {
   }, {
     key: "onRightClick",
     value: function onRightClick(event) {
+      if (this.props.disabled) {
+        return;
+      }
+
       _DomHandler.default.clearSelection();
 
       if (this.props.onContextMenuSelectionChange) {
@@ -620,7 +632,8 @@ function (_Component) {
         var checked = this.isChecked();
         var partialChecked = this.isPartialChecked();
         var className = (0, _classnames.default)('p-checkbox-box', {
-          'p-highlight': checked
+          'p-highlight': checked,
+          'p-disabled': this.props.disabled
         });
         var icon = (0, _classnames.default)('p-checkbox-icon p-c', {
           'pi pi-check': checked,
@@ -694,13 +707,15 @@ function (_Component) {
       var className = (0, _classnames.default)('p-treenode-content', this.props.node.className, {
         'p-treenode-selectable': this.props.selectionMode && this.props.node.selectable !== false,
         'p-highlight': this.isCheckboxSelectionMode() ? checked : selected,
-        'p-highlight-contextmenu': this.props.contextMenuSelectionKey && this.props.contextMenuSelectionKey === this.props.node.key
+        'p-highlight-contextmenu': this.props.contextMenuSelectionKey && this.props.contextMenuSelectionKey === this.props.node.key,
+        'p-disabled': this.props.disabled
       });
       var expanded = this.isExpanded();
       var toggler = this.renderToggler(expanded);
       var checkbox = this.renderCheckbox();
       var icon = this.renderIcon(expanded);
       var label = this.renderLabel();
+      var tabIndex = this.props.disabled ? undefined : '0';
       return _react.default.createElement("div", {
         ref: function ref(el) {
           return _this3.contentElement = el;
@@ -710,14 +725,14 @@ function (_Component) {
         onClick: this.onClick,
         onContextMenu: this.onRightClick,
         onTouchEnd: this.onTouchEnd,
-        draggable: this.props.dragdropScope && this.props.node.draggable !== false,
+        draggable: this.props.dragdropScope && this.props.node.draggable !== false && !this.props.disabled,
         onDrop: this.onDrop,
         onDragOver: this.onDragOver,
         onDragEnter: this.onDragEnter,
         onDragLeave: this.onDragLeave,
         onDragStart: this.onDragStart,
         onDragEnd: this.onDragEnd,
-        tabIndex: "0",
+        tabIndex: tabIndex,
         onKeyDown: this.onNodeKeyDown,
         role: "treeitem",
         "aria-posinset": this.props.index + 1,
@@ -742,6 +757,7 @@ function (_Component) {
             index: index,
             last: index === _this4.props.node.children.length - 1,
             path: _this4.props.path + '-' + index,
+            disabled: _this4.props.disabled,
             selectionMode: _this4.props.selectionMode,
             selectionKeys: _this4.props.selectionKeys,
             onSelectionChange: _this4.props.onSelectionChange,
@@ -789,7 +805,7 @@ function (_Component) {
     value: function render() {
       var node = this.renderNode();
 
-      if (this.props.dragdropScope) {
+      if (this.props.dragdropScope && !this.props.disabled) {
         var beforeDropPoint = this.renderDropPoint(-1);
         var afterDropPoint = this.props.last ? this.renderDropPoint(1) : null;
         return _react.default.createElement(_react.default.Fragment, null, beforeDropPoint, node, afterDropPoint);
@@ -810,6 +826,7 @@ _defineProperty(UITreeNode, "defaultProps", {
   last: null,
   parent: null,
   path: null,
+  disabled: false,
   selectionMode: null,
   selectionKeys: null,
   contextMenuSelectionKey: null,
@@ -843,6 +860,7 @@ _defineProperty(UITreeNode, "propTypes", {
   last: _propTypes.default.bool,
   parent: _propTypes.default.object,
   path: _propTypes.default.string,
+  disabled: _propTypes.default.bool,
   selectionMode: _propTypes.default.string,
   selectionKeys: _propTypes.default.any,
   contextMenuSelectionKey: _propTypes.default.any,

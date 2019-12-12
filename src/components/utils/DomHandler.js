@@ -1,19 +1,25 @@
 export default class DomHandler {
     
     static innerWidth(el) {
-        let width = el.offsetWidth;
-        let style = getComputedStyle(el);
+        if (el) {
+            let width = el.offsetWidth;
+            let style = getComputedStyle(el);
 
-        width += parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-        return width;
+            width += parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+            return width;
+        }
+        return 0;
     }
 
     static width(el) {
-        let width = el.offsetWidth;
-        let style = getComputedStyle(el);
+        if (el) {
+            let width = el.offsetWidth;
+            let style = getComputedStyle(el);
 
-        width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-        return width;
+            width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+            return width;
+        }
+        return 0;
     }
 
     static getWindowScrollTop() {
@@ -37,9 +43,7 @@ export default class DomHandler {
 
             return width;
         }
-        else {
-            return 0;
-        }
+        return 0;
     }
 
     static getOuterHeight(el, margin) {
@@ -53,9 +57,7 @@ export default class DomHandler {
     
             return height;
         }
-        else {
-            return 0;
-        }
+        return 0;
     }
 	
 	static getClientHeight(el, margin) {
@@ -68,9 +70,8 @@ export default class DomHandler {
             }
 
             return height;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     static getViewport() {
@@ -85,11 +86,17 @@ export default class DomHandler {
     }
 
     static getOffset(el) {
-        var rect = el.getBoundingClientRect();
+        if (el) {
+            let rect = el.getBoundingClientRect();
 
+            return {
+                top: rect.top + document.body.scrollTop,
+                left: rect.left + document.body.scrollLeft
+            };
+        }
         return {
-            top: rect.top + document.body.scrollTop,
-            left: rect.left + document.body.scrollLeft
+            top: 'auto',
+            left: 'auto'
         };
     }
 
@@ -103,54 +110,64 @@ export default class DomHandler {
     }
     
     static index(element) {
-        let children = element.parentNode.childNodes;
-        let num = 0;
-        for (var i = 0; i < children.length; i++) {
-            if (children[i] === element) return num;
-            if (children[i].nodeType === 1) num++;
+        if (element) {
+            let children = element.parentNode.childNodes;
+            let num = 0;
+            for (var i = 0; i < children.length; i++) {
+                if (children[i] === element) return num;
+                if (children[i].nodeType === 1) num++;
+            }
         }
         return -1;
     }
 
     static addMultipleClasses(element, className) {
-        if (element.classList) {
-            let styles = className.split(' ');
-            for (let i = 0; i < styles.length; i++) {
-                element.classList.add(styles[i]);
-            }
+        if (element) {
+            if (element.classList) {
+                let styles = className.split(' ');
+                for (let i = 0; i < styles.length; i++) {
+                    element.classList.add(styles[i]);
+                }
 
-        }
-        else {
-            let styles = className.split(' ');
-            for (let i = 0; i < styles.length; i++) {
-                element.className += ' ' + styles[i];
+            }
+            else {
+                let styles = className.split(' ');
+                for (let i = 0; i < styles.length; i++) {
+                    element.className += ' ' + styles[i];
+                }
             }
         }
     }
 
     static addClass(element, className) {
-        if (element.classList)
-            element.classList.add(className);
-        else
-            element.className += ' ' + className;
+        if (element) {
+            if (element.classList)
+                element.classList.add(className);
+            else
+                element.className += ' ' + className;
+        }
     }
 
     static removeClass(element, className) {
-        if (element.classList)
-            element.classList.remove(className);
-        else
-            element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        if (element) {
+            if (element.classList)
+                element.classList.remove(className);
+            else
+                element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
     }
 
     static hasClass(element, className) {
-        if (element.classList)
-            return element.classList.contains(className);
-        else
-            return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
+        if (element) {
+            if (element.classList)
+                return element.classList.contains(className);
+            else
+                return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
+        }
     }
 
     static find(element, selector) {
-        return Array.from(element.querySelectorAll(selector));
+        return element ? Array.from(element.querySelectorAll(selector)) : [];
     }
 
     static findSingle(element, selector) {
@@ -161,52 +178,60 @@ export default class DomHandler {
     }
 
     static getHeight(el) {
-        let height = el.offsetHeight;
-        let style = getComputedStyle(el);
+        if (el) {
+            let height = el.offsetHeight;
+            let style = getComputedStyle(el);
 
-        height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+            height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
 
-        return height;
+            return height;
+        }
+        return 0;
     }
 
     static getWidth(el) {
-        let width = el.offsetWidth;
-        let style = getComputedStyle(el);
+        if (el) {
+            let width = el.offsetWidth;
+            let style = getComputedStyle(el);
 
-        width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+            width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
 
-        return width;
+            return width;
+        }
+        return 0;
     }
 
     static absolutePosition(element, target) {
-        let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element)
-        let elementOuterHeight = elementDimensions.height;
-        let elementOuterWidth = elementDimensions.width;
-        let targetOuterHeight = target.offsetHeight;
-        let targetOuterWidth = target.offsetWidth;
-        let targetOffset = target.getBoundingClientRect();
-        let windowScrollTop = this.getWindowScrollTop();
-        let windowScrollLeft = this.getWindowScrollLeft();
-        let viewport = this.getViewport();
-        let top, left;
+        if (element) {
+            let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element)
+            let elementOuterHeight = elementDimensions.height;
+            let elementOuterWidth = elementDimensions.width;
+            let targetOuterHeight = target.offsetHeight;
+            let targetOuterWidth = target.offsetWidth;
+            let targetOffset = target.getBoundingClientRect();
+            let windowScrollTop = this.getWindowScrollTop();
+            let windowScrollLeft = this.getWindowScrollLeft();
+            let viewport = this.getViewport();
+            let top, left;
 
-        if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
-            top = targetOffset.top + windowScrollTop - elementOuterHeight;
-            if(top < 0) {
-                top = windowScrollTop;
+            if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
+                top = targetOffset.top + windowScrollTop - elementOuterHeight;
+                if(top < 0) {
+                    top = windowScrollTop;
+                }
+            } 
+            else {
+                top = targetOuterHeight + targetOffset.top + windowScrollTop;
             }
-        } 
-        else {
-            top = targetOuterHeight + targetOffset.top + windowScrollTop;
+
+            if (targetOffset.left + targetOuterWidth + elementOuterWidth > viewport.width)
+                left = Math.max(0, targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth);
+            else
+                left = targetOffset.left + windowScrollLeft;
+
+            element.style.top = top + 'px';
+            element.style.left = left + 'px';
         }
-
-        if (targetOffset.left + targetOuterWidth + elementOuterWidth > viewport.width)
-            left = Math.max(0, targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth);
-        else
-            left = targetOffset.left + windowScrollLeft;
-
-        element.style.top = top + 'px';
-        element.style.left = left + 'px';
     }
 
     static relativePosition(element, target, container) {
@@ -253,71 +278,82 @@ export default class DomHandler {
 
     }
     static getHiddenElementOuterHeight(element) {
-        element.style.visibility = 'hidden';
-        element.style.display = 'block';
-        let elementHeight = element.offsetHeight;
-        element.style.display = 'none';
-        element.style.visibility = 'visible';
+        if (element) {
+            element.style.visibility = 'hidden';
+            element.style.display = 'block';
+            let elementHeight = element.offsetHeight;
+            element.style.display = 'none';
+            element.style.visibility = 'visible';
 
-        return elementHeight;
+            return elementHeight;
+        }
+        return 0;
     }
 
     static getHiddenElementOuterWidth(element) {
-        element.style.visibility = 'hidden';
-        element.style.display = 'block';
-        let elementWidth = element.offsetWidth;
-        element.style.display = 'none';
-        element.style.visibility = 'visible';
+        if (element) {
+            element.style.visibility = 'hidden';
+            element.style.display = 'block';
+            let elementWidth = element.offsetWidth;
+            element.style.display = 'none';
+            element.style.visibility = 'visible';
 
-        return elementWidth;
+            return elementWidth;
+        }
+        return 0;
     }
 
     static getHiddenElementDimensions(element) {
-        var dimensions = {};
-        element.style.visibility = 'hidden';
-        element.style.display = 'block';
-        dimensions.width = element.offsetWidth;
-        dimensions.height = element.offsetHeight;
-        element.style.display = 'none';
-        element.style.visibility = 'visible';
-
+        let dimensions = {};
+        if (element) {
+            element.style.visibility = 'hidden';
+            element.style.display = 'block';
+            dimensions.width = element.offsetWidth;
+            dimensions.height = element.offsetHeight;
+            element.style.display = 'none';
+            element.style.visibility = 'visible';
+        }
         return dimensions;
     }
 
     static fadeIn(element, duration) {
-        element.style.opacity = 0;
+        if (element) {
+            element.style.opacity = 0;
 
-        var last = +new Date();
-        var opacity = 0;
-        var tick = function () {
-            opacity = +element.style.opacity + (new Date().getTime() - last) / duration;
-            element.style.opacity = opacity;
-            last = +new Date();
+            let last = +new Date();
+            let opacity = 0;
+            let tick = function () {
+                opacity = +element.style.opacity + (new Date().getTime() - last) / duration;
+                element.style.opacity = opacity;
+                last = +new Date();
 
-            if (+opacity < 1) {
-                (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
-            }
-        };
+                if (+opacity < 1) {
+                    (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+                }
+            };
 
-        tick();
+            tick();
+        }
     }
 
     static fadeOut(element, ms) {
-        var opacity = 1,
-            interval = 50,
-            duration = ms,
-            gap = interval / duration;
+        if (element) {
+            let opacity = 1,
+                interval = 50,
+                duration = ms,
+                gap = interval / duration;
 
-        let fading = setInterval(() => {
-            opacity -= gap;
+            let fading = setInterval(() => {
+                opacity -= gap;
 
-            if (opacity <= 0) {
-                opacity = 0;
-                clearInterval(fading);
-            }
-            
-            element.style.opacity = opacity;
-        }, interval);
+                if (opacity <= 0) {
+                    opacity = 0;
+                    clearInterval(fading);
+                }
+                
+                element.style.opacity = opacity;
+            }, interval);
+        }
     }
 
     static getUserAgent() {
@@ -436,6 +472,6 @@ export default class DomHandler {
     }
 
     static isVisible(element) {
-        return element.offsetParent != null;
+        return element && element.offsetParent != null;
     } 
 }

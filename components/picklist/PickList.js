@@ -181,6 +181,15 @@ function (_Component) {
       _DomHandler.default.scrollInView(listContainer, listItem);
     }
   }, {
+    key: "onSelectionChange",
+    value: function onSelectionChange(e, stateKey, callback) {
+      this.setState(_defineProperty({}, stateKey, e.value));
+
+      if (callback) {
+        callback(e);
+      }
+    }
+  }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate() {
       if (this.reorderedListElement) {
@@ -213,9 +222,7 @@ function (_Component) {
         list: this.props.source,
         selection: this.state.selectedItemsSource,
         onSelectionChange: function onSelectionChange(e) {
-          return _this2.setState({
-            selectedItemsSource: e.value
-          });
+          return _this2.onSelectionChange(e, 'selectedItemsSource', _this2.props.onSourceSelect);
         },
         itemTemplate: this.props.itemTemplate,
         header: this.props.sourceHeader,
@@ -237,9 +244,7 @@ function (_Component) {
         list: this.props.target,
         selection: this.state.selectedItemsTarget,
         onSelectionChange: function onSelectionChange(e) {
-          return _this2.setState({
-            selectedItemsTarget: e.value
-          });
+          return _this2.onSelectionChange(e, 'selectedItemsTarget', _this2.props.onTargetSelect);
         },
         itemTemplate: this.props.itemTemplate,
         header: this.props.targetHeader,
@@ -282,7 +287,9 @@ _defineProperty(PickList, "defaultProps", {
   onMoveToSource: null,
   onMoveAllToSource: null,
   onMoveToTarget: null,
-  onMoveAllToTarget: null
+  onMoveAllToTarget: null,
+  onSourceSelect: null,
+  onTargetSelect: null
 });
 
 _defineProperty(PickList, "propTypes", {
@@ -305,5 +312,7 @@ _defineProperty(PickList, "propTypes", {
   onMoveToSource: _propTypes.default.func,
   onMoveAllToSource: _propTypes.default.func,
   onMoveToTarget: _propTypes.default.func,
-  onMoveAllToTarget: _propTypes.default.func
+  onMoveAllToTarget: _propTypes.default.func,
+  onSourceSelect: _propTypes.default.func,
+  onTargetSelect: _propTypes.default.func
 });

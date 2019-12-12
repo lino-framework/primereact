@@ -80,7 +80,9 @@ _defineProperty(Column, "defaultProps", {
   onEditorCancel: null,
   excludeGlobalFilter: false,
   rowReorder: false,
-  rowReorderIcon: 'pi pi-bars'
+  rowReorderIcon: 'pi pi-bars',
+  rowEditor: false,
+  exportable: true
 });
 
 _defineProperty(Column, "propTypes", {
@@ -121,5 +123,7 @@ _defineProperty(Column, "propTypes", {
   editorValidatorEvent: _propTypes.default.string,
   excludeGlobalFilter: _propTypes.default.bool,
   rowReorder: _propTypes.default.bool,
-  rowReorderIcon: _propTypes.default.string
+  rowReorderIcon: _propTypes.default.string,
+  rowEditor: _propTypes.default.bool,
+  exportable: _propTypes.default.bool
 });

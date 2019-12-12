@@ -483,6 +483,10 @@ function (_Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
+      if (this.props.autoFocus && this.inputEl) {
+        this.inputEl.focus();
+      }
+
       if (this.props.tooltip) {
         this.renderTooltip();
       }
@@ -511,7 +515,7 @@ function (_Component) {
         this.updateInputField(this.props.value);
       }
 
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
       }
     }
@@ -551,7 +555,7 @@ function (_Component) {
           return _this5.inputEl = _reactDom.default.findDOMNode(el);
         },
         id: this.props.inputId,
-        type: "text",
+        type: this.props.type,
         name: this.props.name,
         defaultValue: this.formatValue(this.props.value),
         className: inputClassName,
@@ -609,7 +613,7 @@ function (_Component) {
         ref: function ref(el) {
           return _this7.inputEl = el;
         },
-        type: "text",
+        type: this.props.type,
         disabled: this.props.disabled,
         placeholder: this.props.placeholder,
         autoComplete: "off",
@@ -619,6 +623,7 @@ function (_Component) {
         name: this.props.name,
         style: this.props.inputStyle,
         className: this.props.inputClassName,
+        maxLength: this.props.maxlength,
         onKeyUp: this.props.onKeyUp,
         onKeyDown: this.onInputKeyDown,
         onKeyPress: this.props.onKeyPress,
@@ -756,6 +761,7 @@ _defineProperty(AutoComplete, "defaultProps", {
   id: null,
   value: null,
   name: null,
+  type: 'text',
   suggestions: null,
   field: null,
   scrollHeight: '200px',
@@ -776,6 +782,7 @@ _defineProperty(AutoComplete, "defaultProps", {
   size: null,
   appendTo: null,
   tabindex: null,
+  autoFocus: false,
   tooltip: null,
   tooltipOptions: null,
   completeMethod: null,
@@ -801,6 +808,7 @@ _defineProperty(AutoComplete, "propTypes", {
   id: _propTypes.default.string,
   value: _propTypes.default.any,
   name: _propTypes.default.string,
+  type: _propTypes.default.string,
   suggestions: _propTypes.default.array,
   field: _propTypes.default.string,
   scrollHeight: _propTypes.default.string,
@@ -821,6 +829,7 @@ _defineProperty(AutoComplete, "propTypes", {
   size: _propTypes.default.number,
   appendTo: _propTypes.default.any,
   tabindex: _propTypes.default.number,
+  autoFocus: _propTypes.default.bool,
   tooltip: _propTypes.default.string,
   tooltipOptions: _propTypes.default.object,
   completeMethod: _propTypes.default.func,

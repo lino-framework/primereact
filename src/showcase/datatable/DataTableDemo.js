@@ -420,6 +420,18 @@ export class DataTableDemo extends Component {
                             <td>pi pi-bars</td>
                             <td>Icon of the drag handle to reorder rows.</td>
                         </tr>
+                        <tr>
+                            <td>rowEditor</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Displays icons to edit row.</td>
+                        </tr>
+                        <tr>
+                            <td>exportable</td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Defines whether the column is exported or not.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -476,8 +488,8 @@ export class DataTableTemplatingDemo extends Component {
             <DataTable value={this.state.cars} header={header} footer={footer}>
                 <Column field="vin" header="Vin" />
                 <Column field="year" header="Year" />
-                <Column field="brand" header="Brand" bodyTemplate={this.brandTemplate} style={{textAlign:'center'}}/>
-                <Column field="color" header="Color" bodyTemplate={this.colorTemplate} />
+                <Column field="brand" header="Brand" body={this.brandTemplate} style={{textAlign:'center'}}/>
+                <Column field="color" header="Color" body={this.colorTemplate} />
                 <Column body={this.actionTemplate} style={{textAlign:'center', width: '6em'}}/>
             </DataTable>
         );
@@ -1064,7 +1076,7 @@ export class DataTableSelectionDemo extends Component {
 `}
 </CodeHighlight>
 
-            <h3>Incell Editing</h3>
+            <h3>Cell Editing</h3>
             <p>Incell editing feature provides a way to quickly edit data inside the table. A cell editor is defined using the <i>editor</i> property
             that refers to a function to return an input element for the editing.</p>
             
@@ -1142,6 +1154,87 @@ requiredValidator(props) {
     let value = props.rowData[props.field];
     return value && value.length > 0;
 }
+`}
+</CodeHighlight>
+
+            <h3>Row Editing</h3>
+            <p>Row editing toggles the visibility of the all editors in the row at once and provides additional options to save and cancel editing.</p>
+            
+<CodeHighlight className="language-jsx">
+{`
+<DataTable value={this.state.cars} editMode="row">
+    <Column field="vin" header="Vin" />
+    <Column field="brand" header="Brand" editor={this.brandEditor} onRowEditorValidator={this.onRowEditorValidator}/>
+    <Column field="saleDate" header="Sale Date" editor={this.saleDateEditor} >
+    <Column rowEditor={true} />
+</DataTable>
+
+`}
+</CodeHighlight>
+
+<CodeHighlight className="language-javascript">
+{`
+onEditorValueChange(props, value) {
+    let updatedCars = [...this.state.cars];
+    updatedCars[props.rowIndex][props.field] = value;
+    this.setState({cars: updatedCars});
+}
+
+brandEditor(props) {
+    let brands = [
+        {label: 'Audi', value: 'Audi'},
+        {label: 'BMW', value: 'BMW'},
+        {label: 'Fiat', value: 'Fiat'},
+        {label: 'Ford', value: 'Ford'},
+        {label: 'Honda', value: 'Honda'},
+        {label: 'Jaguar', value: 'Jaguar'},
+        {label: 'Mercedes', value: 'Mercedes'},
+        {label: 'Renault', value: 'Renault'},
+        {label: 'VW', value: 'VW'},
+        {label: 'Volvo', value: 'Volvo'}
+    ];
+    
+    return (
+        <Dropdown value={this.state.cars[props.rowIndex].brand} options={brands} 
+                onChange={(e) => this.onEditorValueChange(props, e.value)} style={{width:'100%'}} placeholder="Select a City"/>
+    );
+}
+
+saleDateEditor(props) {        
+    return (
+        <Calendar value={this.state.cars[props.rowIndex].saleDate}
+                onChange={(e) => this.onEditorValueChange(props, e.value)} style={{width:'100%'}} />
+    );
+}
+
+onRowEditorValidator(rowData) {
+    let value = rowData['brand'];
+    return value.length > 0;
+}
+
+onRowEditInit(event) {
+    this.clonedCars[event.data.vin] = {...event.data};
+}
+
+onRowEditSave(event) {
+    if (this.onRowEditorValidator(event.data)) {
+        delete this.clonedCars[event.data.vin];
+        // Success message
+    }
+    else {
+        // Error message
+    }
+}
+
+onRowEditCancel(event) {
+    let cars = [...this.state.cars];
+    cars[event.index] = this.clonedCars[event.data.vin];
+    delete this.clonedCars[event.data.vin];
+    this.setState({
+        cars
+    })
+}
+    
 `}
 </CodeHighlight>
 
@@ -2055,6 +2148,20 @@ export class DataTableStateDemo extends Component {
                             <td>session</td>
                             <td>Defines where a stateful table keeps its state, <br/> valid values are "session" for sessionStorage and "local" for localStorage.</td>
                         </tr>
+                        <tr>
+                            <td>editMode</td>
+                            <td>string</td>
+                            <td>cell</td>
+                            <td>Defines editing mode, options are "cell" and "row".</td>
+                        </tr>
+                        <tr>
+                            <td>exportFunction</td>
+                            <td>function</td>
+                            <td>null</td>
+                            <td>A function to implement custom export. Need to return string value. <br />
+                                event.data: Field data. <br />
+                                event.rows: Column field.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -2187,6 +2294,30 @@ export class DataTableStateDemo extends Component {
                             <td>value: Value displayed by the table.</td>
                             <td>Callback to invoke after filtering and sorting to pass the rendered value.</td>
                         </tr>
+                        <tr>
+                            <td>rowEditorValidator</td>
+                            <td>data: Editing row data</td>
+                            <td>Callback to invoke to validate the editing row when the save icon is clicked on row editing mode.</td>
+                        </tr>
+                        <tr>
+                            <td>onRowEditInit</td>
+                            <td>event.originalEvent: Browser event <br />
+                                event.data: Editing row data </td>
+                            <td>Callback to invoke when the editing icon is clicked on row editing mode.</td>
+                        </tr>
+                        <tr>
+                            <td>onRowEditSave</td>
+                            <td>event.originalEvent: Browser event <br />
+                                event.data: Editing row data</td>
+                            <td>Callback to invoke when the save icon is clicked on row editing mode.</td>
+                        </tr>
+                        <tr>
+                            <td>onRowEditCancel</td>
+                            <td>event.originalEvent: Browser event <br />
+                                event.data: Editing row data <br />
+                                event.index: Editing row data index</td>
+                            <td>Callback to invoke when the cancel icon is clicked on row editing mode.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -2203,14 +2334,32 @@ export class DataTableStateDemo extends Component {
                     </thead>
                     <tbody>
                         <tr>
+                            <td>reset</td>
+                            <td>-</td>
+                            <td>Resets sort, filter, paginator and columnorder state.</td>
+                        </tr>
+                        <tr>
                             <td>exportCSV</td>
                             <td>-</td>
                             <td>Exports the data to CSV format.</td>
                         </tr>
                         <tr>
+                            <td>filter</td>
+                            <td>value: the filter value <br />
+                                field: the filter field <br />
+                                mode: "startsWith", "contains", "endsWidth", "equals", "notEquals", "in" and "custom".
+                            </td>
+                            <td>Filters the data.</td>
+                        </tr>
+                        <tr>
                             <td>closeEditingCell</td>
                             <td>-</td>
                             <td>Closes the current editing cell when incell editing is enabled.</td>
+                        </tr>
+                        <tr>
+                            <td>resetColumnOrder</td>
+                            <td>-</td>
+                            <td>Resets column order when reorderableColumns is enabled.</td>
                         </tr>
                     </tbody>
                 </table>

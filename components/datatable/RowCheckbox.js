@@ -46,7 +46,11 @@ function (_Component) {
     _classCallCheck(this, RowCheckbox);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(RowCheckbox).call(this, props));
+    _this.state = {};
     _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
+    _this.onFocus = _this.onFocus.bind(_assertThisInitialized(_this));
+    _this.onBlur = _this.onBlur.bind(_assertThisInitialized(_this));
+    _this.onKeyDown = _this.onKeyDown.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -62,24 +66,53 @@ function (_Component) {
       }
     }
   }, {
+    key: "onFocus",
+    value: function onFocus() {
+      this.setState({
+        focused: true
+      });
+    }
+  }, {
+    key: "onBlur",
+    value: function onBlur() {
+      this.setState({
+        focused: false
+      });
+    }
+  }, {
+    key: "onKeyDown",
+    value: function onKeyDown(event) {
+      if (event.key === 'Enter') {
+        this.onClick(event);
+        event.preventDefault();
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var className = (0, _classnames.default)('p-checkbox-box p-component', {
         'p-highlight': this.props.selected,
-        'p-disabled': this.props.disabled
+        'p-disabled': this.props.disabled,
+        'p-focus': this.state.focused
       });
       var iconClassName = (0, _classnames.default)('p-checkbox-icon p-clickable', {
         'pi pi-check': this.props.selected
       });
       return _react.default.createElement("div", {
-        className: "p-checkbox p-component"
+        className: "p-checkbox p-component",
+        onClick: this.onClick
       }, _react.default.createElement("div", {
         className: "p-hidden-accessible"
       }, _react.default.createElement("input", {
-        type: "checkbox"
+        type: "checkbox",
+        defaultChecked: this.props.selected,
+        disabled: this.props.disabled,
+        "aria-checked": this.props.selected,
+        onKeyDown: this.onKeyDown,
+        onFocus: this.onFocus,
+        onBlur: this.onBlur
       })), _react.default.createElement("div", {
-        className: className,
-        onClick: this.onClick
+        className: className
       }, _react.default.createElement("span", {
         className: iconClassName
       })));

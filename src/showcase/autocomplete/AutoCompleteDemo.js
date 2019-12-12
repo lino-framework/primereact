@@ -254,6 +254,12 @@ brandTemplate(brand) {
                                         <td>Name of the input element.</td>
                                     </tr>
                                     <tr>
+                                        <td>type</td>
+                                        <td>string</td>
+                                        <td>text</td>
+                                        <td>Type of the input element.</td>
+                                    </tr>
+                                    <tr>
                                         <td>suggestions</td>
                                         <td>array</td>
                                         <td>null</td>
@@ -372,6 +378,12 @@ brandTemplate(brand) {
                                         <td>number</td>
                                         <td>null</td>
                                         <td>Index of the element in tabbing order.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>autoFocus</td>
+                                        <td>boolean</td>
+                                        <td>false</td>
+                                        <td>When present, it specifies that the component should automatically get focus on load.</td>
                                     </tr>
                                     <tr>
                                         <td>tooltip</td>

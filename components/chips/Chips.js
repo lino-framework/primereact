@@ -79,8 +79,15 @@ function (_Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
-        if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
+      var isValueSame = this.props.value && prevProps.value.length === this.props.value.length;
+
+      if (this.props.tooltip) {
+        if (prevProps.tooltip !== this.props.tooltip) {
+          if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
+        } else if (!isValueSame && this.tooltip) {
+          this.tooltip.deactivate();
+          this.tooltip.activate();
+        }
       }
     }
   }, {
@@ -95,7 +102,8 @@ function (_Component) {
     key: "renderTooltip",
     value: function renderTooltip() {
       this.tooltip = new _Tooltip.default({
-        target: this.element,
+        target: this.inputElement,
+        targetContainer: this.listElement,
         content: this.props.tooltip,
         options: this.props.tooltipOptions
       });
@@ -224,15 +232,16 @@ function (_Component) {
       var _this2 = this;
 
       var content = this.props.itemTemplate ? this.props.itemTemplate(value) : value;
-      return _react.default.createElement("li", {
-        key: index,
-        className: "p-chips-token p-highlight"
-      }, _react.default.createElement("span", {
+      var icon = this.props.disabled ? null : _react.default.createElement("span", {
         className: "p-chips-token-icon pi pi-fw pi-times",
         onClick: function onClick(event) {
           return _this2.removeItem(event, index);
         }
-      }), _react.default.createElement("span", {
+      });
+      return _react.default.createElement("li", {
+        key: index,
+        className: "p-chips-token p-highlight"
+      }, icon, _react.default.createElement("span", {
         className: "p-chips-token-label"
       }, content));
     }

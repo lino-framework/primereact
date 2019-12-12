@@ -105,7 +105,7 @@ function (_Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
       }
     }
@@ -164,7 +164,9 @@ function (_Component) {
         defaultChecked: this.props.checked,
         onFocus: this.onFocus,
         onBlur: this.onBlur,
-        disabled: this.props.disabled
+        disabled: this.props.disabled,
+        required: this.props.required,
+        tabIndex: this.props.tabIndex
       })), _react.default.createElement("div", {
         className: boxClass,
         ref: function ref(el) {
@@ -190,6 +192,8 @@ _defineProperty(RadioButton, "defaultProps", {
   style: null,
   className: null,
   disabled: false,
+  required: false,
+  tabIndex: null,
   tooltip: null,
   tooltipOptions: null,
   onChange: null
@@ -203,6 +207,8 @@ _defineProperty(RadioButton, "propTypes", {
   style: _propTypes.default.object,
   className: _propTypes.default.string,
   disabled: _propTypes.default.bool,
+  required: _propTypes.default.bool,
+  tabIndex: _propTypes.default.number,
   onChange: _propTypes.default.func,
   tooltip: _propTypes.default.string,
   tooltipOptions: _propTypes.default.object

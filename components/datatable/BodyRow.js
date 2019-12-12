@@ -52,6 +52,9 @@ function (_Component) {
     _classCallCheck(this, BodyRow);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(BodyRow).call(this, props));
+    _this.state = {
+      editing: false
+    };
     _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
     _this.onDoubleClick = _this.onDoubleClick.bind(_assertThisInitialized(_this));
     _this.onTouchEnd = _this.onTouchEnd.bind(_assertThisInitialized(_this));
@@ -62,6 +65,9 @@ function (_Component) {
     _this.onDragLeave = _this.onDragLeave.bind(_assertThisInitialized(_this));
     _this.onDrop = _this.onDrop.bind(_assertThisInitialized(_this));
     _this.onKeyDown = _this.onKeyDown.bind(_assertThisInitialized(_this));
+    _this.onRowEditInit = _this.onRowEditInit.bind(_assertThisInitialized(_this));
+    _this.onRowEditSave = _this.onRowEditSave.bind(_assertThisInitialized(_this));
+    _this.onRowEditCancel = _this.onRowEditCancel.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -216,6 +222,58 @@ function (_Component) {
       }
     }
   }, {
+    key: "onRowEditInit",
+    value: function onRowEditInit(event) {
+      if (this.props.onRowEditInit) {
+        this.props.onRowEditInit({
+          originalEvent: event,
+          data: this.props.rowData
+        });
+      }
+
+      this.setState({
+        editing: true
+      });
+      event.preventDefault();
+    }
+  }, {
+    key: "onRowEditSave",
+    value: function onRowEditSave(event) {
+      var valid = true;
+
+      if (this.props.rowEditorValidator) {
+        valid = this.props.rowEditorValidator(this.props.rowData);
+      }
+
+      if (this.props.onRowEditSave) {
+        this.props.onRowEditSave({
+          originalEvent: event,
+          data: this.props.rowData
+        });
+      }
+
+      this.setState({
+        editing: !valid
+      });
+      event.preventDefault();
+    }
+  }, {
+    key: "onRowEditCancel",
+    value: function onRowEditCancel(event) {
+      if (this.props.onRowEditCancel) {
+        this.props.onRowEditCancel({
+          originalEvent: event,
+          data: this.props.rowData,
+          index: this.props.rowIndex
+        });
+      }
+
+      this.setState({
+        editing: false
+      });
+      event.preventDefault();
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -242,7 +300,12 @@ function (_Component) {
 
         if (hasRowSpanGrouping) {
           if (this.props.sortField === column.props.field) {
-            if (this.props.groupRowSpan) rowSpan = this.props.groupRowSpan;else continue;
+            if (this.props.groupRowSpan) {
+              rowSpan = this.props.groupRowSpan;
+              className += ' p-datatable-rowspan-group';
+            } else {
+              continue;
+            }
           }
         }
 
@@ -258,7 +321,12 @@ function (_Component) {
           onRadioClick: this.props.onRadioClick,
           onCheckboxClick: this.props.onCheckboxClick,
           responsive: this.props.responsive,
-          selected: this.props.selected
+          selected: this.props.selected,
+          editMode: this.props.editMode,
+          editing: this.state.editing,
+          onRowEditInit: this.onRowEditInit,
+          onRowEditSave: this.onRowEditSave,
+          onRowEditCancel: this.onRowEditCancel
         }));
 
         cells.push(cell);

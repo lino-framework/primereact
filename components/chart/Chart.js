@@ -9,7 +9,7 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _Chart = _interopRequireDefault(require("chart.js/dist/Chart.js"));
+var ChartJS = _interopRequireWildcard(require("chart.js"));
 
 var _classnames = _interopRequireDefault(require("classnames"));
 
@@ -51,7 +51,7 @@ function (_Component) {
   _createClass(Chart, [{
     key: "initChart",
     value: function initChart() {
-      this.chart = new _Chart.default(this.canvas, {
+      this.chart = new ChartJS.Chart(this.canvas, {
         type: this.props.type,
         data: this.props.data,
         options: this.props.options
@@ -88,6 +88,15 @@ function (_Component) {
         this.chart.destroy();
         this.initChart();
       }
+    }
+  }, {
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate(nextProps) {
+      if (nextProps.data === this.props.data) {
+        return false;
+      }
+
+      return true;
     }
   }, {
     key: "componentDidMount",

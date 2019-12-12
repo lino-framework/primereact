@@ -105,6 +105,7 @@ function (_Component) {
           columnEl: event.target.parentElement,
           columnProps: this.props
         });
+        event.preventDefault();
       }
     }
   }, {

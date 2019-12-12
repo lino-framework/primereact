@@ -9,7 +9,10 @@ export class BodyCell extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            editing: this.props.editing
+        };
+
         this.onExpanderClick = this.onExpanderClick.bind(this);
         this.onClick = this.onClick.bind(this);
         this.onBlur = this.onBlur.bind(this);
@@ -67,7 +70,8 @@ export class BodyCell extends Component {
     }
     
     onClick() {
-        this.editingCellClick = true;
+        if (this.props.editMode !== 'row') {
+            this.editingCellClick = true;
 
         if (this.props.editor && !this.state.editing  && (!this.props.isDisabled || !this.props.isDisabled(this.props))) {
             this.setState({
@@ -79,10 +83,10 @@ export class BodyCell extends Component {
             }
             this.props.onEditorOpen && this.props.onEditorOpen(this.props)
         }
-    }
+    }}
 
     onBlur() {
-        if (this.state.editing && this.props.editorValidatorEvent === 'blur') {
+        if (this.props.editMode !== 'row' && this.state.editing && this.props.editorValidatorEvent === 'blur') {
             this.switchCellToViewMode(true);
         }
     }
@@ -142,9 +146,19 @@ export class BodyCell extends Component {
             this.documentEditListener = null;
         }
     }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.editMode === 'row' && nextProps.editing !== prevState.editing) {
+            return {
+                editing: nextProps.editing
+            }
+        }
+
+        return null;
+    }
         
     componentDidUpdate() {
-        if (this.container && this.props.editor) {
+        if (this.props.editMode !== 'row' && this.container && this.props.editor) {
             clearTimeout(this.tabindexTimeout);
             if (this.state.editing) {
                 let focusable = DomHandler.findSingle(this.container, 'input');
@@ -170,11 +184,11 @@ export class BodyCell extends Component {
     }
 
     render() {
-        let content, header;
+        let content, header, editorKeyHelper;
         let cellClassName = classNames(this.props.bodyClassName||this.props.className, {
                                 'p-selection-column': this.props.selectionMode,
                                 'p-editable-column': this.props.editor,
-                                'p-cell-editing': this.state.editing
+                                'p-cell-editing': this.state.editing && this.props.editor
                             });
 
         if (this.props.expander) {
@@ -198,12 +212,30 @@ export class BodyCell extends Component {
                 <i className={reorderIcon}></i>
             );
         }
-        else {
+        else if (this.props.rowEditor) {
             if (this.state.editing) {
-                if (this.props.editor)
-                    content = this.props.editor(this.props);
-                else
-                    throw new Error("Editor is not found on column.");
+                content = (
+                    <React.Fragment>
+                        <button onClick={this.props.onRowEditSave} className="p-row-editor-save p-link">
+                            <span className="p-row-editor-save-icon pi pi-fw pi-check p-clickable"></span>
+                        </button>
+                        <button onClick={this.props.onRowEditCancel} className="p-row-editor-cancel p-link">
+                            <span className="p-row-editor-cancel-icon pi pi-fw pi-times p-clickable"></span>
+                        </button>
+                    </React.Fragment>
+                );
+            }
+            else {
+                content = (
+                    <button onClick={this.props.onRowEditInit} className="p-row-editor-init p-link">
+                        <span className="p-row-editor-init-icon pi pi-fw pi-pencil p-clickable"></span>
+                    </button>
+                );
+            }
+        }
+        else {
+            if (this.state.editing && this.props.editor) {
+                content = this.props.editor(this.props);
             }
             else {
                 if (this.props.body)
@@ -218,7 +250,7 @@ export class BodyCell extends Component {
         }
 
         /* eslint-disable */
-        let editorKeyHelper = this.props.editor && ( !this.props.isDisabled || !this.props.isDisabled(this.props) ) && <a tabIndex="0" ref={(el) => {this.keyHelper = el;}} className="p-cell-editor-key-helper p-hidden-accessible" onFocus={this.onEditorFocus}><span></span></a>;
+        editorKeyHelper = this.props.editor && ( !this.props.isDisabled || !this.props.isDisabled(this.props) ) && <a tabIndex="0" ref={(el) => {this.keyHelper = el;}} className="p-cell-editor-key-helper p-hidden-accessible" onFocus={this.onEditorFocus}><span></span></a>;
         /* eslint-enable */
                        
         return (

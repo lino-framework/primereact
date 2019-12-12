@@ -97,7 +97,7 @@ function (_Component) {
         } else {
           this.show();
 
-          if (this.props.filter) {
+          if (this.props.filter && this.props.filterInputAutoFocus) {
             setTimeout(function () {
               _this2.filterInput.focus();
             }, 200);
@@ -457,7 +457,7 @@ function (_Component) {
     value: function hide() {
       var _this6 = this;
 
-      if (this.panel.element && this.panel.element.offsetParent) {
+      if (this.panel && this.panel.element && this.panel.element.offsetParent) {
         _DomHandler.default.addClass(this.panel.element, 'p-input-overlay-hidden');
 
         _DomHandler.default.removeClass(this.panel.element, 'p-input-overlay-visible');
@@ -534,19 +534,44 @@ function (_Component) {
       return this.state.filter && this.state.filter.trim().length > 0;
     }
   }, {
+    key: "renderHiddenSelect",
+    value: function renderHiddenSelect(selectedOption) {
+      var _this8 = this;
+
+      var placeHolderOption = _react.default.createElement("option", {
+        value: ""
+      }, this.props.placeholder);
+
+      var option = selectedOption ? _react.default.createElement("option", {
+        value: selectedOption.value
+      }, this.getOptionLabel(selectedOption)) : null;
+      return _react.default.createElement("div", {
+        className: "p-hidden-accessible p-dropdown-hidden-select"
+      }, _react.default.createElement("select", {
+        ref: function ref(el) {
+          return _this8.nativeSelect = el;
+        },
+        required: this.props.required,
+        name: this.props.name,
+        tabIndex: "-1",
+        "aria-hidden": "true"
+      }, placeHolderOption, option));
+    }
+  }, {
     key: "renderKeyboardHelper",
     value: function renderKeyboardHelper() {
-      var _this8 = this;
+      var _this9 = this;
 
       return _react.default.createElement("div", {
         className: "p-hidden-accessible"
       }, _react.default.createElement("input", {
         ref: function ref(el) {
-          return _this8.focusInput = el;
+          return _this9.focusInput = el;
         },
         id: this.props.inputId,
         type: "text",
         role: "listbox",
+        readOnly: true,
         onFocus: this.onInputFocus,
         onBlur: this.onInputBlur,
         onKeyDown: this.onInputKeyDown,
@@ -559,13 +584,13 @@ function (_Component) {
   }, {
     key: "renderLabel",
     value: function renderLabel(label) {
-      var _this9 = this;
+      var _this10 = this;
 
       if (this.props.editable) {
         var value = label || this.props.value || '';
         return _react.default.createElement("input", {
           ref: function ref(el) {
-            return _this9.editableInput = el;
+            return _this10.editableInput = el;
           },
           type: "text",
           defaultValue: value,
@@ -614,28 +639,28 @@ function (_Component) {
   }, {
     key: "renderItems",
     value: function renderItems(selectedOption) {
-      var _this10 = this;
+      var _this11 = this;
 
       var items = this.props.options;
 
       if (items && this.hasFilter()) {
         items = items && items.filter(function (option) {
-          return _this10.filter(option);
+          return _this11.filter(option);
         });
       }
 
       if (items) {
         return items.map(function (option) {
-          var optionLabel = _this10.getOptionLabel(option);
+          var optionLabel = _this11.getOptionLabel(option);
 
           return _react.default.createElement(_DropdownItem.DropdownItem, {
-            key: _this10.getOptionKey(option),
+            key: _this11.getOptionKey(option),
             label: optionLabel,
             option: option,
-            template: _this10.props.itemTemplate,
+            template: _this11.props.itemTemplate,
             selected: selectedOption === option,
             disabled: option.disabled,
-            onClick: _this10.onOptionClick
+            onClick: _this11.onOptionClick
           });
         });
       } else {
@@ -645,14 +670,14 @@ function (_Component) {
   }, {
     key: "renderFilter",
     value: function renderFilter() {
-      var _this11 = this;
+      var _this12 = this;
 
       if (this.props.filter) {
         return _react.default.createElement("div", {
           className: "p-dropdown-filter-container"
         }, _react.default.createElement("input", {
           ref: function ref(el) {
-            return _this11.filterInput = el;
+            return _this12.filterInput = el;
           },
           type: "text",
           autoComplete: "off",
@@ -692,6 +717,8 @@ function (_Component) {
       if (this.props.tooltip) {
         this.renderTooltip();
       }
+
+      this.nativeSelect.selectedIndex = 1;
     }
   }, {
     key: "componentWillUnmount",
@@ -723,9 +750,11 @@ function (_Component) {
         }
       }
 
-      if (this.props.tooltip && prevProps.tooltip !== this.props.tooltip) {
+      if (prevProps.tooltip !== this.props.tooltip) {
         if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
       }
+
+      this.nativeSelect.selectedIndex = 1;
     }
   }, {
     key: "renderTooltip",
@@ -739,7 +768,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this12 = this;
+      var _this13 = this;
 
       var className = (0, _classnames.default)('p-dropdown p-component', this.props.className, {
         'p-disabled': this.props.disabled,
@@ -747,6 +776,7 @@ function (_Component) {
       });
       var selectedOption = this.findOption(this.props.value);
       var label = selectedOption ? this.getOptionLabel(selectedOption) : null;
+      var hiddenSelect = this.renderHiddenSelect(selectedOption);
       var keyboardHelper = this.renderKeyboardHelper();
       var labelElement = this.renderLabel(label);
       var dropdownIcon = this.renderDropdownIcon();
@@ -762,16 +792,16 @@ function (_Component) {
       return _react.default.createElement("div", {
         id: this.props.id,
         ref: function ref(el) {
-          return _this12.container = el;
+          return _this13.container = el;
         },
         className: className,
         style: this.props.style,
         onClick: this.onClick,
         onMouseDown: this.props.onMouseDown,
         onContextMenu: this.props.onContextMenu
-      }, keyboardHelper, labelElement, clearIcon, dropdownIcon, _react.default.createElement(_DropdownPanel.DropdownPanel, {
+      }, keyboardHelper, hiddenSelect, labelElement, clearIcon, dropdownIcon, _react.default.createElement(_DropdownPanel.DropdownPanel, {
         ref: function ref(el) {
-          return _this12.panel = el;
+          return _this13.panel = el;
         },
         appendTo: this.props.appendTo,
         panelStyle: this.props.panelStyle,
@@ -790,6 +820,7 @@ exports.Dropdown = Dropdown;
 
 _defineProperty(Dropdown, "defaultProps", {
   id: null,
+  name: null,
   value: null,
   options: null,
   optionLabel: null,
@@ -806,6 +837,7 @@ _defineProperty(Dropdown, "defaultProps", {
   appendTo: null,
   tabIndex: null,
   autoFocus: false,
+  filterInputAutoFocus: true,
   panelClassName: null,
   panelStyle: null,
   dataKey: null,
@@ -823,6 +855,7 @@ _defineProperty(Dropdown, "defaultProps", {
 
 _defineProperty(Dropdown, "propTypes", {
   id: _propTypes.default.string,
+  name: _propTypes.default.string,
   value: _propTypes.default.any,
   options: _propTypes.default.array,
   optionLabel: _propTypes.default.string,
@@ -839,6 +872,7 @@ _defineProperty(Dropdown, "propTypes", {
   appendTo: _propTypes.default.any,
   tabIndex: _propTypes.default.number,
   autoFocus: _propTypes.default.bool,
+  filterInputAutoFocus: _propTypes.default.bool,
   lazy: _propTypes.default.bool,
   panelClassName: _propTypes.default.string,
   panelstyle: _propTypes.default.object,

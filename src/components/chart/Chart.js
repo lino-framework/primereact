@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ChartJS from 'chart.js/dist/Chart.js';
+import * as ChartJS from 'chart.js';
 import classNames from 'classnames';
 
 export class Chart extends Component {
@@ -28,7 +28,7 @@ export class Chart extends Component {
     };
 
     initChart() {
-        this.chart = new ChartJS(this.canvas, {
+        this.chart = new ChartJS.Chart(this.canvas, {
             type: this.props.type,
             data: this.props.data,
             options: this.props.options
@@ -60,6 +60,13 @@ export class Chart extends Component {
             this.chart.destroy();
             this.initChart();
         }
+    }
+
+    shouldComponentUpdate(nextProps){	
+        if(nextProps.data === this.props.data) {	
+            return false;	
+        }
+        return true;	
     }
 
     componentDidMount() {

@@ -90,7 +90,7 @@ function (_Component) {
       if (event.which === 13 || event.which === 9) {
         // enter || tab
         event.preventDefault();
-        this.switchCellToViewMode(true);
+        this.switchCellToViewMode(event, true);
       }
 
       if (event.which === 13) {
@@ -123,7 +123,7 @@ function (_Component) {
 
       if (event.which === 27) // escape
         {
-          this.switchCellToViewMode(false);
+          this.switchCellToViewMode(event, false);
         }
     }
   }, {
@@ -147,9 +147,9 @@ function (_Component) {
     }
   }, {
     key: "onBlur",
-    value: function onBlur() {
+    value: function onBlur(event) {
       if (this.props.editMode !== 'row' && this.state.editing && this.props.editorValidatorEvent === 'blur') {
-        this.switchCellToViewMode(true);
+        this.switchCellToViewMode(event, true);
       }
     }
   }, {
@@ -165,7 +165,7 @@ function (_Component) {
       if (!this.documentEditListener) {
         this.documentEditListener = function (event) {
           if (!_this2.editingCellClick) {
-            _this2.switchCellToViewMode(true);
+            _this2.switchCellToViewMode(event, true);
           }
 
           _this2.editingCellClick = false;
@@ -185,13 +185,13 @@ function (_Component) {
     }
   }, {
     key: "switchCellToViewMode",
-    value: function switchCellToViewMode(submit) {
+    value: function switchCellToViewMode(event, submit) {
       if (this.props.editorValidator && submit) {
         var valid = this.props.editorValidator(this.props);
 
         if (valid) {
           if (this.props.onEditorSubmit) {
-            this.props.onEditorSubmit(this.props);
+            this.props.onEditorSubmit(event, this.props);
           }
 
           this.closeCell();
@@ -199,9 +199,9 @@ function (_Component) {
 
       } else {
         if (submit && this.props.onEditorSubmit) {
-          this.props.onEditorSubmit(this.props);
+          this.props.onEditorSubmit(event, this.props);
         } else if (this.props.onEditorCancel) {
-          this.props.onEditorCancel(this.props);
+          this.props.onEditorCancel(event, this.props);
         }
 
         this.closeCell();

@@ -17,183 +17,139 @@ var _ObjectUtils = _interopRequireDefault(require("../utils/ObjectUtils"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var InputSwitch =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(InputSwitch, _Component);
-
-  function InputSwitch(props) {
-    var _this;
-
-    _classCallCheck(this, InputSwitch);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(InputSwitch).call(this, props));
-    _this.state = {};
-    _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
-    _this.toggle = _this.toggle.bind(_assertThisInitialized(_this));
-    _this.onFocus = _this.onFocus.bind(_assertThisInitialized(_this));
-    _this.onBlur = _this.onBlur.bind(_assertThisInitialized(_this));
-    _this.onKeyDown = _this.onKeyDown.bind(_assertThisInitialized(_this));
-    return _this;
+class InputSwitch extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.onClick = this.onClick.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
-  _createClass(InputSwitch, [{
-    key: "onClick",
-    value: function onClick(event) {
-      if (this.props.disabled) {
-        return;
-      }
+  onClick(event) {
+    if (this.props.disabled) {
+      return;
+    }
 
-      this.toggle(event);
-      this.input.focus();
-    }
-  }, {
-    key: "toggle",
-    value: function toggle(event) {
-      if (this.props.onChange) {
-        this.props.onChange({
-          originalEvent: event,
-          value: !this.props.checked,
-          stopPropagation: function stopPropagation() {},
-          preventDefault: function preventDefault() {},
-          target: {
-            name: this.props.name,
-            id: this.props.id,
-            value: !this.props.checked
-          }
-        });
-      }
-    }
-  }, {
-    key: "onFocus",
-    value: function onFocus(event) {
-      this.setState({
-        focused: true
-      });
+    this.toggle(event);
+    this.input.focus();
+  }
 
-      if (this.props.onFocus) {
-        this.props.onFocus(event);
-      }
-    }
-  }, {
-    key: "onBlur",
-    value: function onBlur(event) {
-      this.setState({
-        focused: false
-      });
-
-      if (this.props.onBlur) {
-        this.props.onBlur(event);
-      }
-    }
-  }, {
-    key: "onKeyDown",
-    value: function onKeyDown(event) {
-      if (event.key === 'Enter') {
-        this.onClick(event);
-      }
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      if (this.props.tooltip) {
-        this.renderTooltip();
-      }
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      if (prevProps.tooltip !== this.props.tooltip) {
-        if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
-      }
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      if (this.tooltip) {
-        this.tooltip.destroy();
-        this.tooltip = null;
-      }
-    }
-  }, {
-    key: "renderTooltip",
-    value: function renderTooltip() {
-      this.tooltip = new _Tooltip.default({
-        target: this.container,
-        content: this.props.tooltip,
-        options: this.props.tooltipOptions
+  toggle(event) {
+    if (this.props.onChange) {
+      this.props.onChange({
+        originalEvent: event,
+        value: !this.props.checked,
+        stopPropagation: () => {},
+        preventDefault: () => {},
+        target: {
+          name: this.props.name,
+          id: this.props.id,
+          value: !this.props.checked
+        }
       });
     }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
+  }
 
-      var className = (0, _classnames.default)('p-inputswitch p-component', this.props.className, {
-        'p-inputswitch-checked': this.props.checked,
-        'p-disabled': this.props.disabled,
-        'p-inputswitch-focus': this.state.focused
-      });
+  onFocus(event) {
+    this.setState({
+      focused: true
+    });
 
-      var inputSwitchProps = _ObjectUtils.default.findDiffKeys(this.props, InputSwitch.defaultProps);
-
-      return _react.default.createElement("div", _extends({
-        ref: function ref(el) {
-          return _this2.container = el;
-        },
-        id: this.props.id,
-        className: className,
-        style: this.props.style,
-        onClick: this.onClick,
-        role: "checkbox",
-        "aria-checked": this.props.checked
-      }, inputSwitchProps), _react.default.createElement("div", {
-        className: "p-hidden-accessible"
-      }, _react.default.createElement("input", {
-        ref: function ref(el) {
-          return _this2.input = el;
-        },
-        type: "checkbox",
-        id: this.props.inputId,
-        name: this.props.name,
-        checked: this.props.checked,
-        onChange: this.toggle,
-        onFocus: this.onFocus,
-        onBlur: this.onBlur,
-        onKeyDown: this.onKeyDown,
-        disabled: this.props.disabled
-      })), _react.default.createElement("span", {
-        className: "p-inputswitch-slider"
-      }));
+    if (this.props.onFocus) {
+      this.props.onFocus(event);
     }
-  }]);
+  }
 
-  return InputSwitch;
-}(_react.Component);
+  onBlur(event) {
+    this.setState({
+      focused: false
+    });
+
+    if (this.props.onBlur) {
+      this.props.onBlur(event);
+    }
+  }
+
+  onKeyDown(event) {
+    if (event.key === 'Enter') {
+      this.onClick(event);
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.tooltip) {
+      this.renderTooltip();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.tooltip !== this.props.tooltip) {
+      if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.tooltip) {
+      this.tooltip.destroy();
+      this.tooltip = null;
+    }
+  }
+
+  renderTooltip() {
+    this.tooltip = new _Tooltip.default({
+      target: this.container,
+      content: this.props.tooltip,
+      options: this.props.tooltipOptions
+    });
+  }
+
+  render() {
+    const className = (0, _classnames.default)('p-inputswitch p-component', this.props.className, {
+      'p-inputswitch-checked': this.props.checked,
+      'p-disabled': this.props.disabled,
+      'p-inputswitch-focus': this.state.focused
+    });
+
+    let inputSwitchProps = _ObjectUtils.default.findDiffKeys(this.props, InputSwitch.defaultProps);
+
+    return _react.default.createElement("div", _extends({
+      ref: el => this.container = el,
+      id: this.props.id,
+      className: className,
+      style: this.props.style,
+      onClick: this.onClick,
+      role: "checkbox",
+      "aria-checked": this.props.checked
+    }, inputSwitchProps), _react.default.createElement("div", {
+      className: "p-hidden-accessible"
+    }, _react.default.createElement("input", {
+      ref: el => this.input = el,
+      type: "checkbox",
+      id: this.props.inputId,
+      name: this.props.name,
+      checked: this.props.checked,
+      onChange: this.toggle,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur,
+      onKeyDown: this.onKeyDown,
+      disabled: this.props.disabled
+    })), _react.default.createElement("span", {
+      className: "p-inputswitch-slider"
+    }));
+  }
+
+}
 
 exports.InputSwitch = InputSwitch;
 

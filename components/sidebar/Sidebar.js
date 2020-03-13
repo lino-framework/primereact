@@ -15,257 +15,202 @@ var _DomHandler = _interopRequireDefault(require("../utils/DomHandler"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Sidebar =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Sidebar, _Component);
-
-  function Sidebar(props) {
-    var _this;
-
-    _classCallCheck(this, Sidebar);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Sidebar).call(this, props));
-    _this.onCloseClick = _this.onCloseClick.bind(_assertThisInitialized(_this));
-    return _this;
+class Sidebar extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.onCloseClick = this.onCloseClick.bind(this);
   }
 
-  _createClass(Sidebar, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      if (this.props.visible) {
-        this.onShow();
+  componentDidMount() {
+    if (this.props.visible) {
+      this.onShow();
+    }
+  }
+
+  componentWillUnmount() {
+    this.unbindMaskClickListener();
+    this.disableModality();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.visible !== this.props.visible) {
+      if (this.props.visible) this.onShow();else this.onHide();
+    }
+
+    if (this.mask && prevProps.dismissable !== this.props.dismissable) {
+      if (this.props.dismissable) {
+        this.bindMaskClickListener();
+      } else {
+        this.unbindMaskClickListener();
       }
     }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
+  }
+
+  onShow() {
+    this.container.style.zIndex = String(this.props.baseZIndex + _DomHandler.default.generateZIndex());
+
+    if (this.props.modal) {
+      this.enableModality();
+    }
+
+    if (this.props.closeOnEscape) {
+      this.bindDocumentEscapeListener();
+    }
+
+    if (this.closeIcon) {
+      this.closeIcon.focus();
+    }
+
+    if (this.props.onShow) {
+      this.props.onShow();
+    }
+  }
+
+  enableModality() {
+    if (!this.mask) {
+      this.mask = document.createElement('div');
+      this.mask.style.zIndex = String(parseInt(this.container.style.zIndex, 10) - 1);
+      let maskStyleClass = 'p-component-overlay p-sidebar-mask';
+
+      if (this.props.blockScroll) {
+        maskStyleClass += ' p-sidebar-mask-scrollblocker';
+      }
+
+      _DomHandler.default.addMultipleClasses(this.mask, maskStyleClass);
+
+      if (this.props.dismissable) {
+        this.bindMaskClickListener();
+      }
+
+      document.body.appendChild(this.mask);
+
+      if (this.props.blockScroll) {
+        _DomHandler.default.addClass(document.body, 'p-overflow-hidden');
+      }
+    }
+  }
+
+  disableModality() {
+    if (this.mask) {
       this.unbindMaskClickListener();
+      document.body.removeChild(this.mask);
+
+      if (this.props.blockScroll) {
+        let bodyChildren = document.body.children;
+        let hasBlockerMasks;
+
+        for (let i = 0; i < bodyChildren.length; i++) {
+          let bodyChild = bodyChildren[i];
+
+          if (_DomHandler.default.hasClass(bodyChild, 'p-sidebar-mask-scrollblocker')) {
+            hasBlockerMasks = true;
+            break;
+          }
+        }
+
+        if (!hasBlockerMasks) {
+          _DomHandler.default.removeClass(document.body, 'p-overflow-hidden');
+        }
+      }
+
+      this.mask = null;
+    }
+  }
+
+  onCloseClick(event) {
+    this.props.onHide();
+    event.preventDefault();
+  }
+
+  onHide() {
+    this.unbindMaskClickListener();
+    this.unbindDocumentEscapeListener();
+
+    if (this.props.modal) {
       this.disableModality();
     }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps, prevState) {
-      if (prevProps.visible !== this.props.visible) {
-        if (this.props.visible) this.onShow();else this.onHide();
-      }
+  }
 
-      if (this.mask && prevProps.dismissable !== this.props.dismissable) {
-        if (this.props.dismissable) {
-          this.bindMaskClickListener();
-        } else {
-          this.unbindMaskClickListener();
+  bindDocumentEscapeListener() {
+    this.documentEscapeListener = event => {
+      if (event.which === 27) {
+        if (parseInt(this.container.style.zIndex, 10) === _DomHandler.default.getCurrentZIndex() + this.props.baseZIndex) {
+          this.onCloseClick(event);
         }
       }
+    };
+
+    document.addEventListener('keydown', this.documentEscapeListener);
+  }
+
+  unbindDocumentEscapeListener() {
+    if (this.documentEscapeListener) {
+      document.removeEventListener('keydown', this.documentEscapeListener);
+      this.documentEscapeListener = null;
     }
-  }, {
-    key: "onShow",
-    value: function onShow() {
-      this.container.style.zIndex = String(this.props.baseZIndex + _DomHandler.default.generateZIndex());
+  }
 
-      if (this.props.modal) {
-        this.enableModality();
-      }
-
-      if (this.props.closeOnEscape) {
-        this.bindDocumentEscapeListener();
-      }
-
-      if (this.closeIcon) {
-        this.closeIcon.focus();
-      }
-
-      if (this.props.onShow) {
-        this.props.onShow();
-      }
-    }
-  }, {
-    key: "enableModality",
-    value: function enableModality() {
-      if (!this.mask) {
-        this.mask = document.createElement('div');
-        this.mask.style.zIndex = String(parseInt(this.container.style.zIndex, 10) - 1);
-        var maskStyleClass = 'p-component-overlay p-sidebar-mask';
-
-        if (this.props.blockScroll) {
-          maskStyleClass += ' p-sidebar-mask-scrollblocker';
-        }
-
-        _DomHandler.default.addMultipleClasses(this.mask, maskStyleClass);
-
-        if (this.props.dismissable) {
-          this.bindMaskClickListener();
-        }
-
-        document.body.appendChild(this.mask);
-
-        if (this.props.blockScroll) {
-          _DomHandler.default.addClass(document.body, 'p-overflow-hidden');
-        }
-      }
-    }
-  }, {
-    key: "disableModality",
-    value: function disableModality() {
-      if (this.mask) {
-        this.unbindMaskClickListener();
-        document.body.removeChild(this.mask);
-
-        if (this.props.blockScroll) {
-          var bodyChildren = document.body.children;
-          var hasBlockerMasks;
-
-          for (var i = 0; i < bodyChildren.length; i++) {
-            var bodyChild = bodyChildren[i];
-
-            if (_DomHandler.default.hasClass(bodyChild, 'p-sidebar-mask-scrollblocker')) {
-              hasBlockerMasks = true;
-              break;
-            }
-          }
-
-          if (!hasBlockerMasks) {
-            _DomHandler.default.removeClass(document.body, 'p-overflow-hidden');
-          }
-        }
-
-        this.mask = null;
-      }
-    }
-  }, {
-    key: "onCloseClick",
-    value: function onCloseClick(event) {
-      this.props.onHide();
-      event.preventDefault();
-    }
-  }, {
-    key: "onHide",
-    value: function onHide() {
-      this.unbindMaskClickListener();
-      this.unbindDocumentEscapeListener();
-
-      if (this.props.modal) {
-        this.disableModality();
-      }
-    }
-  }, {
-    key: "bindDocumentEscapeListener",
-    value: function bindDocumentEscapeListener() {
-      var _this2 = this;
-
-      this.documentEscapeListener = function (event) {
-        if (event.which === 27) {
-          if (parseInt(_this2.container.style.zIndex, 10) === _DomHandler.default.getCurrentZIndex() + _this2.props.baseZIndex) {
-            _this2.onCloseClick(event);
-          }
-        }
+  bindMaskClickListener() {
+    if (!this.maskClickListener) {
+      this.maskClickListener = event => {
+        this.onCloseClick(event);
       };
 
-      document.addEventListener('keydown', this.documentEscapeListener);
+      this.mask.addEventListener('click', this.maskClickListener);
     }
-  }, {
-    key: "unbindDocumentEscapeListener",
-    value: function unbindDocumentEscapeListener() {
-      if (this.documentEscapeListener) {
-        document.removeEventListener('keydown', this.documentEscapeListener);
-        this.documentEscapeListener = null;
-      }
-    }
-  }, {
-    key: "bindMaskClickListener",
-    value: function bindMaskClickListener() {
-      var _this3 = this;
+  }
 
-      if (!this.maskClickListener) {
-        this.maskClickListener = function (event) {
-          _this3.onCloseClick(event);
-        };
+  unbindMaskClickListener() {
+    if (this.maskClickListener) {
+      this.mask.removeEventListener('click', this.maskClickListener);
+      this.maskClickListener = null;
+    }
+  }
 
-        this.mask.addEventListener('click', this.maskClickListener);
-      }
+  renderCloseIcon() {
+    if (this.props.showCloseIcon) {
+      return _react.default.createElement("button", {
+        ref: el => this.closeIcon = el,
+        className: "p-sidebar-close p-link",
+        onClick: this.onCloseClick
+      }, _react.default.createElement("span", {
+        className: "p-sidebar-close-icon pi pi-times"
+      }));
+    } else {
+      return null;
     }
-  }, {
-    key: "unbindMaskClickListener",
-    value: function unbindMaskClickListener() {
-      if (this.maskClickListener) {
-        this.mask.removeEventListener('click', this.maskClickListener);
-        this.maskClickListener = null;
-      }
-    }
-  }, {
-    key: "renderCloseIcon",
-    value: function renderCloseIcon() {
-      var _this4 = this;
+  }
 
-      if (this.props.showCloseIcon) {
-        return _react.default.createElement("button", {
-          ref: function ref(el) {
-            return _this4.closeIcon = el;
-          },
-          className: "p-sidebar-close p-link",
-          onClick: this.onCloseClick
-        }, _react.default.createElement("span", {
-          className: "p-sidebar-close-icon pi pi-times"
-        }));
-      } else {
-        return null;
-      }
+  renderIconsTemplate() {
+    if (this.props.iconsTemplate) {
+      return this.props.iconsTemplate(this);
+    } else {
+      return null;
     }
-  }, {
-    key: "renderIconsTemplate",
-    value: function renderIconsTemplate() {
-      if (this.props.iconsTemplate) {
-        return this.props.iconsTemplate(this);
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this5 = this;
+  }
 
-      var className = (0, _classnames.default)('p-sidebar p-component', this.props.className, 'p-sidebar-' + this.props.position, {
-        'p-sidebar-active': this.props.visible,
-        'p-sidebar-full': this.props.fullScreen
-      });
-      var closeIcon = this.renderCloseIcon();
-      var iconsTemplate = this.renderIconsTemplate();
-      return _react.default.createElement("div", {
-        ref: function ref(el) {
-          return _this5.container = el;
-        },
-        id: this.props.id,
-        className: className,
-        style: this.props.style
-      }, closeIcon, iconsTemplate, this.props.children);
-    }
-  }]);
+  render() {
+    const className = (0, _classnames.default)('p-sidebar p-component', this.props.className, 'p-sidebar-' + this.props.position, {
+      'p-sidebar-active': this.props.visible,
+      'p-sidebar-full': this.props.fullScreen
+    });
+    const closeIcon = this.renderCloseIcon();
+    const iconsTemplate = this.renderIconsTemplate();
+    return _react.default.createElement("div", {
+      ref: el => this.container = el,
+      id: this.props.id,
+      className: className,
+      style: this.props.style
+    }, closeIcon, iconsTemplate, this.props.children);
+  }
 
-  return Sidebar;
-}(_react.Component);
+}
 
 exports.Sidebar = Sidebar;
 

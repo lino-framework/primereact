@@ -9,97 +9,75 @@ var _DomHandler = _interopRequireDefault(require("../utils/DomHandler"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var KeyFilter =
-/*#__PURE__*/
-function () {
-  function KeyFilter() {
-    _classCallCheck(this, KeyFilter);
+class KeyFilter {
+  /* eslint-disable */
+
+  /* eslint-enable */
+  static isNavKeyPress(e) {
+    let k = e.keyCode;
+    k = _DomHandler.default.getBrowser().safari ? KeyFilter.SAFARI_KEYS[k] || k : k;
+    return k >= 33 && k <= 40 || k === KeyFilter.KEYS.RETURN || k === KeyFilter.KEYS.TAB || k === KeyFilter.KEYS.ESC;
   }
 
-  _createClass(KeyFilter, null, [{
-    key: "isNavKeyPress",
+  static isSpecialKey(e) {
+    let k = e.keyCode;
+    return k === 9 || k === 13 || k === 27 || k === 16 || k === 17 || k >= 18 && k <= 20 || _DomHandler.default.getBrowser().opera && !e.shiftKey && (k === 8 || k >= 33 && k <= 35 || k >= 36 && k <= 39 || k >= 44 && k <= 45);
+  }
 
-    /* eslint-disable */
+  static getKey(e) {
+    let k = e.keyCode || e.charCode;
+    return _DomHandler.default.getBrowser().safari ? KeyFilter.SAFARI_KEYS[k] || k : k;
+  }
 
-    /* eslint-enable */
-    value: function isNavKeyPress(e) {
-      var k = e.keyCode;
-      k = _DomHandler.default.getBrowser().safari ? KeyFilter.SAFARI_KEYS[k] || k : k;
-      return k >= 33 && k <= 40 || k === KeyFilter.KEYS.RETURN || k === KeyFilter.KEYS.TAB || k === KeyFilter.KEYS.ESC;
+  static getCharCode(e) {
+    return e.charCode || e.keyCode || e.which;
+  }
+
+  static onKeyPress(e, keyfilter, validateOnly) {
+    if (validateOnly) {
+      return;
     }
-  }, {
-    key: "isSpecialKey",
-    value: function isSpecialKey(e) {
-      var k = e.keyCode;
-      return k === 9 || k === 13 || k === 27 || k === 16 || k === 17 || k >= 18 && k <= 20 || _DomHandler.default.getBrowser().opera && !e.shiftKey && (k === 8 || k >= 33 && k <= 35 || k >= 36 && k <= 39 || k >= 44 && k <= 45);
+
+    const regex = KeyFilter.DEFAULT_MASKS[keyfilter] ? KeyFilter.DEFAULT_MASKS[keyfilter] : keyfilter;
+
+    const browser = _DomHandler.default.getBrowser();
+
+    if (e.ctrlKey || e.altKey) {
+      return;
     }
-  }, {
-    key: "getKey",
-    value: function getKey(e) {
-      var k = e.keyCode || e.charCode;
-      return _DomHandler.default.getBrowser().safari ? KeyFilter.SAFARI_KEYS[k] || k : k;
+
+    const k = this.getKey(e);
+
+    if (browser.mozilla && (this.isNavKeyPress(e) || k === KeyFilter.KEYS.BACKSPACE || k === KeyFilter.KEYS.DELETE && e.charCode === 0)) {
+      return;
     }
-  }, {
-    key: "getCharCode",
-    value: function getCharCode(e) {
-      return e.charCode || e.keyCode || e.which;
+
+    const c = this.getCharCode(e);
+    const cc = String.fromCharCode(c);
+
+    if (browser.mozilla && (this.isSpecialKey(e) || !cc)) {
+      return;
     }
-  }, {
-    key: "onKeyPress",
-    value: function onKeyPress(e, keyfilter, validateOnly) {
-      if (validateOnly) {
-        return;
-      }
 
-      var regex = KeyFilter.DEFAULT_MASKS[keyfilter] ? KeyFilter.DEFAULT_MASKS[keyfilter] : keyfilter;
-
-      var browser = _DomHandler.default.getBrowser();
-
-      if (e.ctrlKey || e.altKey) {
-        return;
-      }
-
-      var k = this.getKey(e);
-
-      if (browser.mozilla && (this.isNavKeyPress(e) || k === KeyFilter.KEYS.BACKSPACE || k === KeyFilter.KEYS.DELETE && e.charCode === 0)) {
-        return;
-      }
-
-      var c = this.getCharCode(e);
-      var cc = String.fromCharCode(c);
-
-      if (browser.mozilla && (this.isSpecialKey(e) || !cc)) {
-        return;
-      }
-
-      if (!regex.test(cc)) {
-        e.preventDefault();
-      }
+    if (!regex.test(cc)) {
+      e.preventDefault();
     }
-  }, {
-    key: "validate",
-    value: function validate(e, keyfilter) {
-      var value = e.target.value,
-          validatePattern = true;
+  }
 
-      if (value && !keyfilter.test(value)) {
-        validatePattern = false;
-      }
+  static validate(e, keyfilter) {
+    let value = e.target.value,
+        validatePattern = true;
 
-      return validatePattern;
+    if (value && !keyfilter.test(value)) {
+      validatePattern = false;
     }
-  }]);
 
-  return KeyFilter;
-}();
+    return validatePattern;
+  }
+
+}
 
 exports.default = KeyFilter;
 

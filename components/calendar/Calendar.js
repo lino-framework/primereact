@@ -25,1000 +25,917 @@ var _Tooltip = _interopRequireDefault(require("../tooltip/Tooltip"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Calendar =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Calendar, _Component);
+class Calendar extends _react.Component {
+  constructor(props) {
+    super(props);
 
-  function Calendar(props) {
-    var _this;
-
-    _classCallCheck(this, Calendar);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Calendar).call(this, props));
-
-    if (!_this.props.onViewDateChange) {
-      var propValue = _this.props.value;
+    if (!this.props.onViewDateChange) {
+      let propValue = this.props.value;
 
       if (Array.isArray(propValue)) {
         propValue = propValue[0];
       }
 
-      _this.state = {
-        viewDate: _this.props.viewDate || propValue || new Date()
+      this.state = {
+        viewDate: this.props.viewDate || propValue || new Date()
       };
     }
 
-    _this.onInputChange = _this.onInputChange.bind(_assertThisInitialized(_this));
-    _this.onInputFocus = _this.onInputFocus.bind(_assertThisInitialized(_this));
-    _this.onInputBlur = _this.onInputBlur.bind(_assertThisInitialized(_this));
-    _this.onInputKeyDown = _this.onInputKeyDown.bind(_assertThisInitialized(_this));
-    _this.onButtonClick = _this.onButtonClick.bind(_assertThisInitialized(_this));
-    _this.navBackward = _this.navBackward.bind(_assertThisInitialized(_this));
-    _this.navForward = _this.navForward.bind(_assertThisInitialized(_this));
-    _this.onMonthDropdownChange = _this.onMonthDropdownChange.bind(_assertThisInitialized(_this));
-    _this.onYearDropdownChange = _this.onYearDropdownChange.bind(_assertThisInitialized(_this));
-    _this.onTodayButtonClick = _this.onTodayButtonClick.bind(_assertThisInitialized(_this));
-    _this.onClearButtonClick = _this.onClearButtonClick.bind(_assertThisInitialized(_this));
-    _this.incrementHour = _this.incrementHour.bind(_assertThisInitialized(_this));
-    _this.decrementHour = _this.decrementHour.bind(_assertThisInitialized(_this));
-    _this.incrementMinute = _this.incrementMinute.bind(_assertThisInitialized(_this));
-    _this.decrementMinute = _this.decrementMinute.bind(_assertThisInitialized(_this));
-    _this.incrementSecond = _this.incrementSecond.bind(_assertThisInitialized(_this));
-    _this.decrementSecond = _this.decrementSecond.bind(_assertThisInitialized(_this));
-    _this.toggleAmPm = _this.toggleAmPm.bind(_assertThisInitialized(_this));
-    _this.onTimePickerElementMouseDown = _this.onTimePickerElementMouseDown.bind(_assertThisInitialized(_this));
-    _this.onTimePickerElementMouseUp = _this.onTimePickerElementMouseUp.bind(_assertThisInitialized(_this));
-    _this.onTimePickerElementMouseLeave = _this.onTimePickerElementMouseLeave.bind(_assertThisInitialized(_this));
-    return _this;
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onInputFocus = this.onInputFocus.bind(this);
+    this.onInputBlur = this.onInputBlur.bind(this);
+    this.onInputKeyDown = this.onInputKeyDown.bind(this);
+    this.onButtonClick = this.onButtonClick.bind(this);
+    this.navBackward = this.navBackward.bind(this);
+    this.navForward = this.navForward.bind(this);
+    this.onMonthDropdownChange = this.onMonthDropdownChange.bind(this);
+    this.onYearDropdownChange = this.onYearDropdownChange.bind(this);
+    this.onTodayButtonClick = this.onTodayButtonClick.bind(this);
+    this.onClearButtonClick = this.onClearButtonClick.bind(this);
+    this.incrementHour = this.incrementHour.bind(this);
+    this.decrementHour = this.decrementHour.bind(this);
+    this.incrementMinute = this.incrementMinute.bind(this);
+    this.decrementMinute = this.decrementMinute.bind(this);
+    this.incrementSecond = this.incrementSecond.bind(this);
+    this.decrementSecond = this.decrementSecond.bind(this);
+    this.toggleAmPm = this.toggleAmPm.bind(this);
+    this.onTimePickerElementMouseDown = this.onTimePickerElementMouseDown.bind(this);
+    this.onTimePickerElementMouseUp = this.onTimePickerElementMouseUp.bind(this);
+    this.onTimePickerElementMouseLeave = this.onTimePickerElementMouseLeave.bind(this);
   }
 
-  _createClass(Calendar, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      if (this.props.tooltip) {
-        this.renderTooltip();
+  componentDidMount() {
+    if (this.props.tooltip) {
+      this.renderTooltip();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.tooltip !== this.props.tooltip) {
+      if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
+    }
+
+    if (!this.props.onViewDateChange && !this.viewStateChanged) {
+      let propValue = this.props.value;
+
+      if (Array.isArray(propValue)) {
+        propValue = propValue[0];
+      }
+
+      let prevPropValue = prevProps.value;
+
+      if (Array.isArray(prevPropValue)) {
+        prevPropValue = prevPropValue[0];
+      }
+
+      if (!prevPropValue && propValue || propValue && propValue instanceof Date && propValue.getTime() !== prevPropValue.getTime()) {
+        this.setState({
+          viewDate: this.props.viewDate || propValue || new Date()
+        });
       }
     }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      if (prevProps.tooltip !== this.props.tooltip) {
-        if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
+  }
+
+  componentWillUnmount() {
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+    }
+
+    if (this.mask) {
+      this.disableModality();
+      this.mask = null;
+    }
+
+    if (this.tooltip) {
+      this.tooltip.destroy();
+      this.tooltip = null;
+    }
+
+    this.unbindDocumentClickListener();
+    this.unbindDocumentResizeListener();
+  }
+
+  renderTooltip() {
+    this.tooltip = new _Tooltip.default({
+      target: this.inputElement,
+      content: this.props.tooltip,
+      options: this.props.tooltipOptions
+    });
+  }
+
+  onInputFocus(event) {
+    if (this.props.showOnFocus && !this.panel.offsetParent) {
+      this.showOverlay();
+    }
+
+    if (this.props.onFocus) {
+      this.props.onFocus(event);
+    }
+
+    _DomHandler.default.addClass(this.container, 'p-inputwrapper-focus');
+  }
+
+  onInputBlur(event) {
+    if (this.props.onBlur) {
+      this.props.onBlur(event);
+    }
+
+    _DomHandler.default.removeClass(this.container, 'p-inputwrapper-focus');
+  }
+
+  onInputKeyDown(event) {
+    this.isKeydown = true;
+
+    if (event.keyCode === 9) {
+      this.hideOverlay();
+    }
+  }
+
+  onInputChange(event) {
+    // IE 11 Workaround for input placeholder
+    if (!this.isKeydown) {
+      return;
+    }
+
+    this.isKeydown = false;
+    let rawValue = event.target.value;
+
+    try {
+      let value = this.parseValueFromString(rawValue);
+      this.updateModel(event, value);
+      this.updateViewDate(event, value.length ? value[0] : value);
+    } catch (err) {
+      this.updateModel(event, rawValue);
+    }
+
+    if (this.props.onInput) {
+      this.props.onInput(event);
+    }
+  }
+
+  onButtonClick(event) {
+    if (!this.panel.offsetParent) {
+      this.showOverlay();
+    }
+  }
+
+  navBackward(event) {
+    if (this.props.disabled) {
+      event.preventDefault();
+      return;
+    }
+
+    let newViewDate = new Date(this.getViewDate().getTime());
+
+    if (this.props.view === 'date') {
+      if (newViewDate.getMonth() === 0) {
+        newViewDate.setMonth(11);
+        newViewDate.setFullYear(newViewDate.getFullYear() - 1);
+      } else {
+        newViewDate.setMonth(newViewDate.getMonth() - 1);
+      }
+    } else if (this.props.view === 'month') {
+      let currentYear = newViewDate.getFullYear();
+      let newYear = currentYear - 1;
+
+      if (this.props.yearNavigator) {
+        const minYear = parseInt(this.props.yearRange.split(':')[0], 10);
+
+        if (newYear < minYear) {
+          newYear = minYear;
+        }
       }
 
-      if (!this.props.onViewDateChange && !this.viewStateChanged) {
-        var propValue = this.props.value;
+      newViewDate.setFullYear(newYear);
+    }
 
-        if (Array.isArray(propValue)) {
-          propValue = propValue[0];
+    this.updateViewDate(event, newViewDate);
+    event.preventDefault();
+  }
+
+  navForward(event) {
+    if (this.props.disabled) {
+      event.preventDefault();
+      return;
+    }
+
+    let newViewDate = new Date(this.getViewDate().getTime());
+
+    if (this.props.view === 'date') {
+      if (newViewDate.getMonth() === 11) {
+        newViewDate.setMonth(0);
+        newViewDate.setFullYear(newViewDate.getFullYear() + 1);
+      } else {
+        newViewDate.setMonth(newViewDate.getMonth() + 1);
+      }
+    } else if (this.props.view === 'month') {
+      let currentYear = newViewDate.getFullYear();
+      let newYear = currentYear + 1;
+
+      if (this.props.yearNavigator) {
+        const maxYear = parseInt(this.props.yearRange.split(':')[1], 10);
+
+        if (newYear > maxYear) {
+          newYear = maxYear;
         }
+      }
 
-        var prevPropValue = prevProps.value;
+      newViewDate.setFullYear(newYear);
+    }
 
-        if (Array.isArray(prevPropValue)) {
-          prevPropValue = prevPropValue[0];
-        }
+    this.updateViewDate(event, newViewDate);
+    event.preventDefault();
+  }
 
-        if (!prevPropValue && propValue || propValue && propValue instanceof Date && propValue.getTime() !== prevPropValue.getTime()) {
-          this.setState({
-            viewDate: this.props.viewDate || propValue || new Date()
-          });
+  onMonthDropdownChange(event) {
+    const currentViewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
+    let newViewDate = new Date(currentViewDate.getTime());
+    newViewDate.setMonth(parseInt(event.target.value, 10));
+    this.updateViewDate(event, newViewDate);
+  }
+
+  onYearDropdownChange(event) {
+    const currentViewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
+    let newViewDate = new Date(currentViewDate.getTime());
+    newViewDate.setFullYear(parseInt(event.target.value, 10));
+    this.updateViewDate(event, newViewDate);
+  }
+
+  onTodayButtonClick(event) {
+    const today = new Date();
+    const dateMeta = {
+      day: today.getDate(),
+      month: today.getMonth(),
+      year: today.getFullYear(),
+      today: true,
+      selectable: true
+    };
+    this.updateViewDate(event, today);
+    this.onDateSelect(event, dateMeta);
+
+    if (this.props.onTodayButtonClick) {
+      this.props.onTodayButtonClick(event);
+    }
+  }
+
+  onClearButtonClick(event) {
+    this.updateModel(event, null);
+
+    if (this.props.onClearButtonClick) {
+      this.props.onClearButtonClick(event);
+    }
+  }
+
+  onTimePickerElementMouseDown(event, type, direction) {
+    if (!this.props.disabled) {
+      this.repeat(event, null, type, direction);
+      event.preventDefault();
+    }
+  }
+
+  onTimePickerElementMouseUp() {
+    if (!this.props.disabled) {
+      this.clearTimePickerTimer();
+    }
+  }
+
+  onTimePickerElementMouseLeave() {
+    if (!this.props.disabled) {
+      this.clearTimePickerTimer();
+    }
+  }
+
+  repeat(event, interval, type, direction) {
+    event.persist();
+    let i = interval || 500;
+    this.clearTimePickerTimer();
+    this.timePickerTimer = setTimeout(() => {
+      this.repeat(event, 100, type, direction);
+    }, i);
+
+    switch (type) {
+      case 0:
+        if (direction === 1) this.incrementHour(event);else this.decrementHour(event);
+        break;
+
+      case 1:
+        if (direction === 1) this.incrementMinute(event);else this.decrementMinute(event);
+        break;
+
+      case 2:
+        if (direction === 1) this.incrementSecond(event);else this.decrementSecond(event);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  clearTimePickerTimer() {
+    if (this.timePickerTimer) {
+      clearTimeout(this.timePickerTimer);
+    }
+  }
+
+  incrementHour(event) {
+    const currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+    const currentHour = currentTime.getHours();
+    let newHour = currentHour + this.props.stepHour;
+    newHour = newHour >= 24 ? newHour - 24 : newHour;
+
+    if (this.validateHour(newHour, currentTime)) {
+      this.updateTime(event, newHour, currentTime.getMinutes(), currentTime.getSeconds());
+    }
+
+    event.preventDefault();
+  }
+
+  decrementHour(event) {
+    const currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+    const currentHour = currentTime.getHours();
+    let newHour = currentHour - this.props.stepHour;
+    newHour = newHour < 0 ? newHour + 24 : newHour;
+
+    if (this.validateHour(newHour, currentTime)) {
+      this.updateTime(event, newHour, currentTime.getMinutes(), currentTime.getSeconds());
+    }
+
+    event.preventDefault();
+  }
+
+  incrementMinute(event) {
+    const currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+    const currentMinute = currentTime.getMinutes();
+    let newMinute = currentMinute + this.props.stepMinute;
+    newMinute = newMinute > 59 ? newMinute - 60 : newMinute;
+
+    if (this.validateMinute(newMinute, currentTime)) {
+      this.updateTime(event, currentTime.getHours(), newMinute, currentTime.getSeconds());
+    }
+
+    event.preventDefault();
+  }
+
+  decrementMinute(event) {
+    const currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+    const currentMinute = currentTime.getMinutes();
+    let newMinute = currentMinute - this.props.stepMinute;
+    newMinute = newMinute < 0 ? newMinute + 60 : newMinute;
+
+    if (this.validateMinute(newMinute, currentTime)) {
+      this.updateTime(event, currentTime.getHours(), newMinute, currentTime.getSeconds());
+    }
+
+    event.preventDefault();
+  }
+
+  incrementSecond(event) {
+    const currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+    const currentSecond = currentTime.getSeconds();
+    let newSecond = currentSecond + this.props.stepSecond;
+    newSecond = newSecond > 59 ? newSecond - 60 : newSecond;
+
+    if (this.validateSecond(newSecond, currentTime)) {
+      this.updateTime(event, currentTime.getHours(), currentTime.getMinutes(), newSecond);
+    }
+
+    event.preventDefault();
+  }
+
+  decrementSecond(event) {
+    const currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+    const currentSecond = currentTime.getSeconds();
+    let newSecond = currentSecond - this.props.stepSecond;
+    newSecond = newSecond < 0 ? newSecond + 60 : newSecond;
+
+    if (this.validateSecond(newSecond, currentTime)) {
+      this.updateTime(event, currentTime.getHours(), currentTime.getMinutes(), newSecond);
+    }
+
+    event.preventDefault();
+  }
+
+  toggleAmPm(event) {
+    const currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+    const currentHour = currentTime.getHours();
+    const newHour = currentHour >= 12 ? currentHour - 12 : currentHour + 12;
+    this.updateTime(event, newHour, currentTime.getMinutes(), currentTime.getSeconds());
+    event.preventDefault();
+  }
+
+  getViewDate() {
+    return this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
+  }
+
+  validateHour(hour, value) {
+    let valid = true;
+    let valueDateString = value ? value.toDateString() : null;
+
+    if (this.props.minDate && valueDateString && this.props.minDate.toDateString() === valueDateString) {
+      if (this.props.minDate.getHours() > hour) {
+        valid = false;
+      }
+    }
+
+    if (this.props.maxDate && valueDateString && this.props.maxDate.toDateString() === valueDateString) {
+      if (this.props.maxDate.getHours() < hour) {
+        valid = false;
+      }
+    }
+
+    return valid;
+  }
+
+  validateMinute(minute, value) {
+    let valid = true;
+    let valueDateString = value ? value.toDateString() : null;
+
+    if (this.props.minDate && valueDateString && this.props.minDate.toDateString() === valueDateString) {
+      if (value.getHours() === this.props.minDate.getHours()) {
+        if (this.props.minDate.getMinutes() > minute) {
+          valid = false;
         }
       }
     }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      if (this.hideTimeout) {
-        clearTimeout(this.hideTimeout);
+
+    if (this.props.maxDate && valueDateString && this.props.maxDate.toDateString() === valueDateString) {
+      if (value.getHours() === this.props.maxDate.getHours()) {
+        if (this.props.maxDate.getMinutes() < minute) {
+          valid = false;
+        }
       }
+    }
+
+    return valid;
+  }
+
+  validateSecond(second, value) {
+    let valid = true;
+    let valueDateString = value ? value.toDateString() : null;
+
+    if (this.props.minDate && valueDateString && this.props.minDate.toDateString() === valueDateString) {
+      if (value.getHours() === this.props.minDate.getHours() && value.getMinutes() === this.props.minDate.getMinutes()) {
+        if (this.props.minDate.getMinutes() > second) {
+          valid = false;
+        }
+      }
+    }
+
+    if (this.props.maxDate && valueDateString && this.props.maxDate.toDateString() === valueDateString) {
+      if (value.getHours() === this.props.maxDate.getHours() && value.getMinutes() === this.props.maxDate.getMinutes()) {
+        if (this.props.maxDate.getMinutes() < second) {
+          valid = false;
+        }
+      }
+    }
+
+    return valid;
+  }
+
+  updateTime(event, hour, minute, second) {
+    let newDateTime = this.props.value && this.props.value instanceof Date ? new Date(this.props.value) : new Date();
+    newDateTime.setHours(hour);
+    newDateTime.setMinutes(minute);
+    newDateTime.setSeconds(second);
+    this.updateModel(event, newDateTime);
+
+    if (this.props.onSelect) {
+      this.props.onSelect({
+        originalEvent: event,
+        value: newDateTime
+      });
+    }
+  }
+
+  updateViewDate(event, value) {
+    if (this.props.yearNavigator) {
+      let viewYear = value.getFullYear();
+
+      if (this.props.minDate && this.props.minDate.getFullYear() > viewYear) {
+        viewYear = this.props.minDate.getFullYear();
+      }
+
+      if (this.props.maxDate && this.props.maxDate.getFullYear() < viewYear) {
+        viewYear = this.props.maxDate.getFullYear();
+      }
+
+      value.setFullYear(viewYear);
+    }
+
+    if (this.props.monthNavigator && this.props.view !== 'month') {
+      let viewMonth = value.getMonth();
+      let viewMonthWithMinMax = parseInt(this.isInMinYear(value) && Math.max(this.props.minDate.getMonth(), viewMonth).toString() || this.isInMaxYear(value) && Math.min(this.props.maxDate.getMonth(), viewMonth).toString() || viewMonth);
+      value.setMonth(viewMonthWithMinMax);
+    }
+
+    if (this.props.onViewDateChange) {
+      this.props.onViewDateChange({
+        originalEvent: event,
+        value: value
+      });
+    } else {
+      this.viewStateChanged = true;
+      this.setState({
+        viewDate: value
+      });
+    }
+  }
+
+  onDateSelect(event, dateMeta) {
+    if (this.props.disabled || !dateMeta.selectable) {
+      event.preventDefault();
+      return;
+    }
+
+    if (this.isMultipleSelection()) {
+      if (this.isSelected(dateMeta)) {
+        let value = this.props.value.filter((date, i) => {
+          return !this.isDateEquals(date, dateMeta);
+        });
+        this.updateModel(event, value);
+      } else if (!this.props.maxDateCount || !this.props.value || this.props.maxDateCount > this.props.value.length) {
+        this.selectDate(event, dateMeta);
+      }
+    } else {
+      this.selectDate(event, dateMeta);
+    }
+
+    if (!this.props.inline && this.isSingleSelection() && (!this.props.showTime || this.props.hideOnDateTimeSelect)) {
+      setTimeout(() => {
+        this.hideOverlay();
+      }, 100);
 
       if (this.mask) {
         this.disableModality();
-        this.mask = null;
       }
+    }
 
-      if (this.tooltip) {
-        this.tooltip.destroy();
-        this.tooltip = null;
+    event.preventDefault();
+  }
+
+  selectDate(event, dateMeta) {
+    let date = new Date(dateMeta.year, dateMeta.month, dateMeta.day);
+
+    if (this.props.showTime) {
+      let time = this.props.value && this.props.value instanceof Date ? this.props.value : new Date();
+      date.setHours(time.getHours());
+      date.setMinutes(time.getMinutes());
+      date.setSeconds(time.getSeconds());
+    }
+
+    if (this.props.minDate && this.props.minDate > date) {
+      date = this.props.minDate;
+    }
+
+    if (this.props.maxDate && this.props.maxDate < date) {
+      date = this.props.maxDate;
+    }
+
+    if (this.isSingleSelection()) {
+      this.updateModel(event, date);
+    } else if (this.isMultipleSelection()) {
+      this.updateModel(event, this.props.value ? [...this.props.value, date] : [date]);
+    } else if (this.isRangeSelection()) {
+      if (this.props.value && this.props.value.length) {
+        let startDate = this.props.value[0];
+        let endDate = this.props.value[1];
+
+        if (!endDate && date.getTime() >= startDate.getTime()) {
+          endDate = date;
+        } else {
+          startDate = date;
+          endDate = null;
+        }
+
+        this.updateModel(event, [startDate, endDate]);
+      } else {
+        this.updateModel(event, [date, null]);
       }
+    }
+
+    if (this.props.onSelect) {
+      this.props.onSelect({
+        originalEvent: event,
+        value: date
+      });
+    }
+  }
+
+  onMonthSelect(event, month) {
+    this.onDateSelect(event, {
+      year: this.getViewDate().getFullYear(),
+      month: month,
+      day: 1,
+      selectable: true
+    });
+    event.preventDefault();
+  }
+
+  updateModel(event, value) {
+    if (this.props.onChange) {
+      this.props.onChange({
+        originalEvent: event,
+        value: value,
+        stopPropagation: () => {},
+        preventDefault: () => {},
+        target: {
+          name: this.props.name,
+          id: this.props.id,
+          value: value
+        }
+      });
+      this.viewStateChanged = true;
+    }
+  }
+
+  showOverlay() {
+    if (this.props.autoZIndex) {
+      this.panel.style.zIndex = String(this.props.baseZIndex + _DomHandler.default.generateZIndex());
+    }
+
+    this.panel.style.display = 'block';
+    setTimeout(() => {
+      _DomHandler.default.addClass(this.panel, 'p-input-overlay-visible');
+
+      _DomHandler.default.removeClass(this.panel, 'p-input-overlay-hidden');
+    }, 1);
+    this.alignPanel();
+    this.bindDocumentClickListener();
+    this.bindDocumentResizeListener();
+  }
+
+  hideOverlay() {
+    if (this.panel) {
+      _DomHandler.default.addClass(this.panel, 'p-input-overlay-hidden');
+
+      _DomHandler.default.removeClass(this.panel, 'p-input-overlay-visible');
 
       this.unbindDocumentClickListener();
       this.unbindDocumentResizeListener();
+      this.hideTimeout = setTimeout(() => {
+        this.panel.style.display = 'none';
+
+        _DomHandler.default.removeClass(this.panel, 'p-input-overlay-hidden');
+      }, 150);
     }
-  }, {
-    key: "renderTooltip",
-    value: function renderTooltip() {
-      this.tooltip = new _Tooltip.default({
-        target: this.inputElement,
-        content: this.props.tooltip,
-        options: this.props.tooltipOptions
-      });
-    }
-  }, {
-    key: "onInputFocus",
-    value: function onInputFocus(event) {
-      if (this.props.showOnFocus && !this.panel.offsetParent) {
-        this.showOverlay();
-      }
+  }
 
-      if (this.props.onFocus) {
-        this.props.onFocus(event);
-      }
-
-      _DomHandler.default.addClass(this.container, 'p-inputwrapper-focus');
-    }
-  }, {
-    key: "onInputBlur",
-    value: function onInputBlur(event) {
-      if (this.props.onBlur) {
-        this.props.onBlur(event);
-      }
-
-      _DomHandler.default.removeClass(this.container, 'p-inputwrapper-focus');
-    }
-  }, {
-    key: "onInputKeyDown",
-    value: function onInputKeyDown(event) {
-      this.isKeydown = true;
-
-      if (event.keyCode === 9) {
-        this.hideOverlay();
-      }
-    }
-  }, {
-    key: "onInputChange",
-    value: function onInputChange(event) {
-      // IE 11 Workaround for input placeholder
-      if (!this.isKeydown) {
-        return;
-      }
-
-      this.isKeydown = false;
-      var rawValue = event.target.value;
-
-      try {
-        var value = this.parseValueFromString(rawValue);
-        this.updateModel(event, value);
-        this.updateViewDate(event, value.length ? value[0] : value);
-      } catch (err) {
-        this.updateModel(event, rawValue);
-      }
-
-      if (this.props.onInput) {
-        this.props.onInput(event);
-      }
-    }
-  }, {
-    key: "onButtonClick",
-    value: function onButtonClick(event) {
-      if (!this.panel.offsetParent) {
-        this.showOverlay();
-      }
-    }
-  }, {
-    key: "navBackward",
-    value: function navBackward(event) {
-      if (this.props.disabled) {
-        event.preventDefault();
-        return;
-      }
-
-      var newViewDate = new Date(this.getViewDate().getTime());
-
-      if (this.props.view === 'date') {
-        if (newViewDate.getMonth() === 0) {
-          newViewDate.setMonth(11);
-          newViewDate.setFullYear(newViewDate.getFullYear() - 1);
-        } else {
-          newViewDate.setMonth(newViewDate.getMonth() - 1);
+  bindDocumentClickListener() {
+    if (!this.documentClickListener) {
+      this.documentClickListener = event => {
+        if (this.isOutsideClicked(event)) {
+          this.hideOverlay();
         }
-      } else if (this.props.view === 'month') {
-        var currentYear = newViewDate.getFullYear();
-        var newYear = currentYear - 1;
-
-        if (this.props.yearNavigator) {
-          var minYear = parseInt(this.props.yearRange.split(':')[0], 10);
-
-          if (newYear < minYear) {
-            newYear = minYear;
-          }
-        }
-
-        newViewDate.setFullYear(newYear);
-      }
-
-      this.updateViewDate(event, newViewDate);
-      event.preventDefault();
-    }
-  }, {
-    key: "navForward",
-    value: function navForward(event) {
-      if (this.props.disabled) {
-        event.preventDefault();
-        return;
-      }
-
-      var newViewDate = new Date(this.getViewDate().getTime());
-
-      if (this.props.view === 'date') {
-        if (newViewDate.getMonth() === 11) {
-          newViewDate.setMonth(0);
-          newViewDate.setFullYear(newViewDate.getFullYear() + 1);
-        } else {
-          newViewDate.setMonth(newViewDate.getMonth() + 1);
-        }
-      } else if (this.props.view === 'month') {
-        var currentYear = newViewDate.getFullYear();
-        var newYear = currentYear + 1;
-
-        if (this.props.yearNavigator) {
-          var maxYear = parseInt(this.props.yearRange.split(':')[1], 10);
-
-          if (newYear > maxYear) {
-            newYear = maxYear;
-          }
-        }
-
-        newViewDate.setFullYear(newYear);
-      }
-
-      this.updateViewDate(event, newViewDate);
-      event.preventDefault();
-    }
-  }, {
-    key: "onMonthDropdownChange",
-    value: function onMonthDropdownChange(event) {
-      var currentViewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
-      var newViewDate = new Date(currentViewDate.getTime());
-      newViewDate.setMonth(parseInt(event.target.value, 10));
-      this.updateViewDate(event, newViewDate);
-    }
-  }, {
-    key: "onYearDropdownChange",
-    value: function onYearDropdownChange(event) {
-      var currentViewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
-      var newViewDate = new Date(currentViewDate.getTime());
-      newViewDate.setFullYear(parseInt(event.target.value, 10));
-      this.updateViewDate(event, newViewDate);
-    }
-  }, {
-    key: "onTodayButtonClick",
-    value: function onTodayButtonClick(event) {
-      var today = new Date();
-      var dateMeta = {
-        day: today.getDate(),
-        month: today.getMonth(),
-        year: today.getFullYear(),
-        today: true,
-        selectable: true
       };
-      this.updateViewDate(event, today);
-      this.onDateSelect(event, dateMeta);
 
-      if (this.props.onTodayButtonClick) {
-        this.props.onTodayButtonClick(event);
-      }
+      document.addEventListener('click', this.documentClickListener);
     }
-  }, {
-    key: "onClearButtonClick",
-    value: function onClearButtonClick(event) {
-      this.updateModel(event, null);
+  }
 
-      if (this.props.onClearButtonClick) {
-        this.props.onClearButtonClick(event);
-      }
+  unbindDocumentClickListener() {
+    if (this.documentClickListener) {
+      document.removeEventListener('click', this.documentClickListener);
+      this.documentClickListener = null;
     }
-  }, {
-    key: "onTimePickerElementMouseDown",
-    value: function onTimePickerElementMouseDown(event, type, direction) {
-      if (!this.props.disabled) {
-        this.repeat(event, null, type, direction);
-        event.preventDefault();
-      }
+  }
+
+  bindDocumentResizeListener() {
+    if (!this.documentResizeListener && !this.props.touchUI) {
+      this.documentResizeListener = this.onWindowResize.bind(this);
+      window.addEventListener('resize', this.documentResizeListener);
     }
-  }, {
-    key: "onTimePickerElementMouseUp",
-    value: function onTimePickerElementMouseUp() {
-      if (!this.props.disabled) {
-        this.clearTimePickerTimer();
-      }
+  }
+
+  unbindDocumentResizeListener() {
+    if (this.documentResizeListener) {
+      window.removeEventListener('resize', this.documentResizeListener);
+      this.documentResizeListener = null;
     }
-  }, {
-    key: "onTimePickerElementMouseLeave",
-    value: function onTimePickerElementMouseLeave() {
-      if (!this.props.disabled) {
-        this.clearTimePickerTimer();
-      }
+  }
+
+  isOutsideClicked(event) {
+    return this.container && !(this.container.isSameNode(event.target) || this.isNavIconClicked(event) || this.container.contains(event.target) || this.panel && this.panel.contains(event.target));
+  }
+
+  isNavIconClicked(event) {
+    return _DomHandler.default.hasClass(event.target, 'p-datepicker-prev') || _DomHandler.default.hasClass(event.target, 'p-datepicker-prev-icon') || _DomHandler.default.hasClass(event.target, 'p-datepicker-next') || _DomHandler.default.hasClass(event.target, 'p-datepicker-next-icon');
+  }
+
+  onWindowResize() {
+    if (this.panel.offsetParent && !_DomHandler.default.isAndroid()) {
+      this.hideOverlay();
     }
-  }, {
-    key: "repeat",
-    value: function repeat(event, interval, type, direction) {
-      var _this2 = this;
+  }
 
-      event.persist();
-      var i = interval || 500;
-      this.clearTimePickerTimer();
-      this.timePickerTimer = setTimeout(function () {
-        _this2.repeat(event, 100, type, direction);
-      }, i);
+  alignPanel() {
+    if (this.props.touchUI) {
+      this.enableModality();
+    } else {
+      if (this.props.appendTo) {
+        _DomHandler.default.absolutePosition(this.panel, this.inputElement);
 
-      switch (type) {
-        case 0:
-          if (direction === 1) this.incrementHour(event);else this.decrementHour(event);
-          break;
-
-        case 1:
-          if (direction === 1) this.incrementMinute(event);else this.decrementMinute(event);
-          break;
-
-        case 2:
-          if (direction === 1) this.incrementSecond(event);else this.decrementSecond(event);
-          break;
-
-        default:
-          break;
-      }
-    }
-  }, {
-    key: "clearTimePickerTimer",
-    value: function clearTimePickerTimer() {
-      if (this.timePickerTimer) {
-        clearTimeout(this.timePickerTimer);
-      }
-    }
-  }, {
-    key: "incrementHour",
-    value: function incrementHour(event) {
-      var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-      var currentHour = currentTime.getHours();
-      var newHour = currentHour + this.props.stepHour;
-      newHour = newHour >= 24 ? newHour - 24 : newHour;
-
-      if (this.validateHour(newHour, currentTime)) {
-        this.updateTime(event, newHour, currentTime.getMinutes(), currentTime.getSeconds());
-      }
-
-      event.preventDefault();
-    }
-  }, {
-    key: "decrementHour",
-    value: function decrementHour(event) {
-      var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-      var currentHour = currentTime.getHours();
-      var newHour = currentHour - this.props.stepHour;
-      newHour = newHour < 0 ? newHour + 24 : newHour;
-
-      if (this.validateHour(newHour, currentTime)) {
-        this.updateTime(event, newHour, currentTime.getMinutes(), currentTime.getSeconds());
-      }
-
-      event.preventDefault();
-    }
-  }, {
-    key: "incrementMinute",
-    value: function incrementMinute(event) {
-      var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-      var currentMinute = currentTime.getMinutes();
-      var newMinute = currentMinute + this.props.stepMinute;
-      newMinute = newMinute > 59 ? newMinute - 60 : newMinute;
-
-      if (this.validateMinute(newMinute, currentTime)) {
-        this.updateTime(event, currentTime.getHours(), newMinute, currentTime.getSeconds());
-      }
-
-      event.preventDefault();
-    }
-  }, {
-    key: "decrementMinute",
-    value: function decrementMinute(event) {
-      var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-      var currentMinute = currentTime.getMinutes();
-      var newMinute = currentMinute - this.props.stepMinute;
-      newMinute = newMinute < 0 ? newMinute + 60 : newMinute;
-
-      if (this.validateMinute(newMinute, currentTime)) {
-        this.updateTime(event, currentTime.getHours(), newMinute, currentTime.getSeconds());
-      }
-
-      event.preventDefault();
-    }
-  }, {
-    key: "incrementSecond",
-    value: function incrementSecond(event) {
-      var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-      var currentSecond = currentTime.getSeconds();
-      var newSecond = currentSecond + this.props.stepSecond;
-      newSecond = newSecond > 59 ? newSecond - 60 : newSecond;
-
-      if (this.validateSecond(newSecond, currentTime)) {
-        this.updateTime(event, currentTime.getHours(), currentTime.getMinutes(), newSecond);
-      }
-
-      event.preventDefault();
-    }
-  }, {
-    key: "decrementSecond",
-    value: function decrementSecond(event) {
-      var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-      var currentSecond = currentTime.getSeconds();
-      var newSecond = currentSecond - this.props.stepSecond;
-      newSecond = newSecond < 0 ? newSecond + 60 : newSecond;
-
-      if (this.validateSecond(newSecond, currentTime)) {
-        this.updateTime(event, currentTime.getHours(), currentTime.getMinutes(), newSecond);
-      }
-
-      event.preventDefault();
-    }
-  }, {
-    key: "toggleAmPm",
-    value: function toggleAmPm(event) {
-      var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-      var currentHour = currentTime.getHours();
-      var newHour = currentHour >= 12 ? currentHour - 12 : currentHour + 12;
-      this.updateTime(event, newHour, currentTime.getMinutes(), currentTime.getSeconds());
-      event.preventDefault();
-    }
-  }, {
-    key: "getViewDate",
-    value: function getViewDate() {
-      return this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
-    }
-  }, {
-    key: "validateHour",
-    value: function validateHour(hour, value) {
-      var valid = true;
-      var valueDateString = value ? value.toDateString() : null;
-
-      if (this.props.minDate && valueDateString && this.props.minDate.toDateString() === valueDateString) {
-        if (this.props.minDate.getHours() > hour) {
-          valid = false;
-        }
-      }
-
-      if (this.props.maxDate && valueDateString && this.props.maxDate.toDateString() === valueDateString) {
-        if (this.props.maxDate.getHours() < hour) {
-          valid = false;
-        }
-      }
-
-      return valid;
-    }
-  }, {
-    key: "validateMinute",
-    value: function validateMinute(minute, value) {
-      var valid = true;
-      var valueDateString = value ? value.toDateString() : null;
-
-      if (this.props.minDate && valueDateString && this.props.minDate.toDateString() === valueDateString) {
-        if (value.getHours() === this.props.minDate.getHours()) {
-          if (this.props.minDate.getMinutes() > minute) {
-            valid = false;
-          }
-        }
-      }
-
-      if (this.props.maxDate && valueDateString && this.props.maxDate.toDateString() === valueDateString) {
-        if (value.getHours() === this.props.maxDate.getHours()) {
-          if (this.props.maxDate.getMinutes() < minute) {
-            valid = false;
-          }
-        }
-      }
-
-      return valid;
-    }
-  }, {
-    key: "validateSecond",
-    value: function validateSecond(second, value) {
-      var valid = true;
-      var valueDateString = value ? value.toDateString() : null;
-
-      if (this.props.minDate && valueDateString && this.props.minDate.toDateString() === valueDateString) {
-        if (value.getHours() === this.props.minDate.getHours() && value.getMinutes() === this.props.minDate.getMinutes()) {
-          if (this.props.minDate.getMinutes() > second) {
-            valid = false;
-          }
-        }
-      }
-
-      if (this.props.maxDate && valueDateString && this.props.maxDate.toDateString() === valueDateString) {
-        if (value.getHours() === this.props.maxDate.getHours() && value.getMinutes() === this.props.maxDate.getMinutes()) {
-          if (this.props.maxDate.getMinutes() < second) {
-            valid = false;
-          }
-        }
-      }
-
-      return valid;
-    }
-  }, {
-    key: "updateTime",
-    value: function updateTime(event, hour, minute, second) {
-      var newDateTime = this.props.value && this.props.value instanceof Date ? new Date(this.props.value) : new Date();
-      newDateTime.setHours(hour);
-      newDateTime.setMinutes(minute);
-      newDateTime.setSeconds(second);
-      this.updateModel(event, newDateTime);
-
-      if (this.props.onSelect) {
-        this.props.onSelect({
-          originalEvent: event,
-          value: newDateTime
-        });
-      }
-    }
-  }, {
-    key: "updateViewDate",
-    value: function updateViewDate(event, value) {
-      if (this.props.yearNavigator) {
-        var viewYear = value.getFullYear();
-
-        if (this.props.minDate && this.props.minDate.getFullYear() > viewYear) {
-          viewYear = this.props.minDate.getFullYear();
-        }
-
-        if (this.props.maxDate && this.props.maxDate.getFullYear() < viewYear) {
-          viewYear = this.props.maxDate.getFullYear();
-        }
-
-        value.setFullYear(viewYear);
-      }
-
-      if (this.props.monthNavigator && this.props.view !== 'month') {
-        var viewMonth = value.getMonth();
-        var viewMonthWithMinMax = parseInt(this.isInMinYear(value) && Math.max(this.props.minDate.getMonth(), viewMonth).toString() || this.isInMaxYear(value) && Math.min(this.props.maxDate.getMonth(), viewMonth).toString() || viewMonth);
-        value.setMonth(viewMonthWithMinMax);
-      }
-
-      if (this.props.onViewDateChange) {
-        this.props.onViewDateChange({
-          originalEvent: event,
-          value: value
-        });
+        this.panel.style.minWidth = _DomHandler.default.getWidth(this.container) + 'px';
       } else {
-        this.viewStateChanged = true;
-        this.setState({
-          viewDate: value
-        });
+        _DomHandler.default.relativePosition(this.panel, this.inputElement);
       }
     }
-  }, {
-    key: "onDateSelect",
-    value: function onDateSelect(event, dateMeta) {
-      var _this3 = this;
+  }
 
-      if (this.props.disabled || !dateMeta.selectable) {
-        event.preventDefault();
-        return;
-      }
+  enableModality() {
+    if (!this.mask) {
+      this.mask = document.createElement('div');
+      this.mask.style.zIndex = String(parseInt(this.panel.style.zIndex, 10) - 1);
 
-      if (this.isMultipleSelection()) {
-        if (this.isSelected(dateMeta)) {
-          var value = this.props.value.filter(function (date, i) {
-            return !_this3.isDateEquals(date, dateMeta);
-          });
-          this.updateModel(event, value);
-        } else if (!this.props.maxDateCount || !this.props.value || this.props.maxDateCount > this.props.value.length) {
-          this.selectDate(event, dateMeta);
-        }
-      } else {
-        this.selectDate(event, dateMeta);
-      }
+      _DomHandler.default.addMultipleClasses(this.mask, 'p-component-overlay p-datepicker-mask p-datepicker-mask-scrollblocker');
 
-      if (!this.props.inline && this.isSingleSelection() && (!this.props.showTime || this.props.hideOnDateTimeSelect)) {
-        setTimeout(function () {
-          _this3.hideOverlay();
-        }, 100);
-
-        if (this.mask) {
-          this.disableModality();
-        }
-      }
-
-      event.preventDefault();
-    }
-  }, {
-    key: "selectDate",
-    value: function selectDate(event, dateMeta) {
-      var date = new Date(dateMeta.year, dateMeta.month, dateMeta.day);
-
-      if (this.props.showTime) {
-        var time = this.props.value && this.props.value instanceof Date ? this.props.value : new Date();
-        date.setHours(time.getHours());
-        date.setMinutes(time.getMinutes());
-        date.setSeconds(time.getSeconds());
-      }
-
-      if (this.props.minDate && this.props.minDate > date) {
-        date = this.props.minDate;
-      }
-
-      if (this.props.maxDate && this.props.maxDate < date) {
-        date = this.props.maxDate;
-      }
-
-      if (this.isSingleSelection()) {
-        this.updateModel(event, date);
-      } else if (this.isMultipleSelection()) {
-        this.updateModel(event, this.props.value ? [].concat(_toConsumableArray(this.props.value), [date]) : [date]);
-      } else if (this.isRangeSelection()) {
-        if (this.props.value && this.props.value.length) {
-          var startDate = this.props.value[0];
-          var endDate = this.props.value[1];
-
-          if (!endDate && date.getTime() >= startDate.getTime()) {
-            endDate = date;
-          } else {
-            startDate = date;
-            endDate = null;
-          }
-
-          this.updateModel(event, [startDate, endDate]);
-        } else {
-          this.updateModel(event, [date, null]);
-        }
-      }
-
-      if (this.props.onSelect) {
-        this.props.onSelect({
-          originalEvent: event,
-          value: date
-        });
-      }
-    }
-  }, {
-    key: "onMonthSelect",
-    value: function onMonthSelect(event, month) {
-      this.onDateSelect(event, {
-        year: this.getViewDate().getFullYear(),
-        month: month,
-        day: 1,
-        selectable: true
-      });
-      event.preventDefault();
-    }
-  }, {
-    key: "updateModel",
-    value: function updateModel(event, value) {
-      if (this.props.onChange) {
-        this.props.onChange({
-          originalEvent: event,
-          value: value,
-          stopPropagation: function stopPropagation() {},
-          preventDefault: function preventDefault() {},
-          target: {
-            name: this.props.name,
-            id: this.props.id,
-            value: value
-          }
-        });
-        this.viewStateChanged = true;
-      }
-    }
-  }, {
-    key: "showOverlay",
-    value: function showOverlay() {
-      var _this4 = this;
-
-      if (this.props.autoZIndex) {
-        this.panel.style.zIndex = String(this.props.baseZIndex + _DomHandler.default.generateZIndex());
-      }
-
-      this.panel.style.display = 'block';
-      setTimeout(function () {
-        _DomHandler.default.addClass(_this4.panel, 'p-input-overlay-visible');
-
-        _DomHandler.default.removeClass(_this4.panel, 'p-input-overlay-hidden');
-      }, 1);
-      this.alignPanel();
-      this.bindDocumentClickListener();
-      this.bindDocumentResizeListener();
-    }
-  }, {
-    key: "hideOverlay",
-    value: function hideOverlay() {
-      var _this5 = this;
-
-      if (this.panel) {
-        _DomHandler.default.addClass(this.panel, 'p-input-overlay-hidden');
-
-        _DomHandler.default.removeClass(this.panel, 'p-input-overlay-visible');
-
-        this.unbindDocumentClickListener();
-        this.unbindDocumentResizeListener();
-        this.hideTimeout = setTimeout(function () {
-          _this5.panel.style.display = 'none';
-
-          _DomHandler.default.removeClass(_this5.panel, 'p-input-overlay-hidden');
-        }, 150);
-      }
-    }
-  }, {
-    key: "bindDocumentClickListener",
-    value: function bindDocumentClickListener() {
-      var _this6 = this;
-
-      if (!this.documentClickListener) {
-        this.documentClickListener = function (event) {
-          if (_this6.isOutsideClicked(event)) {
-            _this6.hideOverlay();
-          }
-        };
-
-        document.addEventListener('click', this.documentClickListener);
-      }
-    }
-  }, {
-    key: "unbindDocumentClickListener",
-    value: function unbindDocumentClickListener() {
-      if (this.documentClickListener) {
-        document.removeEventListener('click', this.documentClickListener);
-        this.documentClickListener = null;
-      }
-    }
-  }, {
-    key: "bindDocumentResizeListener",
-    value: function bindDocumentResizeListener() {
-      if (!this.documentResizeListener && !this.props.touchUI) {
-        this.documentResizeListener = this.onWindowResize.bind(this);
-        window.addEventListener('resize', this.documentResizeListener);
-      }
-    }
-  }, {
-    key: "unbindDocumentResizeListener",
-    value: function unbindDocumentResizeListener() {
-      if (this.documentResizeListener) {
-        window.removeEventListener('resize', this.documentResizeListener);
-        this.documentResizeListener = null;
-      }
-    }
-  }, {
-    key: "isOutsideClicked",
-    value: function isOutsideClicked(event) {
-      return this.container && !(this.container.isSameNode(event.target) || this.isNavIconClicked(event) || this.container.contains(event.target) || this.panel && this.panel.contains(event.target));
-    }
-  }, {
-    key: "isNavIconClicked",
-    value: function isNavIconClicked(event) {
-      return _DomHandler.default.hasClass(event.target, 'p-datepicker-prev') || _DomHandler.default.hasClass(event.target, 'p-datepicker-prev-icon') || _DomHandler.default.hasClass(event.target, 'p-datepicker-next') || _DomHandler.default.hasClass(event.target, 'p-datepicker-next-icon');
-    }
-  }, {
-    key: "onWindowResize",
-    value: function onWindowResize() {
-      if (this.panel.offsetParent && !_DomHandler.default.isAndroid()) {
-        this.hideOverlay();
-      }
-    }
-  }, {
-    key: "alignPanel",
-    value: function alignPanel() {
-      if (this.props.touchUI) {
-        this.enableModality();
-      } else {
-        if (this.props.appendTo) {
-          _DomHandler.default.absolutePosition(this.panel, this.inputElement);
-
-          this.panel.style.minWidth = _DomHandler.default.getWidth(this.container) + 'px';
-        } else {
-          _DomHandler.default.relativePosition(this.panel, this.inputElement);
-        }
-      }
-    }
-  }, {
-    key: "enableModality",
-    value: function enableModality() {
-      var _this7 = this;
-
-      if (!this.mask) {
-        this.mask = document.createElement('div');
-        this.mask.style.zIndex = String(parseInt(this.panel.style.zIndex, 10) - 1);
-
-        _DomHandler.default.addMultipleClasses(this.mask, 'p-component-overlay p-datepicker-mask p-datepicker-mask-scrollblocker');
-
-        this.maskClickListener = function () {
-          _this7.disableModality();
-        };
-
-        this.mask.addEventListener('click', this.maskClickListener);
-        document.body.appendChild(this.mask);
-
-        _DomHandler.default.addClass(document.body, 'p-overflow-hidden');
-      }
-    }
-  }, {
-    key: "disableModality",
-    value: function disableModality() {
-      if (this.mask) {
-        this.mask.removeEventListener('click', this.maskClickListener);
-        this.maskClickListener = null;
-        document.body.removeChild(this.mask);
-        this.mask = null;
-        var bodyChildren = document.body.children;
-        var hasBlockerMasks;
-
-        for (var i = 0; i < bodyChildren.length; i++) {
-          var bodyChild = bodyChildren[i];
-
-          if (_DomHandler.default.hasClass(bodyChild, 'p-datepicker-mask-scrollblocker')) {
-            hasBlockerMasks = true;
-            break;
-          }
-        }
-
-        if (!hasBlockerMasks) {
-          _DomHandler.default.removeClass(document.body, 'p-overflow-hidden');
-        }
-
-        this.hideOverlay();
-      }
-    }
-  }, {
-    key: "getFirstDayOfMonthIndex",
-    value: function getFirstDayOfMonthIndex(month, year) {
-      var day = new Date();
-      day.setDate(1);
-      day.setMonth(month);
-      day.setFullYear(year);
-      var dayIndex = day.getDay() + this.getSundayIndex();
-      return dayIndex >= 7 ? dayIndex - 7 : dayIndex;
-    }
-  }, {
-    key: "getDaysCountInMonth",
-    value: function getDaysCountInMonth(month, year) {
-      return 32 - this.daylightSavingAdjust(new Date(year, month, 32)).getDate();
-    }
-  }, {
-    key: "getDaysCountInPrevMonth",
-    value: function getDaysCountInPrevMonth(month, year) {
-      var prev = this.getPreviousMonthAndYear(month, year);
-      return this.getDaysCountInMonth(prev.month, prev.year);
-    }
-  }, {
-    key: "daylightSavingAdjust",
-    value: function daylightSavingAdjust(date) {
-      if (!date) {
-        return null;
-      }
-
-      date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
-      return date;
-    }
-  }, {
-    key: "getPreviousMonthAndYear",
-    value: function getPreviousMonthAndYear(month, year) {
-      var m, y;
-
-      if (month === 0) {
-        m = 11;
-        y = year - 1;
-      } else {
-        m = month - 1;
-        y = year;
-      }
-
-      return {
-        'month': m,
-        'year': y
+      this.maskClickListener = () => {
+        this.disableModality();
       };
-    }
-  }, {
-    key: "getNextMonthAndYear",
-    value: function getNextMonthAndYear(month, year) {
-      var m, y;
 
-      if (month === 11) {
-        m = 0;
+      this.mask.addEventListener('click', this.maskClickListener);
+      document.body.appendChild(this.mask);
+
+      _DomHandler.default.addClass(document.body, 'p-overflow-hidden');
+    }
+  }
+
+  disableModality() {
+    if (this.mask) {
+      this.mask.removeEventListener('click', this.maskClickListener);
+      this.maskClickListener = null;
+      document.body.removeChild(this.mask);
+      this.mask = null;
+      let bodyChildren = document.body.children;
+      let hasBlockerMasks;
+
+      for (let i = 0; i < bodyChildren.length; i++) {
+        let bodyChild = bodyChildren[i];
+
+        if (_DomHandler.default.hasClass(bodyChild, 'p-datepicker-mask-scrollblocker')) {
+          hasBlockerMasks = true;
+          break;
+        }
+      }
+
+      if (!hasBlockerMasks) {
+        _DomHandler.default.removeClass(document.body, 'p-overflow-hidden');
+      }
+
+      this.hideOverlay();
+    }
+  }
+
+  getFirstDayOfMonthIndex(month, year) {
+    let day = new Date();
+    day.setDate(1);
+    day.setMonth(month);
+    day.setFullYear(year);
+    let dayIndex = day.getDay() + this.getSundayIndex();
+    return dayIndex >= 7 ? dayIndex - 7 : dayIndex;
+  }
+
+  getDaysCountInMonth(month, year) {
+    return 32 - this.daylightSavingAdjust(new Date(year, month, 32)).getDate();
+  }
+
+  getDaysCountInPrevMonth(month, year) {
+    let prev = this.getPreviousMonthAndYear(month, year);
+    return this.getDaysCountInMonth(prev.month, prev.year);
+  }
+
+  daylightSavingAdjust(date) {
+    if (!date) {
+      return null;
+    }
+
+    date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
+    return date;
+  }
+
+  getPreviousMonthAndYear(month, year) {
+    let m, y;
+
+    if (month === 0) {
+      m = 11;
+      y = year - 1;
+    } else {
+      m = month - 1;
+      y = year;
+    }
+
+    return {
+      'month': m,
+      'year': y
+    };
+  }
+
+  getNextMonthAndYear(month, year) {
+    let m, y;
+
+    if (month === 11) {
+      m = 0;
+      y = year + 1;
+    } else {
+      m = month + 1;
+      y = year;
+    }
+
+    return {
+      'month': m,
+      'year': y
+    };
+  }
+
+  getSundayIndex() {
+    return this.props.locale.firstDayOfWeek > 0 ? 7 - this.props.locale.firstDayOfWeek : 0;
+  }
+
+  createWeekDays() {
+    let weekDays = [];
+    let dayIndex = this.props.locale.firstDayOfWeek;
+
+    for (let i = 0; i < 7; i++) {
+      weekDays.push(this.props.locale.dayNamesMin[dayIndex]);
+      dayIndex = dayIndex === 6 ? 0 : ++dayIndex;
+    }
+
+    return weekDays;
+  }
+
+  createMonths(month, year) {
+    let months = [];
+
+    for (let i = 0; i < this.props.numberOfMonths; i++) {
+      let m = month + i;
+      let y = year;
+
+      if (m > 11) {
+        m = m % 11 - 1;
         y = year + 1;
-      } else {
-        m = month + 1;
-        y = year;
       }
 
-      return {
-        'month': m,
-        'year': y
-      };
+      months.push(this.createMonth(m, y));
     }
-  }, {
-    key: "getSundayIndex",
-    value: function getSundayIndex() {
-      return this.props.locale.firstDayOfWeek > 0 ? 7 - this.props.locale.firstDayOfWeek : 0;
-    }
-  }, {
-    key: "createWeekDays",
-    value: function createWeekDays() {
-      var weekDays = [];
-      var dayIndex = this.props.locale.firstDayOfWeek;
 
-      for (var i = 0; i < 7; i++) {
-        weekDays.push(this.props.locale.dayNamesMin[dayIndex]);
-        dayIndex = dayIndex === 6 ? 0 : ++dayIndex;
-      }
+    return months;
+  }
 
-      return weekDays;
-    }
-  }, {
-    key: "createMonths",
-    value: function createMonths(month, year) {
-      var months = [];
+  createMonth(month, year) {
+    let dates = [];
+    let firstDay = this.getFirstDayOfMonthIndex(month, year);
+    let daysLength = this.getDaysCountInMonth(month, year);
+    let prevMonthDaysLength = this.getDaysCountInPrevMonth(month, year);
+    let dayNo = 1;
+    let today = new Date();
+    let weekNumbers = [];
 
-      for (var i = 0; i < this.props.numberOfMonths; i++) {
-        var m = month + i;
-        var y = year;
+    for (let i = 0; i < 6; i++) {
+      let week = [];
 
-        if (m > 11) {
-          m = m % 11 - 1;
-          y = year + 1;
+      if (i === 0) {
+        for (let j = prevMonthDaysLength - firstDay + 1; j <= prevMonthDaysLength; j++) {
+          let prev = this.getPreviousMonthAndYear(month, year);
+          week.push({
+            day: j,
+            month: prev.month,
+            year: prev.year,
+            otherMonth: true,
+            today: this.isToday(today, j, prev.month, prev.year),
+            selectable: this.isSelectable(j, prev.month, prev.year, true)
+          });
         }
 
-        months.push(this.createMonth(m, y));
-      }
+        let remainingDaysLength = 7 - week.length;
 
-      return months;
-    }
-  }, {
-    key: "createMonth",
-    value: function createMonth(month, year) {
-      var dates = [];
-      var firstDay = this.getFirstDayOfMonthIndex(month, year);
-      var daysLength = this.getDaysCountInMonth(month, year);
-      var prevMonthDaysLength = this.getDaysCountInPrevMonth(month, year);
-      var dayNo = 1;
-      var today = new Date();
-      var weekNumbers = [];
-
-      for (var i = 0; i < 6; i++) {
-        var week = [];
-
-        if (i === 0) {
-          for (var j = prevMonthDaysLength - firstDay + 1; j <= prevMonthDaysLength; j++) {
-            var prev = this.getPreviousMonthAndYear(month, year);
+        for (let j = 0; j < remainingDaysLength; j++) {
+          week.push({
+            day: dayNo,
+            month: month,
+            year: year,
+            today: this.isToday(today, dayNo, month, year),
+            selectable: this.isSelectable(dayNo, month, year, false)
+          });
+          dayNo++;
+        }
+      } else {
+        for (let j = 0; j < 7; j++) {
+          if (dayNo > daysLength) {
+            let next = this.getNextMonthAndYear(month, year);
             week.push({
-              day: j,
-              month: prev.month,
-              year: prev.year,
+              day: dayNo - daysLength,
+              month: next.month,
+              year: next.year,
               otherMonth: true,
-              today: this.isToday(today, j, prev.month, prev.year),
-              selectable: this.isSelectable(j, prev.month, prev.year, true)
+              today: this.isToday(today, dayNo - daysLength, next.month, next.year),
+              selectable: this.isSelectable(dayNo - daysLength, next.month, next.year, true)
             });
-          }
-
-          var remainingDaysLength = 7 - week.length;
-
-          for (var _j = 0; _j < remainingDaysLength; _j++) {
+          } else {
             week.push({
               day: dayNo,
               month: month,
@@ -1026,663 +943,327 @@ function (_Component) {
               today: this.isToday(today, dayNo, month, year),
               selectable: this.isSelectable(dayNo, month, year, false)
             });
-            dayNo++;
           }
-        } else {
-          for (var _j2 = 0; _j2 < 7; _j2++) {
-            if (dayNo > daysLength) {
-              var next = this.getNextMonthAndYear(month, year);
-              week.push({
-                day: dayNo - daysLength,
-                month: next.month,
-                year: next.year,
-                otherMonth: true,
-                today: this.isToday(today, dayNo - daysLength, next.month, next.year),
-                selectable: this.isSelectable(dayNo - daysLength, next.month, next.year, true)
-              });
-            } else {
-              week.push({
-                day: dayNo,
-                month: month,
-                year: year,
-                today: this.isToday(today, dayNo, month, year),
-                selectable: this.isSelectable(dayNo, month, year, false)
-              });
-            }
 
-            dayNo++;
-          }
+          dayNo++;
         }
-
-        if (this.props.showWeek) {
-          weekNumbers.push(this.getWeekNumber(new Date(week[0].year, week[0].month, week[0].day)));
-        }
-
-        dates.push(week);
       }
 
-      return {
-        month: month,
-        year: year,
-        dates: dates,
-        weekNumbers: weekNumbers
-      };
-    }
-  }, {
-    key: "getWeekNumber",
-    value: function getWeekNumber(date) {
-      var checkDate = new Date(date.getTime());
-      checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
-      var time = checkDate.getTime();
-      checkDate.setMonth(0);
-      checkDate.setDate(1);
-      return Math.floor(Math.round((time - checkDate.getTime()) / 86400000) / 7) + 1;
-    }
-  }, {
-    key: "isSelectable",
-    value: function isSelectable(day, month, year, otherMonth) {
-      var validMin = true;
-      var validMax = true;
-      var validDate = true;
-      var validDay = true;
-      var validMonth = true;
+      if (this.props.showWeek) {
+        weekNumbers.push(this.getWeekNumber(new Date(week[0].year, week[0].month, week[0].day)));
+      }
 
-      if (this.props.minDate) {
-        if (this.props.minDate.getFullYear() > year) {
+      dates.push(week);
+    }
+
+    return {
+      month: month,
+      year: year,
+      dates: dates,
+      weekNumbers: weekNumbers
+    };
+  }
+
+  getWeekNumber(date) {
+    let checkDate = new Date(date.getTime());
+    checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
+    let time = checkDate.getTime();
+    checkDate.setMonth(0);
+    checkDate.setDate(1);
+    return Math.floor(Math.round((time - checkDate.getTime()) / 86400000) / 7) + 1;
+  }
+
+  isSelectable(day, month, year, otherMonth) {
+    let validMin = true;
+    let validMax = true;
+    let validDate = true;
+    let validDay = true;
+    let validMonth = true;
+
+    if (this.props.minDate) {
+      if (this.props.minDate.getFullYear() > year) {
+        validMin = false;
+      } else if (this.props.minDate.getFullYear() === year) {
+        if (this.props.minDate.getMonth() > month) {
           validMin = false;
-        } else if (this.props.minDate.getFullYear() === year) {
-          if (this.props.minDate.getMonth() > month) {
+        } else if (this.props.minDate.getMonth() === month) {
+          if (this.props.minDate.getDate() > day) {
             validMin = false;
-          } else if (this.props.minDate.getMonth() === month) {
-            if (this.props.minDate.getDate() > day) {
-              validMin = false;
-            }
           }
         }
       }
+    }
 
-      if (this.props.maxDate) {
-        if (this.props.maxDate.getFullYear() < year) {
+    if (this.props.maxDate) {
+      if (this.props.maxDate.getFullYear() < year) {
+        validMax = false;
+      } else if (this.props.maxDate.getFullYear() === year) {
+        if (this.props.maxDate.getMonth() < month) {
           validMax = false;
-        } else if (this.props.maxDate.getFullYear() === year) {
-          if (this.props.maxDate.getMonth() < month) {
+        } else if (this.props.maxDate.getMonth() === month) {
+          if (this.props.maxDate.getDate() < day) {
             validMax = false;
-          } else if (this.props.maxDate.getMonth() === month) {
-            if (this.props.maxDate.getDate() < day) {
-              validMax = false;
-            }
           }
         }
       }
-
-      if (this.props.disabledDates) {
-        validDate = !this.isDateDisabled(day, month, year);
-      }
-
-      if (this.props.disabledDays) {
-        validDay = !this.isDayDisabled(day, month, year);
-      }
-
-      if (this.props.selectOtherMonths === false && otherMonth) {
-        validMonth = false;
-      }
-
-      return validMin && validMax && validDate && validDay && validMonth;
     }
-  }, {
-    key: "isSelected",
-    value: function isSelected(dateMeta) {
-      if (this.props.value) {
-        if (this.isSingleSelection()) {
-          return this.isDateEquals(this.props.value, dateMeta);
-        } else if (this.isMultipleSelection()) {
-          var selected = false;
-          var _iteratorNormalCompletion = true;
-          var _didIteratorError = false;
-          var _iteratorError = undefined;
 
-          try {
-            for (var _iterator = this.props.value[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-              var date = _step.value;
-              selected = this.isDateEquals(date, dateMeta);
-
-              if (selected) {
-                break;
-              }
-            }
-          } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion && _iterator.return != null) {
-                _iterator.return();
-              }
-            } finally {
-              if (_didIteratorError) {
-                throw _iteratorError;
-              }
-            }
-          }
-
-          return selected;
-        } else if (this.isRangeSelection()) {
-          if (this.props.value[1]) return this.isDateEquals(this.props.value[0], dateMeta) || this.isDateEquals(this.props.value[1], dateMeta) || this.isDateBetween(this.props.value[0], this.props.value[1], dateMeta);else {
-            return this.isDateEquals(this.props.value[0], dateMeta);
-          }
-        }
-      } else {
-        return false;
-      }
+    if (this.props.disabledDates) {
+      validDate = !this.isDateDisabled(day, month, year);
     }
-  }, {
-    key: "isMonthSelected",
-    value: function isMonthSelected(month) {
-      var viewDate = this.getViewDate();
-      if (this.props.value && this.props.value instanceof Date) return this.props.value.getDate() === 1 && this.props.value.getMonth() === month && this.props.value.getFullYear() === viewDate.getFullYear();else return false;
+
+    if (this.props.disabledDays) {
+      validDay = !this.isDayDisabled(day, month, year);
     }
-  }, {
-    key: "isDateEquals",
-    value: function isDateEquals(value, dateMeta) {
-      if (value && _typeof(value) === _typeof("String")) {
-        value = this.props.convertValueToDate(value);
-      }
 
-      if (value && value instanceof Date) return value.getDate() === dateMeta.day && value.getMonth() === dateMeta.month && value.getFullYear() === dateMeta.year;else return false;
+    if (this.props.selectOtherMonths === false && otherMonth) {
+      validMonth = false;
     }
-  }, {
-    key: "isDateBetween",
-    value: function isDateBetween(start, end, dateMeta) {
-      var between = false;
 
-      if (start && end) {
-        var date = new Date(dateMeta.year, dateMeta.month, dateMeta.day);
-        return start.getTime() <= date.getTime() && end.getTime() >= date.getTime();
-      }
+    return validMin && validMax && validDate && validDay && validMonth;
+  }
 
-      return between;
-    }
-  }, {
-    key: "isSingleSelection",
-    value: function isSingleSelection() {
-      return this.props.selectionMode === 'single';
-    }
-  }, {
-    key: "isRangeSelection",
-    value: function isRangeSelection() {
-      return this.props.selectionMode === 'range';
-    }
-  }, {
-    key: "isMultipleSelection",
-    value: function isMultipleSelection() {
-      return this.props.selectionMode === 'multiple';
-    }
-  }, {
-    key: "isToday",
-    value: function isToday(today, day, month, year) {
-      return today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
-    }
-  }, {
-    key: "isDateDisabled",
-    value: function isDateDisabled(day, month, year) {
-      if (this.props.disabledDates) {
-        for (var i = 0; i < this.props.disabledDates.length; i++) {
-          var disabledDate = this.props.disabledDates[i];
-
-          if (disabledDate.getFullYear() === year && disabledDate.getMonth() === month && disabledDate.getDate() === day) {
-            return true;
-          }
-        }
-      }
-
-      return false;
-    }
-  }, {
-    key: "isDayDisabled",
-    value: function isDayDisabled(day, month, year) {
-      if (this.props.disabledDays) {
-        var weekday = new Date(year, month, day);
-        var weekdayNumber = weekday.getDay();
-        return this.props.disabledDays.indexOf(weekdayNumber) !== -1;
-      }
-
-      return false;
-    }
-  }, {
-    key: "getValueToRender",
-    value: function getValueToRender() {
-      var formattedValue = '';
-
-      if (this.props.value) {
-        try {
-          if (this.isSingleSelection()) {
-            formattedValue = this.formatDateTime(this.props.value);
-          } else if (this.isMultipleSelection()) {
-            for (var i = 0; i < this.props.value.length; i++) {
-              var dateAsString = this.formatDateTime(this.props.value[i]);
-              formattedValue += dateAsString;
-
-              if (i !== this.props.value.length - 1) {
-                formattedValue += ', ';
-              }
-            }
-          } else if (this.isRangeSelection()) {
-            if (this.props.value && this.props.value.length) {
-              var startDate = this.props.value[0];
-              var endDate = this.props.value[1];
-              formattedValue = this.formatDateTime(startDate);
-
-              if (endDate) {
-                formattedValue += ' - ' + this.formatDateTime(endDate);
-              }
-            }
-          }
-        } catch (err) {
-          formattedValue = this.props.value;
-        }
-      }
-
-      return formattedValue;
-    }
-  }, {
-    key: "formatDateTime",
-    value: function formatDateTime(date) {
-      var formattedValue = null;
-
-      if (date) {
-        if (this.props.timeOnly) {
-          formattedValue = this.formatTime(date);
-        } else {
-          formattedValue = this.formatDate(date, this.props.dateFormat);
-
-          if (this.props.showTime) {
-            formattedValue += ' ' + this.formatTime(date);
-          }
-        }
-      }
-
-      return formattedValue;
-    }
-  }, {
-    key: "formatDate",
-    value: function formatDate(date, format) {
-      if (!date) {
-        return '';
-      }
-
-      var iFormat;
-
-      var lookAhead = function lookAhead(match) {
-        var matches = iFormat + 1 < format.length && format.charAt(iFormat + 1) === match;
-
-        if (matches) {
-          iFormat++;
-        }
-
-        return matches;
-      },
-          formatNumber = function formatNumber(match, value, len) {
-        var num = '' + value;
-
-        if (lookAhead(match)) {
-          while (num.length < len) {
-            num = '0' + num;
-          }
-        }
-
-        return num;
-      },
-          formatName = function formatName(match, value, shortNames, longNames) {
-        return lookAhead(match) ? longNames[value] : shortNames[value];
-      };
-
-      var output = '';
-      var literal = false;
-
-      if (date) {
-        for (iFormat = 0; iFormat < format.length; iFormat++) {
-          if (literal) {
-            if (format.charAt(iFormat) === '\'' && !lookAhead('\'')) {
-              literal = false;
-            } else {
-              output += format.charAt(iFormat);
-            }
-          } else {
-            switch (format.charAt(iFormat)) {
-              case 'd':
-                output += formatNumber('d', date.getDate(), 2);
-                break;
-
-              case 'D':
-                output += formatName('D', date.getDay(), this.props.locale.dayNamesShort, this.props.locale.dayNames);
-                break;
-
-              case 'o':
-                output += formatNumber('o', Math.round((new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000), 3);
-                break;
-
-              case 'm':
-                output += formatNumber('m', date.getMonth() + 1, 2);
-                break;
-
-              case 'M':
-                output += formatName('M', date.getMonth(), this.props.locale.monthNamesShort, this.props.locale.monthNames);
-                break;
-
-              case 'y':
-                output += lookAhead('y') ? date.getFullYear() : (date.getFullYear() % 100 < 10 ? '0' : '') + date.getFullYear() % 100;
-                break;
-
-              case '@':
-                output += date.getTime();
-                break;
-
-              case '!':
-                output += date.getTime() * 10000 + this.ticksTo1970;
-                break;
-
-              case '\'':
-                if (lookAhead('\'')) {
-                  output += '\'';
-                } else {
-                  literal = true;
-                }
-
-                break;
-
-              default:
-                output += format.charAt(iFormat);
-            }
-          }
-        }
-      }
-
-      return output;
-    }
-  }, {
-    key: "formatTime",
-    value: function formatTime(date) {
-      if (!date) {
-        return '';
-      }
-
-      var output = '';
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var seconds = date.getSeconds();
-
-      if (this.props.hourFormat === '12' && hours > 11 && hours !== 12) {
-        hours -= 12;
-      }
-
-      if (this.props.hourFormat === '12') {
-        output += hours === 0 ? 12 : hours < 10 ? '0' + hours : hours;
-      } else {
-        output += hours < 10 ? '0' + hours : hours;
-      }
-
-      output += ':';
-      output += minutes < 10 ? '0' + minutes : minutes;
-
-      if (this.props.showSeconds) {
-        output += ':';
-        output += seconds < 10 ? '0' + seconds : seconds;
-      }
-
-      if (this.props.hourFormat === '12') {
-        output += date.getHours() > 11 ? ' PM' : ' AM';
-      }
-
-      return output;
-    }
-  }, {
-    key: "parseValueFromString",
-    value: function parseValueFromString(text) {
-      if (!text || text.trim().length === 0) {
-        return null;
-      }
-
-      var value;
-
+  isSelected(dateMeta) {
+    if (this.props.value) {
       if (this.isSingleSelection()) {
-        value = this.parseDateTime(text);
+        return this.isDateEquals(this.props.value, dateMeta);
       } else if (this.isMultipleSelection()) {
-        var tokens = text.split(',');
-        value = [];
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+        let selected = false;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
         try {
-          for (var _iterator2 = tokens[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var token = _step2.value;
-            value.push(this.parseDateTime(token.trim()));
+          for (var _iterator = this.props.value[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            let date = _step.value;
+            selected = this.isDateEquals(date, dateMeta);
+
+            if (selected) {
+              break;
+            }
           }
         } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-              _iterator2.return();
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
             }
           } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
+            if (_didIteratorError) {
+              throw _iteratorError;
             }
           }
         }
+
+        return selected;
       } else if (this.isRangeSelection()) {
-        var _tokens = text.split(' - ');
-
-        value = [];
-
-        for (var i = 0; i < _tokens.length; i++) {
-          value[i] = this.parseDateTime(_tokens[i].trim());
+        if (this.props.value[1]) return this.isDateEquals(this.props.value[0], dateMeta) || this.isDateEquals(this.props.value[1], dateMeta) || this.isDateBetween(this.props.value[0], this.props.value[1], dateMeta);else {
+          return this.isDateEquals(this.props.value[0], dateMeta);
         }
       }
-
-      return value;
+    } else {
+      return false;
     }
-  }, {
-    key: "parseDateTime",
-    value: function parseDateTime(text) {
-      var date;
-      var parts = text.split(' ');
+  }
 
-      if (this.props.timeOnly) {
-        date = new Date();
-        this.populateTime(date, parts[0], parts[1]);
-      } else {
-        if (this.props.showTime) {
-          date = this.parseDate(parts[0], this.props.dateFormat);
-          this.populateTime(date, parts[1], parts[2]);
-        } else {
-          date = this.parseDate(text, this.props.dateFormat);
-        }
-      }
+  isMonthSelected(month) {
+    const viewDate = this.getViewDate();
+    if (this.props.value && this.props.value instanceof Date) return this.props.value.getDate() === 1 && this.props.value.getMonth() === month && this.props.value.getFullYear() === viewDate.getFullYear();else return false;
+  }
 
-      return date;
+  isDateEquals(value, dateMeta) {
+    if (value && typeof value === typeof "String") {
+      value = this.props.convertValueToDate(value);
     }
-  }, {
-    key: "populateTime",
-    value: function populateTime(value, timeString, ampm) {
-      if (this.props.hourFormat === '12' && ampm !== 'PM' && ampm !== 'AM') {
-        throw new Error('Invalid Time');
-      }
 
-      var time = this.parseTime(timeString, ampm);
-      value.setHours(time.hour);
-      value.setMinutes(time.minute);
-      value.setSeconds(time.second);
+    if (value && value instanceof Date) return value.getDate() === dateMeta.day && value.getMonth() === dateMeta.month && value.getFullYear() === dateMeta.year;else return false;
+  }
+
+  isDateBetween(start, end, dateMeta) {
+    let between = false;
+
+    if (start && end) {
+      let date = new Date(dateMeta.year, dateMeta.month, dateMeta.day);
+      return start.getTime() <= date.getTime() && end.getTime() >= date.getTime();
     }
-  }, {
-    key: "parseTime",
-    value: function parseTime(value, ampm) {
-      var tokens = value.split(':');
-      var validTokenLength = this.props.showSeconds ? 3 : 2;
 
-      if (tokens.length !== validTokenLength || tokens[0].length !== 2 || tokens[1].length !== 2 || this.props.showSeconds && tokens[2].length !== 2) {
-        throw new Error('Invalid time');
-      }
+    return between;
+  }
 
-      var h = parseInt(tokens[0], 10);
-      var m = parseInt(tokens[1], 10);
-      var s = this.props.showSeconds ? parseInt(tokens[2], 10) : null;
+  isSingleSelection() {
+    return this.props.selectionMode === 'single';
+  }
 
-      if (isNaN(h) || isNaN(m) || h > 23 || m > 59 || this.props.hourFormat === '12' && h > 12 || this.props.showSeconds && (isNaN(s) || s > 59)) {
-        throw new Error('Invalid time');
-      } else {
-        if (this.props.hourFormat === '12' && h !== 12 && ampm === 'PM') {
-          h += 12;
+  isRangeSelection() {
+    return this.props.selectionMode === 'range';
+  }
+
+  isMultipleSelection() {
+    return this.props.selectionMode === 'multiple';
+  }
+
+  isToday(today, day, month, year) {
+    return today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+  }
+
+  isDateDisabled(day, month, year) {
+    if (this.props.disabledDates) {
+      for (let i = 0; i < this.props.disabledDates.length; i++) {
+        let disabledDate = this.props.disabledDates[i];
+
+        if (disabledDate.getFullYear() === year && disabledDate.getMonth() === month && disabledDate.getDate() === day) {
+          return true;
         }
-
-        return {
-          hour: h,
-          minute: m,
-          second: s
-        };
       }
-    } // Ported from jquery-ui datepicker parseDate
+    }
 
-  }, {
-    key: "parseDate",
-    value: function parseDate(value, format) {
-      if (format == null || value == null) {
-        throw new Error('Invalid arguments');
-      }
+    return false;
+  }
 
-      value = _typeof(value) === "object" ? value.toString() : value + "";
+  isDayDisabled(day, month, year) {
+    if (this.props.disabledDays) {
+      let weekday = new Date(year, month, day);
+      let weekdayNumber = weekday.getDay();
+      return this.props.disabledDays.indexOf(weekdayNumber) !== -1;
+    }
 
-      if (value === "") {
-        return null;
-      }
+    return false;
+  }
 
-      var iFormat,
-          dim,
-          extra,
-          iValue = 0,
-          shortYearCutoff = typeof this.props.shortYearCutoff !== "string" ? this.props.shortYearCutoff : new Date().getFullYear() % 100 + parseInt(this.props.shortYearCutoff, 10),
-          year = -1,
-          month = -1,
-          day = -1,
-          doy = -1,
-          literal = false,
-          date,
-          lookAhead = function lookAhead(match) {
-        var matches = iFormat + 1 < format.length && format.charAt(iFormat + 1) === match;
+  getValueToRender() {
+    let formattedValue = '';
 
-        if (matches) {
-          iFormat++;
-        }
+    if (this.props.value) {
+      try {
+        if (this.isSingleSelection()) {
+          formattedValue = this.formatDateTime(this.props.value);
+        } else if (this.isMultipleSelection()) {
+          for (let i = 0; i < this.props.value.length; i++) {
+            let dateAsString = this.formatDateTime(this.props.value[i]);
+            formattedValue += dateAsString;
 
-        return matches;
-      },
-          getNumber = function getNumber(match) {
-        var isDoubled = lookAhead(match),
-            size = match === "@" ? 14 : match === "!" ? 20 : match === "y" && isDoubled ? 4 : match === "o" ? 3 : 2,
-            minSize = match === "y" ? size : 1,
-            digits = new RegExp("^\\d{" + minSize + "," + size + "}"),
-            num = value.substring(iValue).match(digits);
+            if (i !== this.props.value.length - 1) {
+              formattedValue += ', ';
+            }
+          }
+        } else if (this.isRangeSelection()) {
+          if (this.props.value && this.props.value.length) {
+            let startDate = this.props.value[0];
+            let endDate = this.props.value[1];
+            formattedValue = this.formatDateTime(startDate);
 
-        if (!num) {
-          throw new Error('Missing number at position ' + iValue);
-        }
-
-        iValue += num[0].length;
-        return parseInt(num[0], 10);
-      },
-          getName = function getName(match, shortNames, longNames) {
-        var index = -1;
-        var arr = lookAhead(match) ? longNames : shortNames;
-        var names = [];
-
-        for (var i = 0; i < arr.length; i++) {
-          names.push([i, arr[i]]);
-        }
-
-        names.sort(function (a, b) {
-          return -(a[1].length - b[1].length);
-        });
-
-        for (var _i = 0; _i < names.length; _i++) {
-          var name = names[_i][1];
-
-          if (value.substr(iValue, name.length).toLowerCase() === name.toLowerCase()) {
-            index = names[_i][0];
-            iValue += name.length;
-            break;
+            if (endDate) {
+              formattedValue += ' - ' + this.formatDateTime(endDate);
+            }
           }
         }
+      } catch (err) {
+        formattedValue = this.props.value;
+      }
+    }
 
-        if (index !== -1) {
-          return index + 1;
-        } else {
-          throw new Error('Unknown name at position ' + iValue);
+    return formattedValue;
+  }
+
+  formatDateTime(date) {
+    let formattedValue = null;
+
+    if (date) {
+      if (this.props.timeOnly) {
+        formattedValue = this.formatTime(date);
+      } else {
+        formattedValue = this.formatDate(date, this.props.dateFormat);
+
+        if (this.props.showTime) {
+          formattedValue += ' ' + this.formatTime(date);
         }
-      },
-          checkLiteral = function checkLiteral() {
-        if (value.charAt(iValue) !== format.charAt(iFormat)) {
-          throw new Error('Unexpected literal at position ' + iValue);
-        }
+      }
+    }
 
-        iValue++;
-      };
+    return formattedValue;
+  }
 
-      if (this.props.view === 'month') {
-        day = 1;
+  formatDate(date, format) {
+    if (!date) {
+      return '';
+    }
+
+    let iFormat;
+
+    const lookAhead = match => {
+      const matches = iFormat + 1 < format.length && format.charAt(iFormat + 1) === match;
+
+      if (matches) {
+        iFormat++;
       }
 
+      return matches;
+    },
+          formatNumber = (match, value, len) => {
+      let num = '' + value;
+
+      if (lookAhead(match)) {
+        while (num.length < len) {
+          num = '0' + num;
+        }
+      }
+
+      return num;
+    },
+          formatName = (match, value, shortNames, longNames) => {
+      return lookAhead(match) ? longNames[value] : shortNames[value];
+    };
+
+    let output = '';
+    let literal = false;
+
+    if (date) {
       for (iFormat = 0; iFormat < format.length; iFormat++) {
         if (literal) {
-          if (format.charAt(iFormat) === "'" && !lookAhead("'")) {
+          if (format.charAt(iFormat) === '\'' && !lookAhead('\'')) {
             literal = false;
           } else {
-            checkLiteral();
+            output += format.charAt(iFormat);
           }
         } else {
           switch (format.charAt(iFormat)) {
-            case "d":
-              day = getNumber("d");
+            case 'd':
+              output += formatNumber('d', date.getDate(), 2);
               break;
 
-            case "D":
-              getName("D", this.props.locale.dayNamesShort, this.props.locale.dayNames);
+            case 'D':
+              output += formatName('D', date.getDay(), this.props.locale.dayNamesShort, this.props.locale.dayNames);
               break;
 
-            case "o":
-              doy = getNumber("o");
+            case 'o':
+              output += formatNumber('o', Math.round((new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000), 3);
               break;
 
-            case "m":
-              month = getNumber("m");
+            case 'm':
+              output += formatNumber('m', date.getMonth() + 1, 2);
               break;
 
-            case "M":
-              month = getName("M", this.props.locale.monthNamesShort, this.props.locale.monthNames);
+            case 'M':
+              output += formatName('M', date.getMonth(), this.props.locale.monthNamesShort, this.props.locale.monthNames);
               break;
 
-            case "y":
-              year = getNumber("y");
+            case 'y':
+              output += lookAhead('y') ? date.getFullYear() : (date.getFullYear() % 100 < 10 ? '0' : '') + date.getFullYear() % 100;
               break;
 
-            case "@":
-              date = new Date(getNumber("@"));
-              year = date.getFullYear();
-              month = date.getMonth() + 1;
-              day = date.getDate();
+            case '@':
+              output += date.getTime();
               break;
 
-            case "!":
-              date = new Date((getNumber("!") - this.ticksTo1970) / 10000);
-              year = date.getFullYear();
-              month = date.getMonth() + 1;
-              day = date.getDate();
+            case '!':
+              output += date.getTime() * 10000 + this.ticksTo1970;
               break;
 
-            case "'":
-              if (lookAhead("'")) {
-                checkLiteral();
+            case '\'':
+              if (lookAhead('\'')) {
+                output += '\'';
               } else {
                 literal = true;
               }
@@ -1690,614 +1271,823 @@ function (_Component) {
               break;
 
             default:
-              checkLiteral();
+              output += format.charAt(iFormat);
           }
         }
       }
+    }
 
-      if (iValue < value.length) {
-        extra = value.substr(iValue);
+    return output;
+  }
 
-        if (!/^\s+/.test(extra)) {
-          throw new Error('Extra/unparsed characters found in date: ' + extra);
+  formatTime(date) {
+    if (!date) {
+      return '';
+    }
+
+    let output = '';
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+
+    if (this.props.hourFormat === '12' && hours > 11 && hours !== 12) {
+      hours -= 12;
+    }
+
+    if (this.props.hourFormat === '12') {
+      output += hours === 0 ? 12 : hours < 10 ? '0' + hours : hours;
+    } else {
+      output += hours < 10 ? '0' + hours : hours;
+    }
+
+    output += ':';
+    output += minutes < 10 ? '0' + minutes : minutes;
+
+    if (this.props.showSeconds) {
+      output += ':';
+      output += seconds < 10 ? '0' + seconds : seconds;
+    }
+
+    if (this.props.hourFormat === '12') {
+      output += date.getHours() > 11 ? ' PM' : ' AM';
+    }
+
+    return output;
+  }
+
+  parseValueFromString(text) {
+    if (!text || text.trim().length === 0) {
+      return null;
+    }
+
+    let value;
+
+    if (this.isSingleSelection()) {
+      value = this.parseDateTime(text);
+    } else if (this.isMultipleSelection()) {
+      let tokens = text.split(',');
+      value = [];
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = tokens[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          let token = _step2.value;
+          value.push(this.parseDateTime(token.trim()));
         }
-      }
-
-      if (year === -1) {
-        year = new Date().getFullYear();
-      } else if (year < 100) {
-        year += new Date().getFullYear() - new Date().getFullYear() % 100 + (year <= shortYearCutoff ? 0 : -100);
-      }
-
-      if (doy > -1) {
-        month = 1;
-        day = doy;
-
-        do {
-          dim = this.getDaysCountInMonth(year, month - 1);
-
-          if (day <= dim) {
-            break;
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+            _iterator2.return();
           }
-
-          month++;
-          day -= dim;
-        } while (true);
-      }
-
-      date = this.daylightSavingAdjust(new Date(year, month - 1, day));
-
-      if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
-        throw new Error('Invalid date'); // E.g. 31/02/00
-      }
-
-      return date;
-    }
-  }, {
-    key: "renderBackwardNavigator",
-    value: function renderBackwardNavigator() {
-      return _react.default.createElement("button", {
-        className: "p-datepicker-prev p-link",
-        onClick: this.navBackward
-      }, _react.default.createElement("span", {
-        className: "p-datepicker-prev-icon pi pi-chevron-left"
-      }));
-    }
-  }, {
-    key: "renderForwardNavigator",
-    value: function renderForwardNavigator() {
-      return _react.default.createElement("button", {
-        className: "p-datepicker-next p-link",
-        onClick: this.navForward
-      }, _react.default.createElement("span", {
-        className: "p-datepicker-next-icon pi pi-chevron-right"
-      }));
-    }
-  }, {
-    key: "isInMinYear",
-    value: function isInMinYear(viewDate) {
-      return this.props.minDate && this.props.minDate.getFullYear() === viewDate.getFullYear();
-    }
-  }, {
-    key: "isInMaxYear",
-    value: function isInMaxYear(viewDate) {
-      return this.props.maxDate && this.props.maxDate.getFullYear() === viewDate.getFullYear();
-    }
-  }, {
-    key: "renderTitleMonthElement",
-    value: function renderTitleMonthElement(month) {
-      var _this8 = this;
-
-      if (this.props.monthNavigator && this.props.view !== 'month') {
-        var viewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
-        var viewMonth = viewDate.getMonth();
-        return _react.default.createElement("select", {
-          className: "p-datepicker-month",
-          onChange: this.onMonthDropdownChange,
-          value: viewMonth
-        }, this.props.locale.monthNames.map(function (month, index) {
-          if ((!_this8.isInMinYear(viewDate) || index >= _this8.props.minDate.getMonth()) && (!_this8.isInMaxYear(viewDate) || index <= _this8.props.maxDate.getMonth())) {
-            return _react.default.createElement("option", {
-              key: month,
-              value: index
-            }, month);
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
           }
-
-          return null;
-        }));
-      } else {
-        return _react.default.createElement("span", {
-          className: "p-datepicker-month"
-        }, this.props.locale.monthNames[month]);
-      }
-    }
-  }, {
-    key: "renderTitleYearElement",
-    value: function renderTitleYearElement(year) {
-      var _this9 = this;
-
-      if (this.props.yearNavigator) {
-        var yearOptions = [];
-        var years = this.props.yearRange.split(':');
-        var yearStart = parseInt(years[0], 10);
-        var yearEnd = parseInt(years[1], 10);
-
-        for (var i = yearStart; i <= yearEnd; i++) {
-          yearOptions.push(i);
         }
+      }
+    } else if (this.isRangeSelection()) {
+      let tokens = text.split(' - ');
+      value = [];
 
-        var viewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
-        var viewYear = viewDate.getFullYear();
-        return _react.default.createElement("select", {
-          className: "p-datepicker-year",
-          onChange: this.onYearDropdownChange,
-          value: viewYear
-        }, yearOptions.map(function (year) {
-          if (!(_this9.props.minDate && _this9.props.minDate.getFullYear() > year) && !(_this9.props.maxDate && _this9.props.maxDate.getFullYear() < year)) {
-            return _react.default.createElement("option", {
-              key: year,
-              value: year
-            }, year);
-          }
-
-          return null;
-        }));
-      } else {
-        return _react.default.createElement("span", {
-          className: "p-datepicker-year"
-        }, year);
+      for (let i = 0; i < tokens.length; i++) {
+        value[i] = this.parseDateTime(tokens[i].trim());
       }
     }
-  }, {
-    key: "renderTitle",
-    value: function renderTitle(monthMetaData) {
-      var month = this.renderTitleMonthElement(monthMetaData.month);
-      var year = this.renderTitleYearElement(monthMetaData.year);
-      return _react.default.createElement("div", {
-        className: "p-datepicker-title"
-      }, month, year);
+
+    return value;
+  }
+
+  parseDateTime(text) {
+    let date;
+    let parts = text.split(' ');
+
+    if (this.props.timeOnly) {
+      date = new Date();
+      this.populateTime(date, parts[0], parts[1]);
+    } else {
+      if (this.props.showTime) {
+        date = this.parseDate(parts[0], this.props.dateFormat);
+        this.populateTime(date, parts[1], parts[2]);
+      } else {
+        date = this.parseDate(text, this.props.dateFormat);
+      }
     }
-  }, {
-    key: "renderDayNames",
-    value: function renderDayNames(weekDays) {
-      var dayNames = weekDays.map(function (weekDay) {
-        return _react.default.createElement("th", {
-          key: weekDay,
-          scope: "col"
-        }, _react.default.createElement("span", null, weekDay));
+
+    return date;
+  }
+
+  populateTime(value, timeString, ampm) {
+    if (this.props.hourFormat === '12' && ampm !== 'PM' && ampm !== 'AM') {
+      throw new Error('Invalid Time');
+    }
+
+    let time = this.parseTime(timeString, ampm);
+    value.setHours(time.hour);
+    value.setMinutes(time.minute);
+    value.setSeconds(time.second);
+  }
+
+  parseTime(value, ampm) {
+    let tokens = value.split(':');
+    let validTokenLength = this.props.showSeconds ? 3 : 2;
+
+    if (tokens.length !== validTokenLength || tokens[0].length !== 2 || tokens[1].length !== 2 || this.props.showSeconds && tokens[2].length !== 2) {
+      throw new Error('Invalid time');
+    }
+
+    let h = parseInt(tokens[0], 10);
+    let m = parseInt(tokens[1], 10);
+    let s = this.props.showSeconds ? parseInt(tokens[2], 10) : null;
+
+    if (isNaN(h) || isNaN(m) || h > 23 || m > 59 || this.props.hourFormat === '12' && h > 12 || this.props.showSeconds && (isNaN(s) || s > 59)) {
+      throw new Error('Invalid time');
+    } else {
+      if (this.props.hourFormat === '12' && h !== 12 && ampm === 'PM') {
+        h += 12;
+      }
+
+      return {
+        hour: h,
+        minute: m,
+        second: s
+      };
+    }
+  } // Ported from jquery-ui datepicker parseDate
+
+
+  parseDate(value, format) {
+    if (format == null || value == null) {
+      throw new Error('Invalid arguments');
+    }
+
+    value = typeof value === "object" ? value.toString() : value + "";
+
+    if (value === "") {
+      return null;
+    }
+
+    let iFormat,
+        dim,
+        extra,
+        iValue = 0,
+        shortYearCutoff = typeof this.props.shortYearCutoff !== "string" ? this.props.shortYearCutoff : new Date().getFullYear() % 100 + parseInt(this.props.shortYearCutoff, 10),
+        year = -1,
+        month = -1,
+        day = -1,
+        doy = -1,
+        literal = false,
+        date,
+        lookAhead = match => {
+      let matches = iFormat + 1 < format.length && format.charAt(iFormat + 1) === match;
+
+      if (matches) {
+        iFormat++;
+      }
+
+      return matches;
+    },
+        getNumber = match => {
+      let isDoubled = lookAhead(match),
+          size = match === "@" ? 14 : match === "!" ? 20 : match === "y" && isDoubled ? 4 : match === "o" ? 3 : 2,
+          minSize = match === "y" ? size : 1,
+          digits = new RegExp("^\\d{" + minSize + "," + size + "}"),
+          num = value.substring(iValue).match(digits);
+
+      if (!num) {
+        throw new Error('Missing number at position ' + iValue);
+      }
+
+      iValue += num[0].length;
+      return parseInt(num[0], 10);
+    },
+        getName = (match, shortNames, longNames) => {
+      let index = -1;
+      let arr = lookAhead(match) ? longNames : shortNames;
+      let names = [];
+
+      for (let i = 0; i < arr.length; i++) {
+        names.push([i, arr[i]]);
+      }
+
+      names.sort((a, b) => {
+        return -(a[1].length - b[1].length);
       });
 
-      if (this.props.showWeek) {
-        var weekHeader = _react.default.createElement("th", {
-          scope: "col",
-          key: 'wn',
-          className: "p-datepicker-weekheader p-disabled"
-        }, _react.default.createElement("span", null, this.props.locale['weekHeader']));
+      for (let i = 0; i < names.length; i++) {
+        let name = names[i][1];
 
-        return [weekHeader].concat(_toConsumableArray(dayNames));
-      } else {
-        return dayNames;
-      }
-    }
-  }, {
-    key: "renderDateCellContent",
-    value: function renderDateCellContent(date, className) {
-      var _this10 = this;
-
-      var content = this.props.dateTemplate ? this.props.dateTemplate(date) : date.day;
-      return _react.default.createElement("span", {
-        className: className,
-        onClick: function onClick(e) {
-          return _this10.onDateSelect(e, date);
+        if (value.substr(iValue, name.length).toLowerCase() === name.toLowerCase()) {
+          index = names[i][0];
+          iValue += name.length;
+          break;
         }
-      }, content);
-    }
-  }, {
-    key: "renderWeek",
-    value: function renderWeek(weekDates, weekNumber) {
-      var _this11 = this;
+      }
 
-      var week = weekDates.map(function (date) {
-        var selected = _this11.isSelected(date);
-
-        var cellClassName = (0, _classnames.default)({
-          'p-datepicker-other-month': date.otherMonth,
-          'p-datepicker-today': date.today
-        });
-        var dateClassName = (0, _classnames.default)({
-          'p-highlight': selected,
-          'p-disabled': !date.selectable
-        });
-
-        var content = _this11.renderDateCellContent(date, dateClassName);
-
-        return _react.default.createElement("td", {
-          key: date.day,
-          className: cellClassName
-        }, content);
-      });
-
-      if (this.props.showWeek) {
-        var weekNumberCell = _react.default.createElement("td", {
-          key: 'wn' + weekNumber,
-          className: "p-datepicker-weeknumber"
-        }, _react.default.createElement("span", {
-          className: "p-disabled"
-        }, weekNumber));
-
-        return [weekNumberCell].concat(_toConsumableArray(week));
+      if (index !== -1) {
+        return index + 1;
       } else {
-        return week;
+        throw new Error('Unknown name at position ' + iValue);
       }
-    }
-  }, {
-    key: "renderDates",
-    value: function renderDates(monthMetaData) {
-      var _this12 = this;
-
-      return monthMetaData.dates.map(function (weekDates, index) {
-        return _react.default.createElement("tr", {
-          key: index
-        }, _this12.renderWeek(weekDates, monthMetaData.weekNumbers[index]));
-      });
-    }
-  }, {
-    key: "renderDateViewGrid",
-    value: function renderDateViewGrid(monthMetaData, weekDays) {
-      var dayNames = this.renderDayNames(weekDays);
-      var dates = this.renderDates(monthMetaData);
-      return _react.default.createElement("div", {
-        className: "p-datepicker-calendar-container"
-      }, _react.default.createElement("table", {
-        className: "p-datepicker-calendar"
-      }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, dayNames)), _react.default.createElement("tbody", null, dates)));
-    }
-  }, {
-    key: "renderMonth",
-    value: function renderMonth(monthMetaData, index) {
-      var weekDays = this.createWeekDays();
-      var backwardNavigator = index === 0 ? this.renderBackwardNavigator() : null;
-      var forwardNavigator = this.props.numberOfMonths === 1 || index === this.props.numberOfMonths - 1 ? this.renderForwardNavigator() : null;
-      var title = this.renderTitle(monthMetaData);
-      var dateViewGrid = this.renderDateViewGrid(monthMetaData, weekDays);
-      var header = this.props.headerTemplate ? this.props.headerTemplate() : null;
-      return _react.default.createElement("div", {
-        key: monthMetaData.month,
-        className: "p-datepicker-group"
-      }, _react.default.createElement("div", {
-        className: "p-datepicker-header"
-      }, header, backwardNavigator, forwardNavigator, title), dateViewGrid);
-    }
-  }, {
-    key: "renderMonths",
-    value: function renderMonths(monthsMetaData) {
-      var _this13 = this;
-
-      return monthsMetaData.map(function (monthMetaData, index) {
-        return _this13.renderMonth(monthMetaData, index);
-      });
-    }
-  }, {
-    key: "renderDateView",
-    value: function renderDateView() {
-      var viewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
-      var monthsMetaData = this.createMonths(viewDate.getMonth(), viewDate.getFullYear());
-      var months = this.renderMonths(monthsMetaData);
-      return _react.default.createElement(_react.default.Fragment, null, months);
-    }
-  }, {
-    key: "renderMonthViewMonth",
-    value: function renderMonthViewMonth(index) {
-      var _this14 = this;
-
-      var className = (0, _classnames.default)('p-monthpicker-month', {
-        'p-highlight': this.isMonthSelected(index)
-      });
-      var monthName = this.props.locale.monthNamesShort[index];
-      return _react.default.createElement("span", {
-        key: monthName,
-        className: className,
-        onClick: function onClick(event) {
-          return _this14.onMonthSelect(event, index);
-        }
-      }, monthName);
-    }
-  }, {
-    key: "renderMonthViewMonths",
-    value: function renderMonthViewMonths() {
-      var months = [];
-
-      for (var i = 0; i <= 11; i++) {
-        months.push(this.renderMonthViewMonth(i));
+    },
+        checkLiteral = () => {
+      if (value.charAt(iValue) !== format.charAt(iFormat)) {
+        throw new Error('Unexpected literal at position ' + iValue);
       }
 
-      return months;
+      iValue++;
+    };
+
+    if (this.props.view === 'month') {
+      day = 1;
     }
-  }, {
-    key: "renderMonthView",
-    value: function renderMonthView() {
-      var backwardNavigator = this.renderBackwardNavigator();
-      var forwardNavigator = this.renderForwardNavigator();
-      var yearElement = this.renderTitleYearElement(this.getViewDate().getFullYear());
-      var months = this.renderMonthViewMonths();
-      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
-        className: "p-datepicker-header"
-      }, backwardNavigator, forwardNavigator, _react.default.createElement("div", {
-        className: "p-datepicker-title"
-      }, yearElement)), _react.default.createElement("div", {
-        className: "p-monthpicker"
-      }, months));
-    }
-  }, {
-    key: "renderDatePicker",
-    value: function renderDatePicker() {
-      if (!this.props.timeOnly) {
-        if (this.props.view === 'date') {
-          return this.renderDateView();
-        } else if (this.props.view === 'month') {
-          return this.renderMonthView();
+
+    for (iFormat = 0; iFormat < format.length; iFormat++) {
+      if (literal) {
+        if (format.charAt(iFormat) === "'" && !lookAhead("'")) {
+          literal = false;
         } else {
-          return null;
+          checkLiteral();
+        }
+      } else {
+        switch (format.charAt(iFormat)) {
+          case "d":
+            day = getNumber("d");
+            break;
+
+          case "D":
+            getName("D", this.props.locale.dayNamesShort, this.props.locale.dayNames);
+            break;
+
+          case "o":
+            doy = getNumber("o");
+            break;
+
+          case "m":
+            month = getNumber("m");
+            break;
+
+          case "M":
+            month = getName("M", this.props.locale.monthNamesShort, this.props.locale.monthNames);
+            break;
+
+          case "y":
+            year = getNumber("y");
+            break;
+
+          case "@":
+            date = new Date(getNumber("@"));
+            year = date.getFullYear();
+            month = date.getMonth() + 1;
+            day = date.getDate();
+            break;
+
+          case "!":
+            date = new Date((getNumber("!") - this.ticksTo1970) / 10000);
+            year = date.getFullYear();
+            month = date.getMonth() + 1;
+            day = date.getDate();
+            break;
+
+          case "'":
+            if (lookAhead("'")) {
+              checkLiteral();
+            } else {
+              literal = true;
+            }
+
+            break;
+
+          default:
+            checkLiteral();
         }
       }
     }
-  }, {
-    key: "renderHourPicker",
-    value: function renderHourPicker() {
-      var _this15 = this;
 
-      var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-      var hour = currentTime.getHours();
+    if (iValue < value.length) {
+      extra = value.substr(iValue);
 
-      if (this.props.hourFormat === '12') {
-        if (hour === 0) hour = 12;else if (hour > 11 && hour !== 12) hour = hour - 12;
+      if (!/^\s+/.test(extra)) {
+        throw new Error('Extra/unparsed characters found in date: ' + extra);
       }
+    }
 
-      var hourDisplay = hour < 10 ? '0' + hour : hour;
-      return _react.default.createElement("div", {
-        className: "p-hour-picker"
-      }, _react.default.createElement("button", {
-        className: "p-link",
-        onMouseDown: function onMouseDown(e) {
-          return _this15.onTimePickerElementMouseDown(e, 0, 1);
-        },
-        onMouseUp: this.onTimePickerElementMouseUp,
-        onMouseLeave: this.onTimePickerElementMouseLeave
-      }, _react.default.createElement("span", {
-        className: "pi pi-chevron-up"
-      })), _react.default.createElement("span", null, hourDisplay), _react.default.createElement("button", {
-        className: "p-link",
-        onMouseDown: function onMouseDown(e) {
-          return _this15.onTimePickerElementMouseDown(e, 0, -1);
-        },
-        onMouseUp: this.onTimePickerElementMouseUp,
-        onMouseLeave: this.onTimePickerElementMouseLeave
-      }, _react.default.createElement("span", {
-        className: "pi pi-chevron-down"
-      })));
+    if (year === -1) {
+      year = new Date().getFullYear();
+    } else if (year < 100) {
+      year += new Date().getFullYear() - new Date().getFullYear() % 100 + (year <= shortYearCutoff ? 0 : -100);
     }
-  }, {
-    key: "renderMinutePicker",
-    value: function renderMinutePicker() {
-      var _this16 = this;
 
-      var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-      var minute = currentTime.getMinutes();
-      var minuteDisplay = minute < 10 ? '0' + minute : minute;
-      return _react.default.createElement("div", {
-        className: "p-minute-picker"
-      }, _react.default.createElement("button", {
-        className: "p-link",
-        onMouseDown: function onMouseDown(e) {
-          return _this16.onTimePickerElementMouseDown(e, 1, 1);
-        },
-        onMouseUp: this.onTimePickerElementMouseUp,
-        onMouseLeave: this.onTimePickerElementMouseLeave
-      }, _react.default.createElement("span", {
-        className: "pi pi-chevron-up"
-      })), _react.default.createElement("span", null, minuteDisplay), _react.default.createElement("button", {
-        className: "p-link",
-        onMouseDown: function onMouseDown(e) {
-          return _this16.onTimePickerElementMouseDown(e, 1, -1);
-        },
-        onMouseUp: this.onTimePickerElementMouseUp,
-        onMouseLeave: this.onTimePickerElementMouseLeave
-      }, _react.default.createElement("span", {
-        className: "pi pi-chevron-down"
-      })));
-    }
-  }, {
-    key: "renderSecondPicker",
-    value: function renderSecondPicker() {
-      var _this17 = this;
+    if (doy > -1) {
+      month = 1;
+      day = doy;
 
-      if (this.props.showSeconds) {
-        var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-        var second = currentTime.getSeconds();
-        var secondDisplay = second < 10 ? '0' + second : second;
-        return _react.default.createElement("div", {
-          className: "p-second-picker"
-        }, _react.default.createElement("button", {
-          className: "p-link",
-          onMouseDown: function onMouseDown(e) {
-            return _this17.onTimePickerElementMouseDown(e, 2, 1);
-          },
-          onMouseUp: this.onTimePickerElementMouseUp,
-          onMouseLeave: this.onTimePickerElementMouseLeave
-        }, _react.default.createElement("span", {
-          className: "pi pi-chevron-up"
-        })), _react.default.createElement("span", null, secondDisplay), _react.default.createElement("button", {
-          className: "p-link",
-          onMouseDown: function onMouseDown(e) {
-            return _this17.onTimePickerElementMouseDown(e, 2, -1);
-          },
-          onMouseUp: this.onTimePickerElementMouseUp,
-          onMouseLeave: this.onTimePickerElementMouseLeave
-        }, _react.default.createElement("span", {
-          className: "pi pi-chevron-down"
-        })));
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: "renderAmPmPicker",
-    value: function renderAmPmPicker() {
-      if (this.props.hourFormat === '12') {
-        var currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
-        var hour = currentTime.getHours();
-        var display = hour > 11 ? 'PM' : 'AM';
-        return _react.default.createElement("div", {
-          className: "p-ampm-picker"
-        }, _react.default.createElement("button", {
-          className: "p-link",
-          onClick: this.toggleAmPm
-        }, _react.default.createElement("span", {
-          className: "pi pi-chevron-up"
-        })), _react.default.createElement("span", null, display), _react.default.createElement("button", {
-          className: "p-link",
-          onClick: this.toggleAmPm
-        }, _react.default.createElement("span", {
-          className: "pi pi-chevron-down"
-        })));
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: "renderSeparator",
-    value: function renderSeparator() {
-      return _react.default.createElement("div", {
-        className: "p-separator"
-      }, _react.default.createElement("span", {
-        className: "p-separator-spacer"
-      }, _react.default.createElement("span", {
-        className: "pi pi-chevron-up"
-      })), _react.default.createElement("span", null, ":"), _react.default.createElement("span", {
-        className: "p-separator-spacer"
-      }, _react.default.createElement("span", {
-        className: "pi pi-chevron-down"
-      })));
-    }
-  }, {
-    key: "renderTimePicker",
-    value: function renderTimePicker() {
-      if (this.props.showTime || this.props.timeOnly) {
-        return _react.default.createElement("div", {
-          className: "p-timepicker"
-        }, this.renderHourPicker(), this.renderSeparator(), this.renderMinutePicker(), this.props.showSeconds && this.renderSeparator(), this.renderSecondPicker(), this.props.hourFormat === '12' && this.renderSeparator(), this.renderAmPmPicker());
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: "renderInputElement",
-    value: function renderInputElement() {
-      var _this18 = this;
+      do {
+        dim = this.getDaysCountInMonth(year, month - 1);
 
-      if (!this.props.inline) {
-        var className = (0, _classnames.default)('p-inputtext p-component', this.props.inputClassName);
-        var value = this.getValueToRender();
-        return _react.default.createElement(_InputText.InputText, {
-          ref: function ref(el) {
-            return _this18.inputElement = _reactDom.default.findDOMNode(el);
-          },
-          id: this.props.inputId,
-          name: this.props.name,
-          value: value,
-          type: "text",
-          className: className,
-          style: this.props.inputStyle,
-          readOnly: this.props.readOnlyInput,
-          disabled: this.props.disabled,
-          tabIndex: this.props.tabIndex,
-          required: this.props.required,
-          autoComplete: "off",
-          placeholder: this.props.placeholder,
-          onChange: this.onInputChange,
-          onFocus: this.onInputFocus,
-          onBlur: this.onInputBlur,
-          onKeyDown: this.onInputKeyDown
-        });
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: "renderButton",
-    value: function renderButton() {
-      if (this.props.showIcon) {
-        return _react.default.createElement(_Button.Button, {
-          type: "button",
-          icon: this.props.icon,
-          onClick: this.onButtonClick,
-          tabIndex: "-1",
-          disabled: this.props.disabled,
-          className: "p-datepicker-trigger p-calendar-button"
-        });
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: "renderButtonBar",
-    value: function renderButtonBar() {
-      if (this.props.showButtonBar) {
-        return _react.default.createElement("div", {
-          className: "p-datepicker-buttonbar"
-        }, _react.default.createElement(_Button.Button, {
-          type: "button",
-          label: this.props.locale.today,
-          onClick: this.onTodayButtonClick,
-          className: this.props.todayButtonClassName
-        }), _react.default.createElement(_Button.Button, {
-          type: "button",
-          label: this.props.locale.clear,
-          onClick: this.onClearButtonClick,
-          className: this.props.clearButtonStyleClass
-        }));
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: "renderFooter",
-    value: function renderFooter() {
-      if (this.props.footerTemplate) {
-        var content = this.props.footerTemplate();
-        return _react.default.createElement("div", {
-          className: "p-datepicker-footer"
-        }, content);
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this19 = this;
+        if (day <= dim) {
+          break;
+        }
 
-      var className = (0, _classnames.default)('p-calendar', this.props.className, {
-        'p-calendar-w-btn': this.props.showIcon,
-        'p-calendar-timeonly': this.props.timeOnly,
-        'p-inputwrapper-filled': this.props.value
-      });
-      var panelClassName = (0, _classnames.default)('p-datepicker p-component', this.props.panelClassName, {
-        'p-datepicker-inline': this.props.inline,
-        'p-input-overlay': !this.props.inline,
-        'p-shadow': !this.props.inline,
-        'p-disabled': this.props.disabled,
-        'p-datepicker-timeonly': this.props.timeOnly,
-        'p-datepicker-multiple-month': this.props.numberOfMonths > 1,
-        'p-datepicker-monthpicker': this.props.view === 'month',
-        'p-datepicker-touch-ui': this.props.touchUI
-      });
-      var input = this.renderInputElement();
-      var button = this.renderButton();
-      var datePicker = this.renderDatePicker();
-      var timePicker = this.renderTimePicker();
-      var buttonBar = this.renderButtonBar();
-      var footer = this.renderFooter();
+        month++;
+        day -= dim;
+      } while (true);
+    }
+
+    date = this.daylightSavingAdjust(new Date(year, month - 1, day));
+
+    if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
+      throw new Error('Invalid date'); // E.g. 31/02/00
+    }
+
+    return date;
+  }
+
+  renderBackwardNavigator() {
+    return _react.default.createElement("button", {
+      className: "p-datepicker-prev p-link",
+      onClick: this.navBackward
+    }, _react.default.createElement("span", {
+      className: "p-datepicker-prev-icon pi pi-chevron-left"
+    }));
+  }
+
+  renderForwardNavigator() {
+    return _react.default.createElement("button", {
+      className: "p-datepicker-next p-link",
+      onClick: this.navForward
+    }, _react.default.createElement("span", {
+      className: "p-datepicker-next-icon pi pi-chevron-right"
+    }));
+  }
+
+  isInMinYear(viewDate) {
+    return this.props.minDate && this.props.minDate.getFullYear() === viewDate.getFullYear();
+  }
+
+  isInMaxYear(viewDate) {
+    return this.props.maxDate && this.props.maxDate.getFullYear() === viewDate.getFullYear();
+  }
+
+  renderTitleMonthElement(month) {
+    if (this.props.monthNavigator && this.props.view !== 'month') {
+      let viewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
+      let viewMonth = viewDate.getMonth();
+      return _react.default.createElement("select", {
+        className: "p-datepicker-month",
+        onChange: this.onMonthDropdownChange,
+        value: viewMonth
+      }, this.props.locale.monthNames.map((month, index) => {
+        if ((!this.isInMinYear(viewDate) || index >= this.props.minDate.getMonth()) && (!this.isInMaxYear(viewDate) || index <= this.props.maxDate.getMonth())) {
+          return _react.default.createElement("option", {
+            key: month,
+            value: index
+          }, month);
+        }
+
+        return null;
+      }));
+    } else {
       return _react.default.createElement("span", {
-        ref: function ref(el) {
-          return _this19.container = el;
-        },
-        id: this.props.id,
-        className: className,
-        style: this.props.style
-      }, input, button, _react.default.createElement(_CalendarPanel.CalendarPanel, {
-        ref: function ref(el) {
-          return _this19.panel = _reactDom.default.findDOMNode(el);
-        },
-        className: panelClassName,
-        style: this.props.panelStyle,
-        appendTo: this.props.appendTo
-      }, datePicker, timePicker, buttonBar, footer));
+        className: "p-datepicker-month"
+      }, this.props.locale.monthNames[month]);
     }
-  }]);
+  }
 
-  return Calendar;
-}(_react.Component);
+  renderTitleYearElement(year) {
+    if (this.props.yearNavigator) {
+      let yearOptions = [];
+      const years = this.props.yearRange.split(':');
+      const yearStart = parseInt(years[0], 10);
+      const yearEnd = parseInt(years[1], 10);
+
+      for (let i = yearStart; i <= yearEnd; i++) {
+        yearOptions.push(i);
+      }
+
+      let viewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
+      let viewYear = viewDate.getFullYear();
+      return _react.default.createElement("select", {
+        className: "p-datepicker-year",
+        onChange: this.onYearDropdownChange,
+        value: viewYear
+      }, yearOptions.map(year => {
+        if (!(this.props.minDate && this.props.minDate.getFullYear() > year) && !(this.props.maxDate && this.props.maxDate.getFullYear() < year)) {
+          return _react.default.createElement("option", {
+            key: year,
+            value: year
+          }, year);
+        }
+
+        return null;
+      }));
+    } else {
+      return _react.default.createElement("span", {
+        className: "p-datepicker-year"
+      }, year);
+    }
+  }
+
+  renderTitle(monthMetaData) {
+    const month = this.renderTitleMonthElement(monthMetaData.month);
+    const year = this.renderTitleYearElement(monthMetaData.year);
+    return _react.default.createElement("div", {
+      className: "p-datepicker-title"
+    }, month, year);
+  }
+
+  renderDayNames(weekDays) {
+    const dayNames = weekDays.map(weekDay => _react.default.createElement("th", {
+      key: weekDay,
+      scope: "col"
+    }, _react.default.createElement("span", null, weekDay)));
+
+    if (this.props.showWeek) {
+      const weekHeader = _react.default.createElement("th", {
+        scope: "col",
+        key: 'wn',
+        className: "p-datepicker-weekheader p-disabled"
+      }, _react.default.createElement("span", null, this.props.locale['weekHeader']));
+
+      return [weekHeader, ...dayNames];
+    } else {
+      return dayNames;
+    }
+  }
+
+  renderDateCellContent(date, className) {
+    const content = this.props.dateTemplate ? this.props.dateTemplate(date) : date.day;
+    return _react.default.createElement("span", {
+      className: className,
+      onClick: e => this.onDateSelect(e, date)
+    }, content);
+  }
+
+  renderWeek(weekDates, weekNumber) {
+    const week = weekDates.map(date => {
+      const selected = this.isSelected(date);
+      const cellClassName = (0, _classnames.default)({
+        'p-datepicker-other-month': date.otherMonth,
+        'p-datepicker-today': date.today
+      });
+      const dateClassName = (0, _classnames.default)({
+        'p-highlight': selected,
+        'p-disabled': !date.selectable
+      });
+      const content = this.renderDateCellContent(date, dateClassName);
+      return _react.default.createElement("td", {
+        key: date.day,
+        className: cellClassName
+      }, content);
+    });
+
+    if (this.props.showWeek) {
+      const weekNumberCell = _react.default.createElement("td", {
+        key: 'wn' + weekNumber,
+        className: "p-datepicker-weeknumber"
+      }, _react.default.createElement("span", {
+        className: "p-disabled"
+      }, weekNumber));
+
+      return [weekNumberCell, ...week];
+    } else {
+      return week;
+    }
+  }
+
+  renderDates(monthMetaData) {
+    return monthMetaData.dates.map((weekDates, index) => {
+      return _react.default.createElement("tr", {
+        key: index
+      }, this.renderWeek(weekDates, monthMetaData.weekNumbers[index]));
+    });
+  }
+
+  renderDateViewGrid(monthMetaData, weekDays) {
+    const dayNames = this.renderDayNames(weekDays);
+    const dates = this.renderDates(monthMetaData);
+    return _react.default.createElement("div", {
+      className: "p-datepicker-calendar-container"
+    }, _react.default.createElement("table", {
+      className: "p-datepicker-calendar"
+    }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, dayNames)), _react.default.createElement("tbody", null, dates)));
+  }
+
+  renderMonth(monthMetaData, index) {
+    const weekDays = this.createWeekDays();
+    const backwardNavigator = index === 0 ? this.renderBackwardNavigator() : null;
+    const forwardNavigator = this.props.numberOfMonths === 1 || index === this.props.numberOfMonths - 1 ? this.renderForwardNavigator() : null;
+    const title = this.renderTitle(monthMetaData);
+    const dateViewGrid = this.renderDateViewGrid(monthMetaData, weekDays);
+    const header = this.props.headerTemplate ? this.props.headerTemplate() : null;
+    return _react.default.createElement("div", {
+      key: monthMetaData.month,
+      className: "p-datepicker-group"
+    }, _react.default.createElement("div", {
+      className: "p-datepicker-header"
+    }, header, backwardNavigator, forwardNavigator, title), dateViewGrid);
+  }
+
+  renderMonths(monthsMetaData) {
+    return monthsMetaData.map((monthMetaData, index) => {
+      return this.renderMonth(monthMetaData, index);
+    });
+  }
+
+  renderDateView() {
+    let viewDate = this.props.onViewDateChange ? this.props.viewDate : this.state.viewDate;
+    const monthsMetaData = this.createMonths(viewDate.getMonth(), viewDate.getFullYear());
+    const months = this.renderMonths(monthsMetaData);
+    return _react.default.createElement(_react.default.Fragment, null, months);
+  }
+
+  renderMonthViewMonth(index) {
+    const className = (0, _classnames.default)('p-monthpicker-month', {
+      'p-highlight': this.isMonthSelected(index)
+    });
+    const monthName = this.props.locale.monthNamesShort[index];
+    return _react.default.createElement("span", {
+      key: monthName,
+      className: className,
+      onClick: event => this.onMonthSelect(event, index)
+    }, monthName);
+  }
+
+  renderMonthViewMonths() {
+    let months = [];
+
+    for (let i = 0; i <= 11; i++) {
+      months.push(this.renderMonthViewMonth(i));
+    }
+
+    return months;
+  }
+
+  renderMonthView() {
+    const backwardNavigator = this.renderBackwardNavigator();
+    const forwardNavigator = this.renderForwardNavigator();
+    const yearElement = this.renderTitleYearElement(this.getViewDate().getFullYear());
+    const months = this.renderMonthViewMonths();
+    return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+      className: "p-datepicker-header"
+    }, backwardNavigator, forwardNavigator, _react.default.createElement("div", {
+      className: "p-datepicker-title"
+    }, yearElement)), _react.default.createElement("div", {
+      className: "p-monthpicker"
+    }, months));
+  }
+
+  renderDatePicker() {
+    if (!this.props.timeOnly) {
+      if (this.props.view === 'date') {
+        return this.renderDateView();
+      } else if (this.props.view === 'month') {
+        return this.renderMonthView();
+      } else {
+        return null;
+      }
+    }
+  }
+
+  renderHourPicker() {
+    let currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+    let hour = currentTime.getHours();
+
+    if (this.props.hourFormat === '12') {
+      if (hour === 0) hour = 12;else if (hour > 11 && hour !== 12) hour = hour - 12;
+    }
+
+    const hourDisplay = hour < 10 ? '0' + hour : hour;
+    return _react.default.createElement("div", {
+      className: "p-hour-picker"
+    }, _react.default.createElement("button", {
+      className: "p-link",
+      onMouseDown: e => this.onTimePickerElementMouseDown(e, 0, 1),
+      onMouseUp: this.onTimePickerElementMouseUp,
+      onMouseLeave: this.onTimePickerElementMouseLeave
+    }, _react.default.createElement("span", {
+      className: "pi pi-chevron-up"
+    })), _react.default.createElement("span", null, hourDisplay), _react.default.createElement("button", {
+      className: "p-link",
+      onMouseDown: e => this.onTimePickerElementMouseDown(e, 0, -1),
+      onMouseUp: this.onTimePickerElementMouseUp,
+      onMouseLeave: this.onTimePickerElementMouseLeave
+    }, _react.default.createElement("span", {
+      className: "pi pi-chevron-down"
+    })));
+  }
+
+  renderMinutePicker() {
+    let currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+    let minute = currentTime.getMinutes();
+    let minuteDisplay = minute < 10 ? '0' + minute : minute;
+    return _react.default.createElement("div", {
+      className: "p-minute-picker"
+    }, _react.default.createElement("button", {
+      className: "p-link",
+      onMouseDown: e => this.onTimePickerElementMouseDown(e, 1, 1),
+      onMouseUp: this.onTimePickerElementMouseUp,
+      onMouseLeave: this.onTimePickerElementMouseLeave
+    }, _react.default.createElement("span", {
+      className: "pi pi-chevron-up"
+    })), _react.default.createElement("span", null, minuteDisplay), _react.default.createElement("button", {
+      className: "p-link",
+      onMouseDown: e => this.onTimePickerElementMouseDown(e, 1, -1),
+      onMouseUp: this.onTimePickerElementMouseUp,
+      onMouseLeave: this.onTimePickerElementMouseLeave
+    }, _react.default.createElement("span", {
+      className: "pi pi-chevron-down"
+    })));
+  }
+
+  renderSecondPicker() {
+    if (this.props.showSeconds) {
+      let currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+      let second = currentTime.getSeconds();
+      let secondDisplay = second < 10 ? '0' + second : second;
+      return _react.default.createElement("div", {
+        className: "p-second-picker"
+      }, _react.default.createElement("button", {
+        className: "p-link",
+        onMouseDown: e => this.onTimePickerElementMouseDown(e, 2, 1),
+        onMouseUp: this.onTimePickerElementMouseUp,
+        onMouseLeave: this.onTimePickerElementMouseLeave
+      }, _react.default.createElement("span", {
+        className: "pi pi-chevron-up"
+      })), _react.default.createElement("span", null, secondDisplay), _react.default.createElement("button", {
+        className: "p-link",
+        onMouseDown: e => this.onTimePickerElementMouseDown(e, 2, -1),
+        onMouseUp: this.onTimePickerElementMouseUp,
+        onMouseLeave: this.onTimePickerElementMouseLeave
+      }, _react.default.createElement("span", {
+        className: "pi pi-chevron-down"
+      })));
+    } else {
+      return null;
+    }
+  }
+
+  renderAmPmPicker() {
+    if (this.props.hourFormat === '12') {
+      let currentTime = this.props.value && this.props.value instanceof Date ? this.props.value : this.getViewDate();
+      let hour = currentTime.getHours();
+      let display = hour > 11 ? 'PM' : 'AM';
+      return _react.default.createElement("div", {
+        className: "p-ampm-picker"
+      }, _react.default.createElement("button", {
+        className: "p-link",
+        onClick: this.toggleAmPm
+      }, _react.default.createElement("span", {
+        className: "pi pi-chevron-up"
+      })), _react.default.createElement("span", null, display), _react.default.createElement("button", {
+        className: "p-link",
+        onClick: this.toggleAmPm
+      }, _react.default.createElement("span", {
+        className: "pi pi-chevron-down"
+      })));
+    } else {
+      return null;
+    }
+  }
+
+  renderSeparator() {
+    return _react.default.createElement("div", {
+      className: "p-separator"
+    }, _react.default.createElement("span", {
+      className: "p-separator-spacer"
+    }, _react.default.createElement("span", {
+      className: "pi pi-chevron-up"
+    })), _react.default.createElement("span", null, ":"), _react.default.createElement("span", {
+      className: "p-separator-spacer"
+    }, _react.default.createElement("span", {
+      className: "pi pi-chevron-down"
+    })));
+  }
+
+  renderTimePicker() {
+    if (this.props.showTime || this.props.timeOnly) {
+      return _react.default.createElement("div", {
+        className: "p-timepicker"
+      }, this.renderHourPicker(), this.renderSeparator(), this.renderMinutePicker(), this.props.showSeconds && this.renderSeparator(), this.renderSecondPicker(), this.props.hourFormat === '12' && this.renderSeparator(), this.renderAmPmPicker());
+    } else {
+      return null;
+    }
+  }
+
+  renderInputElement() {
+    if (!this.props.inline) {
+      const className = (0, _classnames.default)('p-inputtext p-component', this.props.inputClassName);
+      const value = this.getValueToRender();
+      return _react.default.createElement(_InputText.InputText, {
+        ref: el => this.inputElement = _reactDom.default.findDOMNode(el),
+        id: this.props.inputId,
+        name: this.props.name,
+        value: value,
+        type: "text",
+        className: className,
+        style: this.props.inputStyle,
+        readOnly: this.props.readOnlyInput,
+        disabled: this.props.disabled,
+        tabIndex: this.props.tabIndex,
+        required: this.props.required,
+        autoComplete: "off",
+        placeholder: this.props.placeholder,
+        onChange: this.onInputChange,
+        onFocus: this.onInputFocus,
+        onBlur: this.onInputBlur,
+        onKeyDown: this.onInputKeyDown
+      });
+    } else {
+      return null;
+    }
+  }
+
+  renderButton() {
+    if (this.props.showIcon) {
+      return _react.default.createElement(_Button.Button, {
+        type: "button",
+        icon: this.props.icon,
+        onClick: this.onButtonClick,
+        tabIndex: "-1",
+        disabled: this.props.disabled,
+        className: "p-datepicker-trigger p-calendar-button"
+      });
+    } else {
+      return null;
+    }
+  }
+
+  renderButtonBar() {
+    if (this.props.showButtonBar) {
+      return _react.default.createElement("div", {
+        className: "p-datepicker-buttonbar"
+      }, _react.default.createElement(_Button.Button, {
+        type: "button",
+        label: this.props.locale.today,
+        onClick: this.onTodayButtonClick,
+        className: this.props.todayButtonClassName
+      }), _react.default.createElement(_Button.Button, {
+        type: "button",
+        label: this.props.locale.clear,
+        onClick: this.onClearButtonClick,
+        className: this.props.clearButtonStyleClass
+      }));
+    } else {
+      return null;
+    }
+  }
+
+  renderFooter() {
+    if (this.props.footerTemplate) {
+      const content = this.props.footerTemplate();
+      return _react.default.createElement("div", {
+        className: "p-datepicker-footer"
+      }, content);
+    } else {
+      return null;
+    }
+  }
+
+  render() {
+    const className = (0, _classnames.default)('p-calendar', this.props.className, {
+      'p-calendar-w-btn': this.props.showIcon,
+      'p-calendar-timeonly': this.props.timeOnly,
+      'p-inputwrapper-filled': this.props.value
+    });
+    const panelClassName = (0, _classnames.default)('p-datepicker p-component', this.props.panelClassName, {
+      'p-datepicker-inline': this.props.inline,
+      'p-input-overlay': !this.props.inline,
+      'p-shadow': !this.props.inline,
+      'p-disabled': this.props.disabled,
+      'p-datepicker-timeonly': this.props.timeOnly,
+      'p-datepicker-multiple-month': this.props.numberOfMonths > 1,
+      'p-datepicker-monthpicker': this.props.view === 'month',
+      'p-datepicker-touch-ui': this.props.touchUI
+    });
+    const input = this.renderInputElement();
+    const button = this.renderButton();
+    const datePicker = this.renderDatePicker();
+    const timePicker = this.renderTimePicker();
+    const buttonBar = this.renderButtonBar();
+    const footer = this.renderFooter();
+    return _react.default.createElement("span", {
+      ref: el => this.container = el,
+      id: this.props.id,
+      className: className,
+      style: this.props.style
+    }, input, button, _react.default.createElement(_CalendarPanel.CalendarPanel, {
+      ref: el => this.panel = _reactDom.default.findDOMNode(el),
+      className: panelClassName,
+      style: this.props.panelStyle,
+      appendTo: this.props.appendTo
+    }, datePicker, timePicker, buttonBar, footer));
+  }
+
+}
 
 exports.Calendar = Calendar;
 
@@ -2376,9 +2166,7 @@ _defineProperty(Calendar, "defaultProps", {
   onViewDateChange: null,
   onTodayButtonClick: null,
   onClearButtonClick: null,
-  convertValueToDate: function convertValueToDate() {
-    return undefined;
-  }
+  convertValueToDate: () => undefined
 });
 
 _defineProperty(Calendar, "propTypes", {

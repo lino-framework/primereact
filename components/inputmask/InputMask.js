@@ -19,636 +19,560 @@ var _Tooltip = _interopRequireDefault(require("../tooltip/Tooltip"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var InputMask =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(InputMask, _Component);
-
-  function InputMask(props) {
-    var _this;
-
-    _classCallCheck(this, InputMask);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(InputMask).call(this, props));
-    _this.onFocus = _this.onFocus.bind(_assertThisInitialized(_this));
-    _this.onBlur = _this.onBlur.bind(_assertThisInitialized(_this));
-    _this.onKeyDown = _this.onKeyDown.bind(_assertThisInitialized(_this));
-    _this.onKeyPress = _this.onKeyPress.bind(_assertThisInitialized(_this));
-    _this.onInput = _this.onInput.bind(_assertThisInitialized(_this));
-    _this.handleInputChange = _this.handleInputChange.bind(_assertThisInitialized(_this));
-    return _this;
+class InputMask extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
+    this.onInput = this.onInput.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  _createClass(InputMask, [{
-    key: "caret",
-    value: function caret(first, last) {
-      var range, begin, end;
+  caret(first, last) {
+    let range, begin, end;
 
-      if (!this.input.offsetParent || this.input !== document.activeElement) {
-        return;
+    if (!this.input.offsetParent || this.input !== document.activeElement) {
+      return;
+    }
+
+    if (typeof first === 'number') {
+      begin = first;
+      end = typeof last === 'number' ? last : begin;
+
+      if (this.input.setSelectionRange) {
+        this.input.setSelectionRange(begin, end);
+      } else if (this.input['createTextRange']) {
+        range = this.input['createTextRange']();
+        range.collapse(true);
+        range.moveEnd('character', end);
+        range.moveStart('character', begin);
+        range.select();
+      }
+    } else {
+      if (this.input.setSelectionRange) {
+        begin = this.input.selectionStart;
+        end = this.input.selectionEnd;
+      } else if (document['selection'] && document['selection'].createRange) {
+        range = document['selection'].createRange();
+        begin = 0 - range.duplicate().moveStart('character', -100000);
+        end = begin + range.text.length;
       }
 
-      if (typeof first === 'number') {
-        begin = first;
-        end = typeof last === 'number' ? last : begin;
+      return {
+        begin: begin,
+        end: end
+      };
+    }
+  }
 
-        if (this.input.setSelectionRange) {
-          this.input.setSelectionRange(begin, end);
-        } else if (this.input['createTextRange']) {
-          range = this.input['createTextRange']();
-          range.collapse(true);
-          range.moveEnd('character', end);
-          range.moveStart('character', begin);
-          range.select();
+  isCompleted() {
+    for (let i = this.firstNonMaskPos; i <= this.lastRequiredNonMaskPos; i++) {
+      if (this.tests[i] && this.buffer[i] === this.getPlaceholder(i)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  getPlaceholder(i) {
+    if (i < this.props.slotChar.length) {
+      return this.props.slotChar.charAt(i);
+    }
+
+    return this.props.slotChar.charAt(0);
+  }
+
+  seekNext(pos) {
+    while (++pos < this.len && !this.tests[pos]);
+
+    return pos;
+  }
+
+  seekPrev(pos) {
+    while (--pos >= 0 && !this.tests[pos]);
+
+    return pos;
+  }
+
+  shiftL(begin, end) {
+    let i, j;
+
+    if (begin < 0) {
+      return;
+    }
+
+    for (i = begin, j = this.seekNext(end); i < this.len; i++) {
+      if (this.tests[i]) {
+        if (j < this.len && this.tests[i].test(this.buffer[j])) {
+          this.buffer[i] = this.buffer[j];
+          this.buffer[j] = this.getPlaceholder(j);
+        } else {
+          break;
         }
-      } else {
-        if (this.input.setSelectionRange) {
-          begin = this.input.selectionStart;
-          end = this.input.selectionEnd;
-        } else if (document['selection'] && document['selection'].createRange) {
-          range = document['selection'].createRange();
-          begin = 0 - range.duplicate().moveStart('character', -100000);
-          end = begin + range.text.length;
+
+        j = this.seekNext(j);
+      }
+    }
+
+    this.writeBuffer();
+    this.caret(Math.max(this.firstNonMaskPos, begin));
+  }
+
+  shiftR(pos) {
+    let i, c, j, t;
+
+    for (i = pos, c = this.getPlaceholder(pos); i < this.len; i++) {
+      if (this.tests[i]) {
+        j = this.seekNext(i);
+        t = this.buffer[i];
+        this.buffer[i] = c;
+
+        if (j < this.len && this.tests[j].test(t)) {
+          c = t;
+        } else {
+          break;
         }
-
-        return {
-          begin: begin,
-          end: end
-        };
       }
     }
-  }, {
-    key: "isCompleted",
-    value: function isCompleted() {
-      for (var i = this.firstNonMaskPos; i <= this.lastRequiredNonMaskPos; i++) {
-        if (this.tests[i] && this.buffer[i] === this.getPlaceholder(i)) {
-          return false;
-        }
+  }
+
+  handleAndroidInput(e) {
+    var curVal = this.input.value;
+    var pos = this.caret();
+
+    if (this.oldVal && this.oldVal.length && this.oldVal.length > curVal.length) {
+      // a deletion or backspace happened
+      this.checkVal(true);
+
+      while (pos.begin > 0 && !this.tests[pos.begin - 1]) pos.begin--;
+
+      if (pos.begin === 0) {
+        while (pos.begin < this.firstNonMaskPos && !this.tests[pos.begin]) pos.begin++;
       }
 
-      return true;
+      this.caret(pos.begin, pos.begin);
+    } else {
+      this.checkVal(true);
+
+      while (pos.begin < this.len && !this.tests[pos.begin]) pos.begin++;
+
+      this.caret(pos.begin, pos.begin);
     }
-  }, {
-    key: "getPlaceholder",
-    value: function getPlaceholder(i) {
-      if (i < this.props.slotChar.length) {
-        return this.props.slotChar.charAt(i);
-      }
 
-      return this.props.slotChar.charAt(0);
+    if (this.props.onComplete && this.isCompleted()) {
+      this.props.onComplete(e);
     }
-  }, {
-    key: "seekNext",
-    value: function seekNext(pos) {
-      while (++pos < this.len && !this.tests[pos]) {
-        ;
-      }
+  }
 
-      return pos;
+  onBlur(e) {
+    this.focus = false;
+    this.checkVal();
+    this.updateModel(e);
+    this.updateFilledState();
+
+    if (this.input.value !== this.focusText) {
+      let event = document.createEvent('HTMLEvents');
+      event.initEvent('change', true, false);
+      this.input.dispatchEvent(event);
     }
-  }, {
-    key: "seekPrev",
-    value: function seekPrev(pos) {
-      while (--pos >= 0 && !this.tests[pos]) {
-        ;
-      }
+  }
 
-      return pos;
+  onKeyDown(e) {
+    if (this.props.readonly) {
+      return;
     }
-  }, {
-    key: "shiftL",
-    value: function shiftL(begin, end) {
-      var i, j;
 
-      if (begin < 0) {
-        return;
+    let k = e.which || e.keyCode,
+        pos,
+        begin,
+        end;
+    let iPhone = /iphone/i.test(_DomHandler.default.getUserAgent());
+    this.oldVal = this.input.value; //backspace, delete, and escape get special treatment
+
+    if (k === 8 || k === 46 || iPhone && k === 127) {
+      pos = this.caret();
+      begin = pos.begin;
+      end = pos.end;
+
+      if (end - begin === 0) {
+        begin = k !== 46 ? this.seekPrev(begin) : end = this.seekNext(begin - 1);
+        end = k === 46 ? this.seekNext(end) : end;
       }
 
-      for (i = begin, j = this.seekNext(end); i < this.len; i++) {
-        if (this.tests[i]) {
-          if (j < this.len && this.tests[i].test(this.buffer[j])) {
-            this.buffer[i] = this.buffer[j];
-            this.buffer[j] = this.getPlaceholder(j);
+      this.clearBuffer(begin, end);
+      this.shiftL(begin, end - 1);
+      this.updateModel(e);
+      e.preventDefault();
+    } else if (k === 13) {
+      // enter
+      this.onBlur(e);
+      this.updateModel(e);
+    } else if (k === 27) {
+      // escape
+      this.input.value = this.focusText;
+      this.caret(0, this.checkVal());
+      this.updateModel(e);
+      e.preventDefault();
+    }
+  }
+
+  onKeyPress(e) {
+    if (this.props.readonly) {
+      return;
+    }
+
+    var k = e.which || e.keyCode,
+        pos = this.caret(),
+        p,
+        c,
+        next,
+        completed;
+
+    if (e.ctrlKey || e.altKey || e.metaKey || k < 32) {
+      //Ignore
+      return;
+    } else if (k && k !== 13) {
+      if (pos.end - pos.begin !== 0) {
+        this.clearBuffer(pos.begin, pos.end);
+        this.shiftL(pos.begin, pos.end - 1);
+      }
+
+      p = this.seekNext(pos.begin - 1);
+
+      if (p < this.len) {
+        c = String.fromCharCode(k);
+
+        if (this.tests[p].test(c)) {
+          this.shiftR(p);
+          this.buffer[p] = c;
+          this.writeBuffer();
+          next = this.seekNext(p);
+
+          if (/android/i.test(_DomHandler.default.getUserAgent())) {
+            //Path for CSP Violation on FireFox OS 1.1
+            let proxy = () => {
+              this.caret(next);
+            };
+
+            setTimeout(proxy, 0);
           } else {
-            break;
+            this.caret(next);
           }
 
-          j = this.seekNext(j);
+          if (pos.begin <= this.lastRequiredNonMaskPos) {
+            completed = this.isCompleted();
+          }
         }
+      }
+
+      e.preventDefault();
+    }
+
+    this.updateModel(e);
+
+    if (this.props.onComplete && completed) {
+      this.props.onComplete({
+        originalEvent: e
+      });
+    }
+  }
+
+  clearBuffer(start, end) {
+    let i;
+
+    for (i = start; i < end && i < this.len; i++) {
+      if (this.tests[i]) {
+        this.buffer[i] = this.getPlaceholder(i);
+      }
+    }
+  }
+
+  writeBuffer() {
+    this.input.value = this.buffer.join('');
+  }
+
+  checkVal(allow) {
+    this.isValueChecked = true; //try to place characters where they belong
+
+    let test = this.input.value,
+        lastMatch = -1,
+        i,
+        c,
+        pos;
+
+    for (i = 0, pos = 0; i < this.len; i++) {
+      if (this.tests[i]) {
+        this.buffer[i] = this.getPlaceholder(i);
+
+        while (pos++ < test.length) {
+          c = test.charAt(pos - 1);
+
+          if (this.tests[i].test(c)) {
+            this.buffer[i] = c;
+            lastMatch = i;
+            break;
+          }
+        }
+
+        if (pos > test.length) {
+          this.clearBuffer(i + 1, this.len);
+          break;
+        }
+      } else {
+        if (this.buffer[i] === test.charAt(pos)) {
+          pos++;
+        }
+
+        if (i < this.partialPosition) {
+          lastMatch = i;
+        }
+      }
+    }
+
+    if (allow) {
+      this.writeBuffer();
+    } else if (lastMatch + 1 < this.partialPosition) {
+      if (this.props.autoClear || this.buffer.join('') === this.defaultBuffer) {
+        // Invalid value. Remove it and replace it with the
+        // mask, which is the default behavior.
+        if (this.input.value) this.input.value = '';
+        this.clearBuffer(0, this.len);
+      } else {
+        // Invalid value, but we opt to show the value to the
+        // user and allow them to correct their mistake.
+        this.writeBuffer();
+      }
+    } else {
+      this.writeBuffer();
+      this.input.value = this.input.value.substring(0, lastMatch + 1);
+    }
+
+    return this.partialPosition ? i : this.firstNonMaskPos;
+  }
+
+  onFocus(event) {
+    if (this.props.readonly) {
+      return;
+    }
+
+    this.focus = true;
+    clearTimeout(this.caretTimeoutId);
+    let pos;
+    this.focusText = this.input.value;
+    pos = this.checkVal();
+    this.caretTimeoutId = setTimeout(() => {
+      if (this.input !== document.activeElement) {
+        return;
       }
 
       this.writeBuffer();
-      this.caret(Math.max(this.firstNonMaskPos, begin));
-    }
-  }, {
-    key: "shiftR",
-    value: function shiftR(pos) {
-      var i, c, j, t;
 
-      for (i = pos, c = this.getPlaceholder(pos); i < this.len; i++) {
-        if (this.tests[i]) {
-          j = this.seekNext(i);
-          t = this.buffer[i];
-          this.buffer[i] = c;
-
-          if (j < this.len && this.tests[j].test(t)) {
-            c = t;
-          } else {
-            break;
-          }
-        }
-      }
-    }
-  }, {
-    key: "handleAndroidInput",
-    value: function handleAndroidInput(e) {
-      var curVal = this.input.value;
-      var pos = this.caret();
-
-      if (this.oldVal && this.oldVal.length && this.oldVal.length > curVal.length) {
-        // a deletion or backspace happened
-        this.checkVal(true);
-
-        while (pos.begin > 0 && !this.tests[pos.begin - 1]) {
-          pos.begin--;
-        }
-
-        if (pos.begin === 0) {
-          while (pos.begin < this.firstNonMaskPos && !this.tests[pos.begin]) {
-            pos.begin++;
-          }
-        }
-
-        this.caret(pos.begin, pos.begin);
+      if (pos === this.props.mask.replace("?", "").length) {
+        this.caret(0, pos);
       } else {
-        this.checkVal(true);
-
-        while (pos.begin < this.len && !this.tests[pos.begin]) {
-          pos.begin++;
-        }
-
-        this.caret(pos.begin, pos.begin);
+        this.caret(pos);
       }
 
-      if (this.props.onComplete && this.isCompleted()) {
-        this.props.onComplete(e);
-      }
-    }
-  }, {
-    key: "onBlur",
-    value: function onBlur(e) {
-      this.focus = false;
-      this.checkVal();
-      this.updateModel(e);
       this.updateFilledState();
+    }, 10);
+  }
 
-      if (this.input.value !== this.focusText) {
-        var event = document.createEvent('HTMLEvents');
-        event.initEvent('change', true, false);
-        this.input.dispatchEvent(event);
+  onInput(event) {
+    if (this.androidChrome) this.handleAndroidInput(event);else this.handleInputChange(event);
+  }
+
+  handleInputChange(event) {
+    if (this.props.readonly) {
+      return;
+    }
+
+    var pos = this.checkVal(true);
+    this.caret(pos);
+    this.updateModel(event);
+
+    if (this.props.onComplete && this.isCompleted()) {
+      this.props.onComplete({
+        originalEvent: event
+      });
+    }
+  }
+
+  getUnmaskedValue() {
+    let unmaskedBuffer = [];
+
+    for (let i = 0; i < this.buffer.length; i++) {
+      let c = this.buffer[i];
+
+      if (this.tests[i] && c !== this.getPlaceholder(i)) {
+        unmaskedBuffer.push(c);
       }
     }
-  }, {
-    key: "onKeyDown",
-    value: function onKeyDown(e) {
-      if (this.props.readonly) {
-        return;
-      }
 
-      var k = e.which || e.keyCode,
-          pos,
-          begin,
-          end;
-      var iPhone = /iphone/i.test(_DomHandler.default.getUserAgent());
-      this.oldVal = this.input.value; //backspace, delete, and escape get special treatment
+    return unmaskedBuffer.join('');
+  }
 
-      if (k === 8 || k === 46 || iPhone && k === 127) {
-        pos = this.caret();
-        begin = pos.begin;
-        end = pos.end;
-
-        if (end - begin === 0) {
-          begin = k !== 46 ? this.seekPrev(begin) : end = this.seekNext(begin - 1);
-          end = k === 46 ? this.seekNext(end) : end;
+  updateModel(e) {
+    if (this.props.onChange) {
+      var val = this.props.unmask ? this.getUnmaskedValue() : e.target.value;
+      this.props.onChange({
+        originalEvent: e,
+        value: this.defaultBuffer !== val ? val : '',
+        stopPropagation: () => {},
+        preventDefault: () => {},
+        target: {
+          name: this.props.name,
+          id: this.props.id,
+          value: this.defaultBuffer !== val ? val : ''
         }
-
-        this.clearBuffer(begin, end);
-        this.shiftL(begin, end - 1);
-        this.updateModel(e);
-        e.preventDefault();
-      } else if (k === 13) {
-        // enter
-        this.onBlur(e);
-        this.updateModel(e);
-      } else if (k === 27) {
-        // escape
-        this.input.value = this.focusText;
-        this.caret(0, this.checkVal());
-        this.updateModel(e);
-        e.preventDefault();
-      }
+      });
     }
-  }, {
-    key: "onKeyPress",
-    value: function onKeyPress(e) {
-      var _this2 = this;
+  }
 
-      if (this.props.readonly) {
-        return;
-      }
+  updateFilledState() {
+    if (this.input && this.input.value && this.input.value.length > 0) _DomHandler.default.addClass(this.input, 'p-filled');else _DomHandler.default.removeClass(this.input, 'p-filled');
+  }
 
-      var k = e.which || e.keyCode,
-          pos = this.caret(),
-          p,
-          c,
-          next,
-          completed;
-
-      if (e.ctrlKey || e.altKey || e.metaKey || k < 32) {
-        //Ignore
-        return;
-      } else if (k && k !== 13) {
-        if (pos.end - pos.begin !== 0) {
-          this.clearBuffer(pos.begin, pos.end);
-          this.shiftL(pos.begin, pos.end - 1);
-        }
-
-        p = this.seekNext(pos.begin - 1);
-
-        if (p < this.len) {
-          c = String.fromCharCode(k);
-
-          if (this.tests[p].test(c)) {
-            this.shiftR(p);
-            this.buffer[p] = c;
-            this.writeBuffer();
-            next = this.seekNext(p);
-
-            if (/android/i.test(_DomHandler.default.getUserAgent())) {
-              //Path for CSP Violation on FireFox OS 1.1
-              var proxy = function proxy() {
-                _this2.caret(next);
-              };
-
-              setTimeout(proxy, 0);
-            } else {
-              this.caret(next);
-            }
-
-            if (pos.begin <= this.lastRequiredNonMaskPos) {
-              completed = this.isCompleted();
-            }
-          }
-        }
-
-        e.preventDefault();
-      }
-
-      this.updateModel(e);
-
-      if (this.props.onComplete && completed) {
-        this.props.onComplete({
-          originalEvent: e
-        });
-      }
-    }
-  }, {
-    key: "clearBuffer",
-    value: function clearBuffer(start, end) {
-      var i;
-
-      for (i = start; i < end && i < this.len; i++) {
-        if (this.tests[i]) {
-          this.buffer[i] = this.getPlaceholder(i);
-        }
-      }
-    }
-  }, {
-    key: "writeBuffer",
-    value: function writeBuffer() {
-      this.input.value = this.buffer.join('');
-    }
-  }, {
-    key: "checkVal",
-    value: function checkVal(allow) {
-      this.isValueChecked = true; //try to place characters where they belong
-
-      var test = this.input.value,
-          lastMatch = -1,
-          i,
-          c,
-          pos;
-
-      for (i = 0, pos = 0; i < this.len; i++) {
-        if (this.tests[i]) {
-          this.buffer[i] = this.getPlaceholder(i);
-
-          while (pos++ < test.length) {
-            c = test.charAt(pos - 1);
-
-            if (this.tests[i].test(c)) {
-              this.buffer[i] = c;
-              lastMatch = i;
-              break;
-            }
-          }
-
-          if (pos > test.length) {
-            this.clearBuffer(i + 1, this.len);
-            break;
-          }
-        } else {
-          if (this.buffer[i] === test.charAt(pos)) {
-            pos++;
-          }
-
-          if (i < this.partialPosition) {
-            lastMatch = i;
-          }
-        }
-      }
-
-      if (allow) {
-        this.writeBuffer();
-      } else if (lastMatch + 1 < this.partialPosition) {
-        if (this.props.autoClear || this.buffer.join('') === this.defaultBuffer) {
-          // Invalid value. Remove it and replace it with the
-          // mask, which is the default behavior.
-          if (this.input.value) this.input.value = '';
-          this.clearBuffer(0, this.len);
-        } else {
-          // Invalid value, but we opt to show the value to the
-          // user and allow them to correct their mistake.
-          this.writeBuffer();
-        }
+  updateValue() {
+    if (this.input) {
+      if (this.props.value == null) {
+        this.input.value = '';
       } else {
-        this.writeBuffer();
-        this.input.value = this.input.value.substring(0, lastMatch + 1);
+        this.input.value = this.props.value;
+        this.checkVal();
       }
 
-      return this.partialPosition ? i : this.firstNonMaskPos;
-    }
-  }, {
-    key: "onFocus",
-    value: function onFocus(event) {
-      var _this3 = this;
-
-      if (this.props.readonly) {
-        return;
-      }
-
-      this.focus = true;
-      clearTimeout(this.caretTimeoutId);
-      var pos;
-      this.focusText = this.input.value;
-      pos = this.checkVal();
-      this.caretTimeoutId = setTimeout(function () {
-        if (_this3.input !== document.activeElement) {
-          return;
-        }
-
-        _this3.writeBuffer();
-
-        if (pos === _this3.props.mask.replace("?", "").length) {
-          _this3.caret(0, pos);
-        } else {
-          _this3.caret(pos);
-        }
-
-        _this3.updateFilledState();
-      }, 10);
-    }
-  }, {
-    key: "onInput",
-    value: function onInput(event) {
-      if (this.androidChrome) this.handleAndroidInput(event);else this.handleInputChange(event);
-    }
-  }, {
-    key: "handleInputChange",
-    value: function handleInputChange(event) {
-      if (this.props.readonly) {
-        return;
-      }
-
-      var pos = this.checkVal(true);
-      this.caret(pos);
-      this.updateModel(event);
-
-      if (this.props.onComplete && this.isCompleted()) {
-        this.props.onComplete({
-          originalEvent: event
-        });
-      }
-    }
-  }, {
-    key: "getUnmaskedValue",
-    value: function getUnmaskedValue() {
-      var unmaskedBuffer = [];
-
-      for (var i = 0; i < this.buffer.length; i++) {
-        var c = this.buffer[i];
-
-        if (this.tests[i] && c !== this.getPlaceholder(i)) {
-          unmaskedBuffer.push(c);
-        }
-      }
-
-      return unmaskedBuffer.join('');
-    }
-  }, {
-    key: "updateModel",
-    value: function updateModel(e) {
-      if (this.props.onChange) {
-        var val = this.props.unmask ? this.getUnmaskedValue() : e.target.value;
-        this.props.onChange({
-          originalEvent: e,
-          value: this.defaultBuffer !== val ? val : '',
-          stopPropagation: function stopPropagation() {},
-          preventDefault: function preventDefault() {},
-          target: {
-            name: this.props.name,
-            id: this.props.id,
-            value: this.defaultBuffer !== val ? val : ''
-          }
-        });
-      }
-    }
-  }, {
-    key: "updateFilledState",
-    value: function updateFilledState() {
-      if (this.input && this.input.value && this.input.value.length > 0) _DomHandler.default.addClass(this.input, 'p-filled');else _DomHandler.default.removeClass(this.input, 'p-filled');
-    }
-  }, {
-    key: "updateValue",
-    value: function updateValue() {
-      var _this4 = this;
-
-      if (this.input) {
-        if (this.props.value == null) {
-          this.input.value = '';
-        } else {
-          this.input.value = this.props.value;
+      setTimeout(() => {
+        if (this.input) {
+          this.writeBuffer();
           this.checkVal();
         }
-
-        setTimeout(function () {
-          if (_this4.input) {
-            _this4.writeBuffer();
-
-            _this4.checkVal();
-          }
-        }, 10);
-        this.focusText = this.input.value;
-      }
-
-      this.updateFilledState();
+      }, 10);
+      this.focusText = this.input.value;
     }
-  }, {
-    key: "init",
-    value: function init() {
-      this.tests = [];
-      this.partialPosition = this.props.mask.length;
-      this.len = this.props.mask.length;
-      this.firstNonMaskPos = null;
-      this.defs = {
-        '9': '[0-9]',
-        'a': '[A-Za-z]',
-        '*': '[A-Za-z0-9]'
-      };
 
-      var ua = _DomHandler.default.getUserAgent();
+    this.updateFilledState();
+  }
 
-      this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
-      var maskTokens = this.props.mask.split('');
+  init() {
+    this.tests = [];
+    this.partialPosition = this.props.mask.length;
+    this.len = this.props.mask.length;
+    this.firstNonMaskPos = null;
+    this.defs = {
+      '9': '[0-9]',
+      'a': '[A-Za-z]',
+      '*': '[A-Za-z0-9]'
+    };
 
-      for (var i = 0; i < maskTokens.length; i++) {
-        var c = maskTokens[i];
+    let ua = _DomHandler.default.getUserAgent();
 
-        if (c === '?') {
-          this.len--;
-          this.partialPosition = i;
-        } else if (this.defs[c]) {
-          this.tests.push(new RegExp(this.defs[c]));
+    this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
+    let maskTokens = this.props.mask.split('');
 
-          if (this.firstNonMaskPos === null) {
-            this.firstNonMaskPos = this.tests.length - 1;
-          }
+    for (let i = 0; i < maskTokens.length; i++) {
+      let c = maskTokens[i];
 
-          if (i < this.partialPosition) {
-            this.lastRequiredNonMaskPos = this.tests.length - 1;
-          }
-        } else {
-          this.tests.push(null);
+      if (c === '?') {
+        this.len--;
+        this.partialPosition = i;
+      } else if (this.defs[c]) {
+        this.tests.push(new RegExp(this.defs[c]));
+
+        if (this.firstNonMaskPos === null) {
+          this.firstNonMaskPos = this.tests.length - 1;
         }
-      }
 
-      this.buffer = [];
-
-      for (var _i = 0; _i < maskTokens.length; _i++) {
-        var _c = maskTokens[_i];
-
-        if (_c !== '?') {
-          if (this.defs[_c]) this.buffer.push(this.getPlaceholder(_i));else this.buffer.push(_c);
+        if (i < this.partialPosition) {
+          this.lastRequiredNonMaskPos = this.tests.length - 1;
         }
+      } else {
+        this.tests.push(null);
       }
-
-      this.defaultBuffer = this.buffer.join('');
     }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.init();
+
+    this.buffer = [];
+
+    for (let i = 0; i < maskTokens.length; i++) {
+      let c = maskTokens[i];
+
+      if (c !== '?') {
+        if (this.defs[c]) this.buffer.push(this.getPlaceholder(i));else this.buffer.push(c);
+      }
+    }
+
+    this.defaultBuffer = this.buffer.join('');
+  }
+
+  componentDidMount() {
+    this.init();
+    this.updateValue();
+
+    if (this.props.tooltip) {
+      this.renderTooltip();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.tooltip !== this.props.tooltip) {
+      if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
+    }
+
+    let isValueUpdated = this.props.unmask ? this.props.value !== this.getUnmaskedValue() : this.input.value !== this.props.value;
+
+    if (isValueUpdated) {
       this.updateValue();
-
-      if (this.props.tooltip) {
-        this.renderTooltip();
-      }
     }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      if (prevProps.tooltip !== this.props.tooltip) {
-        if (this.tooltip) this.tooltip.updateContent(this.props.tooltip);else this.renderTooltip();
-      }
+  }
 
-      var isValueUpdated = this.props.unmask ? this.props.value !== this.getUnmaskedValue() : this.input.value !== this.props.value;
+  componentWillUnmount() {
+    if (this.tooltip) {
+      this.tooltip.destroy();
+      this.tooltip = null;
+    }
+  }
 
-      if (isValueUpdated) {
-        this.updateValue();
-      }
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      if (this.tooltip) {
-        this.tooltip.destroy();
-        this.tooltip = null;
-      }
-    }
-  }, {
-    key: "renderTooltip",
-    value: function renderTooltip() {
-      this.tooltip = new _Tooltip.default({
-        target: this.input,
-        content: this.props.tooltip,
-        options: this.props.tooltipOptions
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this5 = this;
+  renderTooltip() {
+    this.tooltip = new _Tooltip.default({
+      target: this.input,
+      content: this.props.tooltip,
+      options: this.props.tooltipOptions
+    });
+  }
 
-      return _react.default.createElement(_InputText.InputText, {
-        id: this.props.id,
-        ref: function ref(el) {
-          return _this5.input = _reactDom.default.findDOMNode(el);
-        },
-        type: this.props.type,
-        name: this.props.name,
-        style: this.props.style,
-        className: this.props.className,
-        placeholder: this.props.placeholder,
-        size: this.props.size,
-        maxLength: this.props.maxlength,
-        tabIndex: this.props.tabindex,
-        disabled: this.props.disabled,
-        readOnly: this.props.readonly,
-        onFocus: this.onFocus,
-        onBlur: this.onBlur,
-        onKeyDown: this.onKeyDown,
-        onKeyPress: this.onKeyPress,
-        onInput: this.onInput,
-        onPaste: this.handleInputChange,
-        required: this.props.required
-      });
-    }
-  }]);
+  render() {
+    return _react.default.createElement(_InputText.InputText, {
+      id: this.props.id,
+      ref: el => this.input = _reactDom.default.findDOMNode(el),
+      type: this.props.type,
+      name: this.props.name,
+      style: this.props.style,
+      className: this.props.className,
+      placeholder: this.props.placeholder,
+      size: this.props.size,
+      maxLength: this.props.maxlength,
+      tabIndex: this.props.tabindex,
+      disabled: this.props.disabled,
+      readOnly: this.props.readonly,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur,
+      onKeyDown: this.onKeyDown,
+      onKeyPress: this.onKeyPress,
+      onInput: this.onInput,
+      onPaste: this.handleInputChange,
+      required: this.props.required
+    });
+  }
 
-  return InputMask;
-}(_react.Component);
+}
 
 exports.InputMask = InputMask;
 

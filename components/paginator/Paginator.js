@@ -27,247 +27,203 @@ var _CurrentPageReport = require("./CurrentPageReport");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var Paginator =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Paginator, _Component);
-
-  function Paginator(props) {
-    var _this;
-
-    _classCallCheck(this, Paginator);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Paginator).call(this, props));
-    _this.changePageToFirst = _this.changePageToFirst.bind(_assertThisInitialized(_this));
-    _this.changePageToPrev = _this.changePageToPrev.bind(_assertThisInitialized(_this));
-    _this.changePageToNext = _this.changePageToNext.bind(_assertThisInitialized(_this));
-    _this.changePageToLast = _this.changePageToLast.bind(_assertThisInitialized(_this));
-    _this.onRowsChange = _this.onRowsChange.bind(_assertThisInitialized(_this));
-    _this.onPageLinkClick = _this.onPageLinkClick.bind(_assertThisInitialized(_this));
-    return _this;
+class Paginator extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.changePageToFirst = this.changePageToFirst.bind(this);
+    this.changePageToPrev = this.changePageToPrev.bind(this);
+    this.changePageToNext = this.changePageToNext.bind(this);
+    this.changePageToLast = this.changePageToLast.bind(this);
+    this.onRowsChange = this.onRowsChange.bind(this);
+    this.onPageLinkClick = this.onPageLinkClick.bind(this);
   }
 
-  _createClass(Paginator, [{
-    key: "isFirstPage",
-    value: function isFirstPage() {
-      return this.getPage() === 0;
-    }
-  }, {
-    key: "isLastPage",
-    value: function isLastPage() {
-      return this.getPage() === this.getPageCount() - 1;
-    }
-  }, {
-    key: "getPageCount",
-    value: function getPageCount() {
-      return Math.ceil(this.props.totalRecords / this.props.rows) || 1;
-    }
-  }, {
-    key: "calculatePageLinkBoundaries",
-    value: function calculatePageLinkBoundaries() {
-      var numberOfPages = this.getPageCount();
-      var visiblePages = Math.min(this.props.pageLinkSize, numberOfPages); //calculate range, keep current in middle if necessary
+  isFirstPage() {
+    return this.getPage() === 0;
+  }
 
-      var start = Math.max(0, Math.ceil(this.getPage() - visiblePages / 2));
-      var end = Math.min(numberOfPages - 1, start + visiblePages - 1); //check when approaching to last page
+  isLastPage() {
+    return this.getPage() === this.getPageCount() - 1;
+  }
 
-      var delta = this.props.pageLinkSize - (end - start + 1);
-      start = Math.max(0, start - delta);
-      return [start, end];
+  getPageCount() {
+    return Math.ceil(this.props.totalRecords / this.props.rows) || 1;
+  }
+
+  calculatePageLinkBoundaries() {
+    var numberOfPages = this.getPageCount();
+    var visiblePages = Math.min(this.props.pageLinkSize, numberOfPages); //calculate range, keep current in middle if necessary
+
+    var start = Math.max(0, Math.ceil(this.getPage() - visiblePages / 2));
+    var end = Math.min(numberOfPages - 1, start + visiblePages - 1); //check when approaching to last page
+
+    var delta = this.props.pageLinkSize - (end - start + 1);
+    start = Math.max(0, start - delta);
+    return [start, end];
+  }
+
+  updatePageLinks() {
+    var pageLinks = [];
+    var boundaries = this.calculatePageLinkBoundaries();
+    var start = boundaries[0];
+    var end = boundaries[1];
+
+    for (var i = start; i <= end; i++) {
+      pageLinks.push(i + 1);
     }
-  }, {
-    key: "updatePageLinks",
-    value: function updatePageLinks() {
-      var pageLinks = [];
-      var boundaries = this.calculatePageLinkBoundaries();
-      var start = boundaries[0];
-      var end = boundaries[1];
 
-      for (var i = start; i <= end; i++) {
-        pageLinks.push(i + 1);
+    return pageLinks;
+  }
+
+  changePage(first, rows) {
+    var pc = this.getPageCount();
+    var p = Math.floor(first / rows);
+
+    if (p >= 0 && p < pc) {
+      var newPageState = {
+        first: first,
+        rows: rows,
+        page: p,
+        pageCount: pc
+      };
+
+      if (this.props.onPageChange) {
+        this.props.onPageChange(newPageState);
       }
-
-      return pageLinks;
     }
-  }, {
-    key: "changePage",
-    value: function changePage(first, rows) {
-      var pc = this.getPageCount();
-      var p = Math.floor(first / rows);
+  }
 
-      if (p >= 0 && p < pc) {
-        var newPageState = {
-          first: first,
-          rows: rows,
-          page: p,
-          pageCount: pc
-        };
+  getPage() {
+    return Math.floor(this.props.first / this.props.rows);
+  }
 
-        if (this.props.onPageChange) {
-          this.props.onPageChange(newPageState);
+  changePageToFirst(event) {
+    this.changePage(0, this.props.rows);
+    event.preventDefault();
+  }
+
+  changePageToPrev(event) {
+    this.changePage(this.props.first - this.props.rows, this.props.rows);
+    event.preventDefault();
+  }
+
+  onPageLinkClick(event) {
+    this.changePage((event.value - 1) * this.props.rows, this.props.rows);
+  }
+
+  changePageToNext(event) {
+    this.changePage(this.props.first + this.props.rows, this.props.rows);
+    event.preventDefault();
+  }
+
+  changePageToLast(event) {
+    this.changePage((this.getPageCount() - 1) * this.props.rows, this.props.rows);
+    event.preventDefault();
+  }
+
+  onRowsChange(event) {
+    this.changePage(0, event.value);
+  }
+
+  render() {
+    if (!this.props.alwaysShow && this.getPageCount() === 1) {
+      return null;
+    } else {
+      let className = (0, _classnames.default)('p-paginator p-component p-unselectable-text', this.props.className);
+      let paginatorElements = this.props.template.split(' ').map(value => {
+        let key = value.trim();
+        let element;
+
+        switch (key) {
+          case 'FirstPageLink':
+            element = _react.default.createElement(_FirstPageLink.FirstPageLink, {
+              key: key,
+              onClick: this.changePageToFirst,
+              disabled: this.isFirstPage()
+            });
+            break;
+
+          case 'PrevPageLink':
+            element = _react.default.createElement(_PrevPageLink.PrevPageLink, {
+              key: key,
+              onClick: this.changePageToPrev,
+              disabled: this.isFirstPage()
+            });
+            break;
+
+          case 'NextPageLink':
+            element = _react.default.createElement(_NextPageLink.NextPageLink, {
+              key: key,
+              onClick: this.changePageToNext,
+              disabled: this.isLastPage()
+            });
+            break;
+
+          case 'LastPageLink':
+            element = _react.default.createElement(_LastPageLink.LastPageLink, {
+              key: key,
+              onClick: this.changePageToLast,
+              disabled: this.isLastPage()
+            });
+            break;
+
+          case 'PageLinks':
+            element = _react.default.createElement(_PageLinks.PageLinks, {
+              key: key,
+              value: this.updatePageLinks(),
+              page: this.getPage(),
+              onClick: this.onPageLinkClick
+            });
+            break;
+
+          case 'RowsPerPageDropdown':
+            element = _react.default.createElement(_RowsPerPageDropdown.RowsPerPageDropdown, {
+              key: key,
+              value: this.props.rows,
+              options: this.props.rowsPerPageOptions,
+              onChange: this.onRowsChange
+            });
+            break;
+
+          case 'CurrentPageReport':
+            element = _react.default.createElement(_CurrentPageReport.CurrentPageReport, {
+              template: this.props.currentPageReportTemplate,
+              key: key,
+              page: this.getPage(),
+              pageCount: this.getPageCount()
+            });
+            break;
+
+          default:
+            element = null;
+            break;
         }
-      }
+
+        return element;
+      });
+
+      let leftContent = this.props.leftContent && _react.default.createElement("div", {
+        className: "p-paginator-left-content"
+      }, this.props.leftContent);
+
+      let rightContent = this.props.rightContent && _react.default.createElement("div", {
+        className: "p-paginator-right-content"
+      }, this.props.rightContent);
+
+      return _react.default.createElement("div", {
+        className: className,
+        style: this.props.style
+      }, leftContent, paginatorElements, rightContent);
     }
-  }, {
-    key: "getPage",
-    value: function getPage() {
-      return Math.floor(this.props.first / this.props.rows);
-    }
-  }, {
-    key: "changePageToFirst",
-    value: function changePageToFirst(event) {
-      this.changePage(0, this.props.rows);
-      event.preventDefault();
-    }
-  }, {
-    key: "changePageToPrev",
-    value: function changePageToPrev(event) {
-      this.changePage(this.props.first - this.props.rows, this.props.rows);
-      event.preventDefault();
-    }
-  }, {
-    key: "onPageLinkClick",
-    value: function onPageLinkClick(event) {
-      this.changePage((event.value - 1) * this.props.rows, this.props.rows);
-    }
-  }, {
-    key: "changePageToNext",
-    value: function changePageToNext(event) {
-      this.changePage(this.props.first + this.props.rows, this.props.rows);
-      event.preventDefault();
-    }
-  }, {
-    key: "changePageToLast",
-    value: function changePageToLast(event) {
-      this.changePage((this.getPageCount() - 1) * this.props.rows, this.props.rows);
-      event.preventDefault();
-    }
-  }, {
-    key: "onRowsChange",
-    value: function onRowsChange(event) {
-      this.changePage(0, event.value);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
+  }
 
-      if (!this.props.alwaysShow && this.getPageCount() === 1) {
-        return null;
-      } else {
-        var className = (0, _classnames.default)('p-paginator p-component p-unselectable-text', this.props.className);
-        var paginatorElements = this.props.template.split(' ').map(function (value) {
-          var key = value.trim();
-          var element;
-
-          switch (key) {
-            case 'FirstPageLink':
-              element = _react.default.createElement(_FirstPageLink.FirstPageLink, {
-                key: key,
-                onClick: _this2.changePageToFirst,
-                disabled: _this2.isFirstPage()
-              });
-              break;
-
-            case 'PrevPageLink':
-              element = _react.default.createElement(_PrevPageLink.PrevPageLink, {
-                key: key,
-                onClick: _this2.changePageToPrev,
-                disabled: _this2.isFirstPage()
-              });
-              break;
-
-            case 'NextPageLink':
-              element = _react.default.createElement(_NextPageLink.NextPageLink, {
-                key: key,
-                onClick: _this2.changePageToNext,
-                disabled: _this2.isLastPage()
-              });
-              break;
-
-            case 'LastPageLink':
-              element = _react.default.createElement(_LastPageLink.LastPageLink, {
-                key: key,
-                onClick: _this2.changePageToLast,
-                disabled: _this2.isLastPage()
-              });
-              break;
-
-            case 'PageLinks':
-              element = _react.default.createElement(_PageLinks.PageLinks, {
-                key: key,
-                value: _this2.updatePageLinks(),
-                page: _this2.getPage(),
-                onClick: _this2.onPageLinkClick
-              });
-              break;
-
-            case 'RowsPerPageDropdown':
-              element = _react.default.createElement(_RowsPerPageDropdown.RowsPerPageDropdown, {
-                key: key,
-                value: _this2.props.rows,
-                options: _this2.props.rowsPerPageOptions,
-                onChange: _this2.onRowsChange
-              });
-              break;
-
-            case 'CurrentPageReport':
-              element = _react.default.createElement(_CurrentPageReport.CurrentPageReport, {
-                template: _this2.props.currentPageReportTemplate,
-                key: key,
-                page: _this2.getPage(),
-                pageCount: _this2.getPageCount()
-              });
-              break;
-
-            default:
-              element = null;
-              break;
-          }
-
-          return element;
-        });
-
-        var leftContent = this.props.leftContent && _react.default.createElement("div", {
-          className: "p-paginator-left-content"
-        }, this.props.leftContent);
-
-        var rightContent = this.props.rightContent && _react.default.createElement("div", {
-          className: "p-paginator-right-content"
-        }, this.props.rightContent);
-
-        return _react.default.createElement("div", {
-          className: className,
-          style: this.props.style
-        }, leftContent, paginatorElements, rightContent);
-      }
-    }
-  }]);
-
-  return Paginator;
-}(_react.Component);
+}
 
 exports.Paginator = Paginator;
 

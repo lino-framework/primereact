@@ -21,222 +21,170 @@ var _classnames = _interopRequireDefault(require("classnames"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var OrderList =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(OrderList, _Component);
-
-  function OrderList(props) {
-    var _this;
-
-    _classCallCheck(this, OrderList);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(OrderList).call(this, props));
-    _this.state = {
+class OrderList extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       selection: []
     };
-    _this.onItemClick = _this.onItemClick.bind(_assertThisInitialized(_this));
-    _this.onItemKeyDown = _this.onItemKeyDown.bind(_assertThisInitialized(_this));
-    _this.onReorder = _this.onReorder.bind(_assertThisInitialized(_this));
-    return _this;
+    this.onItemClick = this.onItemClick.bind(this);
+    this.onItemKeyDown = this.onItemKeyDown.bind(this);
+    this.onReorder = this.onReorder.bind(this);
   }
 
-  _createClass(OrderList, [{
-    key: "onItemClick",
-    value: function onItemClick(event) {
-      var metaKey = event.originalEvent.metaKey || event.originalEvent.ctrlKey;
+  onItemClick(event) {
+    let metaKey = event.originalEvent.metaKey || event.originalEvent.ctrlKey;
 
-      var index = _ObjectUtils.default.findIndexInList(event.value, this.state.selection);
+    let index = _ObjectUtils.default.findIndexInList(event.value, this.state.selection);
 
-      var selected = index !== -1;
-      var selection;
+    let selected = index !== -1;
+    let selection;
 
-      if (selected) {
-        if (metaKey) selection = this.state.selection.filter(function (val, i) {
-          return i !== index;
-        });else selection = [event.value];
-      } else {
-        if (metaKey) selection = [].concat(_toConsumableArray(this.state.selection), [event.value]);else selection = [event.value];
-      }
+    if (selected) {
+      if (metaKey) selection = this.state.selection.filter((val, i) => i !== index);else selection = [event.value];
+    } else {
+      if (metaKey) selection = [...this.state.selection, event.value];else selection = [event.value];
+    }
 
-      this.setState({
-        selection: selection
+    this.setState({
+      selection: selection
+    });
+  }
+
+  onItemKeyDown(event) {
+    let listItem = event.originalEvent.currentTarget;
+
+    switch (event.originalEvent.which) {
+      //down
+      case 40:
+        var nextItem = this.findNextItem(listItem);
+
+        if (nextItem) {
+          nextItem.focus();
+        }
+
+        event.originalEvent.preventDefault();
+        break;
+      //up
+
+      case 38:
+        var prevItem = this.findPrevItem(listItem);
+
+        if (prevItem) {
+          prevItem.focus();
+        }
+
+        event.originalEvent.preventDefault();
+        break;
+      //enter
+
+      case 13:
+        this.onItemClick(event);
+        event.originalEvent.preventDefault();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  findNextItem(item) {
+    let nextItem = item.nextElementSibling;
+    if (nextItem) return !_DomHandler.default.hasClass(nextItem, 'p-orderlist-item') ? this.findNextItem(nextItem) : nextItem;else return null;
+  }
+
+  findPrevItem(item) {
+    let prevItem = item.previousElementSibling;
+    if (prevItem) return !_DomHandler.default.hasClass(prevItem, 'p-orderlist-item') ? this.findPrevItem(prevItem) : prevItem;else return null;
+  }
+
+  onReorder(event) {
+    if (this.props.onChange) {
+      this.props.onChange({
+        event: event.originalEvent,
+        value: event.value
       });
     }
-  }, {
-    key: "onItemKeyDown",
-    value: function onItemKeyDown(event) {
-      var listItem = event.originalEvent.currentTarget;
 
-      switch (event.originalEvent.which) {
-        //down
-        case 40:
-          var nextItem = this.findNextItem(listItem);
+    this.reorderDirection = event.direction;
+  }
 
-          if (nextItem) {
-            nextItem.focus();
-          }
+  componentDidUpdate() {
+    if (this.reorderDirection) {
+      this.updateListScroll();
+      this.reorderDirection = null;
+    }
+  }
 
-          event.originalEvent.preventDefault();
+  updateListScroll() {
+    let listItems = _DomHandler.default.find(this.subList.listElement, '.p-orderlist-item.p-highlight');
+
+    if (listItems && listItems.length) {
+      switch (this.reorderDirection) {
+        case 'up':
+          _DomHandler.default.scrollInView(this.subList.listElement, listItems[0]);
+
           break;
-        //up
 
-        case 38:
-          var prevItem = this.findPrevItem(listItem);
-
-          if (prevItem) {
-            prevItem.focus();
-          }
-
-          event.originalEvent.preventDefault();
+        case 'top':
+          this.subList.listElement.scrollTop = 0;
           break;
-        //enter
 
-        case 13:
-          this.onItemClick(event);
-          event.originalEvent.preventDefault();
+        case 'down':
+          _DomHandler.default.scrollInView(this.subList.listElement, listItems[listItems.length - 1]);
+
+          break;
+
+        case 'bottom':
+          this.subList.listElement.scrollTop = this.subList.listElement.scrollHeight;
           break;
 
         default:
           break;
       }
     }
-  }, {
-    key: "findNextItem",
-    value: function findNextItem(item) {
-      var nextItem = item.nextElementSibling;
-      if (nextItem) return !_DomHandler.default.hasClass(nextItem, 'p-orderlist-item') ? this.findNextItem(nextItem) : nextItem;else return null;
-    }
-  }, {
-    key: "findPrevItem",
-    value: function findPrevItem(item) {
-      var prevItem = item.previousElementSibling;
-      if (prevItem) return !_DomHandler.default.hasClass(prevItem, 'p-orderlist-item') ? this.findPrevItem(prevItem) : prevItem;else return null;
-    }
-  }, {
-    key: "onReorder",
-    value: function onReorder(event) {
-      if (this.props.onChange) {
-        this.props.onChange({
-          event: event.originalEvent,
-          value: event.value
-        });
-      }
+  }
 
-      this.reorderDirection = event.direction;
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate() {
-      if (this.reorderDirection) {
-        this.updateListScroll();
-        this.reorderDirection = null;
-      }
-    }
-  }, {
-    key: "updateListScroll",
-    value: function updateListScroll() {
-      var listItems = _DomHandler.default.find(this.subList.listElement, '.p-orderlist-item.p-highlight');
+  render() {
+    let className = (0, _classnames.default)('p-orderlist p-component', this.props.className, {
+      'p-orderlist-responsive': this.props.responsive
+    });
+    return _react.default.createElement("div", {
+      ref: el => this.element = el,
+      id: this.props.id,
+      className: className,
+      style: this.props.style
+    }, _react.default.createElement(_OrderListControls.OrderListControls, {
+      value: this.props.value,
+      selection: this.state.selection,
+      onReorder: this.onReorder
+    }), _react.default.createElement(_OrderListSubList.OrderListSubList, {
+      ref: el => this.subList = el,
+      value: this.props.value,
+      selection: this.state.selection,
+      onItemClick: this.onItemClick,
+      onItemKeyDown: this.onItemKeyDown,
+      itemTemplate: this.props.itemTemplate,
+      header: this.props.header,
+      listStyle: this.props.listStyle,
+      dragdrop: this.props.dragdrop,
+      onDragStart: this.onDragStart,
+      onDragEnter: this.onDragEnter,
+      onDragEnd: this.onDragEnd,
+      onDragLeave: this.onDragEnter,
+      onDrop: this.onDrop,
+      onChange: this.props.onChange,
+      tabIndex: this.props.tabIndex
+    }));
+  }
 
-      if (listItems && listItems.length) {
-        switch (this.reorderDirection) {
-          case 'up':
-            _DomHandler.default.scrollInView(this.subList.listElement, listItems[0]);
-
-            break;
-
-          case 'top':
-            this.subList.listElement.scrollTop = 0;
-            break;
-
-          case 'down':
-            _DomHandler.default.scrollInView(this.subList.listElement, listItems[listItems.length - 1]);
-
-            break;
-
-          case 'bottom':
-            this.subList.listElement.scrollTop = this.subList.listElement.scrollHeight;
-            break;
-
-          default:
-            break;
-        }
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      var className = (0, _classnames.default)('p-orderlist p-component', this.props.className, {
-        'p-orderlist-responsive': this.props.responsive
-      });
-      return _react.default.createElement("div", {
-        ref: function ref(el) {
-          return _this2.element = el;
-        },
-        id: this.props.id,
-        className: className,
-        style: this.props.style
-      }, _react.default.createElement(_OrderListControls.OrderListControls, {
-        value: this.props.value,
-        selection: this.state.selection,
-        onReorder: this.onReorder
-      }), _react.default.createElement(_OrderListSubList.OrderListSubList, {
-        ref: function ref(el) {
-          return _this2.subList = el;
-        },
-        value: this.props.value,
-        selection: this.state.selection,
-        onItemClick: this.onItemClick,
-        onItemKeyDown: this.onItemKeyDown,
-        itemTemplate: this.props.itemTemplate,
-        header: this.props.header,
-        listStyle: this.props.listStyle,
-        dragdrop: this.props.dragdrop,
-        onDragStart: this.onDragStart,
-        onDragEnter: this.onDragEnter,
-        onDragEnd: this.onDragEnd,
-        onDragLeave: this.onDragEnter,
-        onDrop: this.onDrop,
-        onChange: this.props.onChange,
-        tabIndex: this.props.tabIndex
-      }));
-    }
-  }]);
-
-  return OrderList;
-}(_react.Component);
+}
 
 exports.OrderList = OrderList;
 

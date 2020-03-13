@@ -248,39 +248,6 @@ button {
 .p-accordion .p-accordion-content-wrapper-expanding {
     overflow: hidden;
 }
-/** Breadcrumb **/
-.p-breadcrumb {
-    margin: 0;
-    padding: 0;
-    padding: .5em;
-}
-
-.p-breadcrumb ul {
-    margin: 0;
-    padding: 0;
-}
-
-.p-breadcrumb ul li {
-    display: inline-block;
-    margin: 0 .25em;
-}
-
-.p-breadcrumb-chevron, .p-breadcrumb-home {
-    vertical-align: middle;
-}
-
-.p-breadcrumb ul li .p-menuitem-link {
-    text-decoration: none;
-}
-
-.p-breadcrumb .p-menuitem-icon {
-    margin-right: .25em;
-    vertical-align: middle;
-}
-
-.p-breadcrumb .p-menuitem-text {
-    vertical-align: middle;
-}
 .p-autocomplete {
     width: auto;
     zoom: 1;
@@ -443,6 +410,39 @@ button {
 
 .p-fluid .p-autocomplete .p-autocomplete-dropdown.p-button {
     width: 2em;
+}
+/** Breadcrumb **/
+.p-breadcrumb {
+    margin: 0;
+    padding: 0;
+    padding: .5em;
+}
+
+.p-breadcrumb ul {
+    margin: 0;
+    padding: 0;
+}
+
+.p-breadcrumb ul li {
+    display: inline-block;
+    margin: 0 .25em;
+}
+
+.p-breadcrumb-chevron, .p-breadcrumb-home {
+    vertical-align: middle;
+}
+
+.p-breadcrumb ul li .p-menuitem-link {
+    text-decoration: none;
+}
+
+.p-breadcrumb .p-menuitem-icon {
+    margin-right: .25em;
+    vertical-align: middle;
+}
+
+.p-breadcrumb .p-menuitem-text {
+    vertical-align: middle;
 }
 /* Button */
 .p-button {
@@ -3002,6 +3002,39 @@ input[type=text]::-ms-clear {
 .p-overlaypanel.p-overlaypanel-flipped:before {
     border-bottom-color: transparent
 }
+.p-panel {
+	padding: 0.2em;
+}
+
+.p-panel .p-panel-titlebar {
+	padding: .5em .75em;
+}
+
+.p-panel .p-panel-titlebar-icon {
+	float: right;
+    cursor: pointer;
+    height: 1.25em;
+    width: 1.25em;
+    line-height: 1.25em;
+    text-align: center;
+}
+
+.p-panel .p-panel-titlebar-icon span {
+    line-height: inherit;
+    margin-top: -1px;
+}
+
+.p-panel .p-panel-content {
+	border: 0;
+    background: none;
+    padding: .5em .75em;
+}
+
+.p-panel .p-panel-footer {
+	border-width: 1px 0 0;
+	padding: .25em .5em;
+	text-align:left;
+}
 .p-paginator {
     margin: 0;
     text-align: center;
@@ -3101,39 +3134,6 @@ input[type=text]::-ms-clear {
     width: auto;
     height: auto;
 }
-.p-panel {
-	padding: 0.2em;
-}
-
-.p-panel .p-panel-titlebar {
-	padding: .5em .75em;
-}
-
-.p-panel .p-panel-titlebar-icon {
-	float: right;
-    cursor: pointer;
-    height: 1.25em;
-    width: 1.25em;
-    line-height: 1.25em;
-    text-align: center;
-}
-
-.p-panel .p-panel-titlebar-icon span {
-    line-height: inherit;
-    margin-top: -1px;
-}
-
-.p-panel .p-panel-content {
-	border: 0;
-    background: none;
-    padding: .5em .75em;
-}
-
-.p-panel .p-panel-footer {
-	border-width: 1px 0 0;
-	padding: .25em .5em;
-	text-align:left;
-}
 .p-panelmenu {
     width: auto;
 }
@@ -3216,6 +3216,115 @@ input[type=text]::-ms-clear {
 .p-password-panel-overlay {
     position: absolute;
 } 
+.p-progressbar { 
+    height: 1.2em; 
+    text-align: left; 
+    position: relative;
+    overflow: hidden;
+}
+
+.p-progressbar-determinate .p-progressbar-value {
+    height: 100%;
+    width: 0%;
+    position: absolute;
+    display: none;
+    border: 0 none;
+}
+
+.p-progressbar-determinate .p-progressbar-value-animate {
+    -webkit-transition: width 1s ease-in-out;
+    -moz-transition: width 1s ease-in-out;
+    -o-transition: width 1s ease-in-out;
+    transition: width 1s ease-in-out;
+}
+
+.p-progressbar-determinate .p-progressbar-label {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    font-weight: bold;
+}
+
+.p-progressbar-indeterminate {
+    height: .5em;
+}
+
+.p-progressbar-indeterminate .p-progressbar-value {
+    border: 0 none;
+}
+
+.p-progressbar-indeterminate .p-progressbar-value::before {
+      content: '';
+      position: absolute;
+      background-color: inherit;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      will-change: left, right;
+      -webkit-animation: p-progressbar-indeterminate-anim 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+              animation: p-progressbar-indeterminate-anim 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+}
+
+.p-progressbar-indeterminate .p-progressbar-value::after {
+    content: '';
+    position: absolute;
+    background-color: inherit;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    will-change: left, right;
+    -webkit-animation: p-progressbar-indeterminate-anim-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+            animation: p-progressbar-indeterminate-anim-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    -webkit-animation-delay: 1.15s;
+            animation-delay: 1.15s;
+}
+    
+@-webkit-keyframes p-progressbar-indeterminate-anim {
+  0% {
+    left: -35%;
+    right: 100%; }
+  60% {
+    left: 100%;
+    right: -90%; }
+  100% {
+    left: 100%;
+    right: -90%; } 
+}
+@keyframes p-progressbar-indeterminate-anim {
+  0% {
+    left: -35%;
+    right: 100%; }
+  60% {
+    left: 100%;
+    right: -90%; }
+  100% {
+    left: 100%;
+    right: -90%; } 
+}
+
+@-webkit-keyframes p-progressbar-indeterminate-anim-short {
+  0% {
+    left: -200%;
+    right: 100%; }
+  60% {
+    left: 107%;
+    right: -8%; }
+  100% {
+    left: 107%;
+    right: -8%; } 
+}
+@keyframes p-progressbar-indeterminate-anim-short {
+  0% {
+    left: -200%;
+    right: 100%; }
+  60% {
+    left: 107%;
+    right: -8%; }
+  100% {
+    left: 107%;
+    right: -8%; } 
+}
 .p-picklist > div {
     float: left;
 }
@@ -3404,115 +3513,6 @@ input[type=text]::-ms-clear {
     }
 }
 
-.p-progressbar { 
-    height: 1.2em; 
-    text-align: left; 
-    position: relative;
-    overflow: hidden;
-}
-
-.p-progressbar-determinate .p-progressbar-value {
-    height: 100%;
-    width: 0%;
-    position: absolute;
-    display: none;
-    border: 0 none;
-}
-
-.p-progressbar-determinate .p-progressbar-value-animate {
-    -webkit-transition: width 1s ease-in-out;
-    -moz-transition: width 1s ease-in-out;
-    -o-transition: width 1s ease-in-out;
-    transition: width 1s ease-in-out;
-}
-
-.p-progressbar-determinate .p-progressbar-label {
-    text-align: center;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    font-weight: bold;
-}
-
-.p-progressbar-indeterminate {
-    height: .5em;
-}
-
-.p-progressbar-indeterminate .p-progressbar-value {
-    border: 0 none;
-}
-
-.p-progressbar-indeterminate .p-progressbar-value::before {
-      content: '';
-      position: absolute;
-      background-color: inherit;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      will-change: left, right;
-      -webkit-animation: p-progressbar-indeterminate-anim 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
-              animation: p-progressbar-indeterminate-anim 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
-}
-
-.p-progressbar-indeterminate .p-progressbar-value::after {
-    content: '';
-    position: absolute;
-    background-color: inherit;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    will-change: left, right;
-    -webkit-animation: p-progressbar-indeterminate-anim-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-            animation: p-progressbar-indeterminate-anim-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-    -webkit-animation-delay: 1.15s;
-            animation-delay: 1.15s;
-}
-    
-@-webkit-keyframes p-progressbar-indeterminate-anim {
-  0% {
-    left: -35%;
-    right: 100%; }
-  60% {
-    left: 100%;
-    right: -90%; }
-  100% {
-    left: 100%;
-    right: -90%; } 
-}
-@keyframes p-progressbar-indeterminate-anim {
-  0% {
-    left: -35%;
-    right: 100%; }
-  60% {
-    left: 100%;
-    right: -90%; }
-  100% {
-    left: 100%;
-    right: -90%; } 
-}
-
-@-webkit-keyframes p-progressbar-indeterminate-anim-short {
-  0% {
-    left: -200%;
-    right: 100%; }
-  60% {
-    left: 107%;
-    right: -8%; }
-  100% {
-    left: 107%;
-    right: -8%; } 
-}
-@keyframes p-progressbar-indeterminate-anim-short {
-  0% {
-    left: -200%;
-    right: 100%; }
-  60% {
-    left: 107%;
-    right: -8%; }
-  100% {
-    left: 107%;
-    right: -8%; } 
-}
 .p-progress-spinner {
     position: relative;
     margin: 0 auto;

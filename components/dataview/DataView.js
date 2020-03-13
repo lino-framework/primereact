@@ -17,100 +17,56 @@ var _ObjectUtils = _interopRequireDefault(require("../utils/ObjectUtils"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var DataViewLayoutOptions =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(DataViewLayoutOptions, _Component);
-
-  function DataViewLayoutOptions(props) {
-    var _this;
-
-    _classCallCheck(this, DataViewLayoutOptions);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(DataViewLayoutOptions).call(this, props));
-    _this.changeLayout = _this.changeLayout.bind(_assertThisInitialized(_this));
-    return _this;
+class DataViewLayoutOptions extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.changeLayout = this.changeLayout.bind(this);
   }
 
-  _createClass(DataViewLayoutOptions, [{
-    key: "changeLayout",
-    value: function changeLayout(event, layoutMode) {
-      this.props.onChange({
-        originalEvent: event,
-        value: layoutMode
-      });
-      event.preventDefault();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
+  changeLayout(event, layoutMode) {
+    this.props.onChange({
+      originalEvent: event,
+      value: layoutMode
+    });
+    event.preventDefault();
+  }
 
-      var className = (0, _classnames.default)('p-dataview-layout-options p-selectbutton p-buttonset', this.props.className);
-      var buttonListClass = (0, _classnames.default)("p-button p-button-icon-only", {
-        'p-highlight': this.props.layout === 'list'
-      });
-      var buttonGridClass = (0, _classnames.default)("p-button p-button-icon-only", {
-        'p-highlight': this.props.layout === 'grid'
-      });
-      return _react.default.createElement("div", {
-        id: this.props.id,
-        style: this.props.style,
-        className: className
-      }, _react.default.createElement("button", {
-        className: buttonListClass,
-        onClick: function onClick(event) {
-          return _this2.changeLayout(event, 'list');
-        }
-      }, _react.default.createElement("i", {
-        className: "pi pi-bars p-button-icon-left"
-      }), _react.default.createElement("span", {
-        className: "p-button-text p-clickable"
-      }, "p-btn")), _react.default.createElement("button", {
-        className: buttonGridClass,
-        onClick: function onClick(event) {
-          return _this2.changeLayout(event, 'grid');
-        }
-      }, _react.default.createElement("i", {
-        className: "pi pi-th-large p-button-icon-left"
-      }), _react.default.createElement("span", {
-        className: "p-button-text p-clickable"
-      }, "p-btn")));
-    }
-  }]);
+  render() {
+    const className = (0, _classnames.default)('p-dataview-layout-options p-selectbutton p-buttonset', this.props.className);
+    const buttonListClass = (0, _classnames.default)("p-button p-button-icon-only", {
+      'p-highlight': this.props.layout === 'list'
+    });
+    const buttonGridClass = (0, _classnames.default)("p-button p-button-icon-only", {
+      'p-highlight': this.props.layout === 'grid'
+    });
+    return _react.default.createElement("div", {
+      id: this.props.id,
+      style: this.props.style,
+      className: className
+    }, _react.default.createElement("button", {
+      className: buttonListClass,
+      onClick: event => this.changeLayout(event, 'list')
+    }, _react.default.createElement("i", {
+      className: "pi pi-bars p-button-icon-left"
+    }), _react.default.createElement("span", {
+      className: "p-button-text p-clickable"
+    }, "p-btn")), _react.default.createElement("button", {
+      className: buttonGridClass,
+      onClick: event => this.changeLayout(event, 'grid')
+    }, _react.default.createElement("i", {
+      className: "pi pi-th-large p-button-icon-left"
+    }), _react.default.createElement("span", {
+      className: "p-button-text p-clickable"
+    }, "p-btn")));
+  }
 
-  return DataViewLayoutOptions;
-}(_react.Component);
+}
 
 exports.DataViewLayoutOptions = DataViewLayoutOptions;
 
@@ -130,26 +86,12 @@ _defineProperty(DataViewLayoutOptions, "propTypes", {
   onChange: _propTypes.default.func.isRequired
 });
 
-var DataViewItem =
-/*#__PURE__*/
-function (_Component2) {
-  _inherits(DataViewItem, _Component2);
-
-  function DataViewItem() {
-    _classCallCheck(this, DataViewItem);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(DataViewItem).apply(this, arguments));
+class DataViewItem extends _react.Component {
+  render() {
+    return this.props.template(this.props.item, this.props.layout);
   }
 
-  _createClass(DataViewItem, [{
-    key: "render",
-    value: function render() {
-      return this.props.template(this.props.item, this.props.layout);
-    }
-  }]);
-
-  return DataViewItem;
-}(_react.Component);
+}
 
 _defineProperty(DataViewItem, "defaultProps", {
   template: null,
@@ -163,227 +105,196 @@ _defineProperty(DataViewItem, "propTypes", {
   layout: _propTypes.default.string
 });
 
-var DataView =
-/*#__PURE__*/
-function (_Component3) {
-  _inherits(DataView, _Component3);
+class DataView extends _react.Component {
+  constructor(props) {
+    super(props);
 
-  function DataView(props) {
-    var _this3;
-
-    _classCallCheck(this, DataView);
-
-    _this3 = _possibleConstructorReturn(this, _getPrototypeOf(DataView).call(this, props));
-
-    if (!_this3.props.onPage) {
-      _this3.state = {
-        first: _this3.props.first,
-        rows: _this3.props.rows
+    if (!this.props.onPage) {
+      this.state = {
+        first: this.props.first,
+        rows: this.props.rows
       };
     }
 
-    _this3.sortChange = false;
-    _this3.onPageChange = _this3.onPageChange.bind(_assertThisInitialized(_this3));
-    return _this3;
+    this.sortChange = false;
+    this.onPageChange = this.onPageChange.bind(this);
   }
 
-  _createClass(DataView, [{
-    key: "getTotalRecords",
-    value: function getTotalRecords() {
-      if (this.props.totalRecords) return this.props.totalRecords;else return this.props.value ? this.props.value.length : 0;
-    }
-  }, {
-    key: "createPaginator",
-    value: function createPaginator(position) {
-      var className = 'p-paginator-' + position;
-      var first = this.props.onPage ? this.props.first : this.state.first;
-      var rows = this.props.onPage ? this.props.rows : this.state.rows;
-      var totalRecords = this.getTotalRecords();
-      return _react.default.createElement(_Paginator.Paginator, {
-        first: first,
-        rows: rows,
-        pageLinkSize: this.props.pageLinkSize,
-        className: className,
-        onPageChange: this.onPageChange,
-        template: this.props.paginatorTemplate,
-        totalRecords: totalRecords,
-        rowsPerPageOptions: this.props.rowsPerPageOptions,
-        currentPageReportTemplate: this.props.currentPageReportTemplate,
-        leftContent: this.props.paginatorLeft,
-        rightContent: this.props.paginatorRight,
-        alwaysShow: this.props.alwaysShowPaginator
+  getTotalRecords() {
+    if (this.props.totalRecords) return this.props.totalRecords;else return this.props.value ? this.props.value.length : 0;
+  }
+
+  createPaginator(position) {
+    const className = 'p-paginator-' + position;
+    const first = this.props.onPage ? this.props.first : this.state.first;
+    const rows = this.props.onPage ? this.props.rows : this.state.rows;
+    const totalRecords = this.getTotalRecords();
+    return _react.default.createElement(_Paginator.Paginator, {
+      first: first,
+      rows: rows,
+      pageLinkSize: this.props.pageLinkSize,
+      className: className,
+      onPageChange: this.onPageChange,
+      template: this.props.paginatorTemplate,
+      totalRecords: totalRecords,
+      rowsPerPageOptions: this.props.rowsPerPageOptions,
+      currentPageReportTemplate: this.props.currentPageReportTemplate,
+      leftContent: this.props.paginatorLeft,
+      rightContent: this.props.paginatorRight,
+      alwaysShow: this.props.alwaysShowPaginator
+    });
+  }
+
+  onPageChange(event) {
+    if (this.props.onPage) {
+      this.props.onPage({
+        originalEvent: event,
+        first: event.first,
+        rows: event.rows
+      });
+    } else {
+      this.setState({
+        first: event.first,
+        rows: event.rows
       });
     }
-  }, {
-    key: "onPageChange",
-    value: function onPageChange(event) {
-      if (this.props.onPage) {
-        this.props.onPage({
-          originalEvent: event,
-          first: event.first,
-          rows: event.rows
-        });
-      } else {
-        this.setState({
-          first: event.first,
-          rows: event.rows
-        });
-      }
-    }
-  }, {
-    key: "isEmpty",
-    value: function isEmpty() {
-      return !this.props.value || this.props.value.length === 0;
-    }
-  }, {
-    key: "sort",
-    value: function sort() {
-      var _this4 = this;
+  }
 
-      if (this.props.value) {
-        var value = _toConsumableArray(this.props.value);
+  isEmpty() {
+    return !this.props.value || this.props.value.length === 0;
+  }
 
-        value.sort(function (data1, data2) {
-          var value1 = _ObjectUtils.default.resolveFieldData(data1, _this4.props.sortField);
+  sort() {
+    if (this.props.value) {
+      const value = [...this.props.value];
+      value.sort((data1, data2) => {
+        let value1 = _ObjectUtils.default.resolveFieldData(data1, this.props.sortField);
 
-          var value2 = _ObjectUtils.default.resolveFieldData(data2, _this4.props.sortField);
+        let value2 = _ObjectUtils.default.resolveFieldData(data2, this.props.sortField);
 
-          var result = null;
-          if (value1 == null && value2 != null) result = -1;else if (value1 != null && value2 == null) result = 1;else if (value1 == null && value2 == null) result = 0;else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2, undefined, {
-            numeric: true
-          });else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-          return _this4.props.sortOrder * result;
-        });
-        return value;
-      } else {
-        return null;
-      }
+        let result = null;
+        if (value1 == null && value2 != null) result = -1;else if (value1 != null && value2 == null) result = 1;else if (value1 == null && value2 == null) result = 0;else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2, undefined, {
+          numeric: true
+        });else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+        return this.props.sortOrder * result;
+      });
+      return value;
+    } else {
+      return null;
     }
-  }, {
-    key: "renderTopPaginator",
-    value: function renderTopPaginator() {
-      if (this.props.paginator && (this.props.paginatorPosition !== 'bottom' || this.props.paginatorPosition === 'both')) {
-        return this.createPaginator('top');
-      } else {
-        return null;
-      }
+  }
+
+  renderTopPaginator() {
+    if (this.props.paginator && (this.props.paginatorPosition !== 'bottom' || this.props.paginatorPosition === 'both')) {
+      return this.createPaginator('top');
+    } else {
+      return null;
     }
-  }, {
-    key: "renderBottomPaginator",
-    value: function renderBottomPaginator() {
-      if (this.props.paginator && (this.props.paginatorPosition !== 'top' || this.props.paginatorPosition === 'both')) {
-        return this.createPaginator('bottom');
-      } else {
-        return null;
-      }
+  }
+
+  renderBottomPaginator() {
+    if (this.props.paginator && (this.props.paginatorPosition !== 'top' || this.props.paginatorPosition === 'both')) {
+      return this.createPaginator('bottom');
+    } else {
+      return null;
     }
-  }, {
-    key: "renderEmptyMessage",
-    value: function renderEmptyMessage() {
+  }
+
+  renderEmptyMessage() {
+    return _react.default.createElement("div", {
+      className: "p-col-12"
+    }, this.props.emptyMessage);
+  }
+
+  renderHeader() {
+    if (this.props.header) {
       return _react.default.createElement("div", {
-        className: "p-col-12"
-      }, this.props.emptyMessage);
+        className: "p-dataview-header"
+      }, this.props.header);
+    } else {
+      return null;
     }
-  }, {
-    key: "renderHeader",
-    value: function renderHeader() {
-      if (this.props.header) {
-        return _react.default.createElement("div", {
-          className: "p-dataview-header"
-        }, this.props.header);
+  }
+
+  renderFooter() {
+    if (this.props.footer) return _react.default.createElement("div", {
+      className: "p-dataview-footer"
+    }, " ", this.props.footer);else return null;
+  }
+
+  renderItems(value) {
+    if (value && value.length) {
+      if (this.props.paginator) {
+        const rows = this.props.onPage ? this.props.rows : this.state.rows;
+        const first = this.props.lazy ? 0 : this.props.onPage ? this.props.first : this.state.first;
+        const last = rows + first;
+        let items = [];
+
+        for (let i = first; i < last; i++) {
+          items.push(_react.default.createElement(DataViewItem, {
+            key: i,
+            template: this.props.itemTemplate,
+            layout: this.props.layout,
+            item: value[i]
+          }));
+        }
+
+        return items;
       } else {
-        return null;
-      }
-    }
-  }, {
-    key: "renderFooter",
-    value: function renderFooter() {
-      if (this.props.footer) return _react.default.createElement("div", {
-        className: "p-dataview-footer"
-      }, " ", this.props.footer);else return null;
-    }
-  }, {
-    key: "renderItems",
-    value: function renderItems(value) {
-      var _this5 = this;
-
-      if (value && value.length) {
-        if (this.props.paginator) {
-          var rows = this.props.onPage ? this.props.rows : this.state.rows;
-          var first = this.props.lazy ? 0 : this.props.onPage ? this.props.first : this.state.first;
-          var last = rows + first;
-          var items = [];
-
-          for (var i = first; i < last; i++) {
-            items.push(_react.default.createElement(DataViewItem, {
-              key: i,
-              template: this.props.itemTemplate,
-              layout: this.props.layout,
-              item: value[i]
-            }));
-          }
-
-          return items;
-        } else {
-          return value.map(function (item, index) {
-            return _react.default.createElement(DataViewItem, {
-              key: index,
-              template: _this5.props.itemTemplate,
-              layout: _this5.props.layout,
-              item: item
-            });
+        return value.map((item, index) => {
+          return _react.default.createElement(DataViewItem, {
+            key: index,
+            template: this.props.itemTemplate,
+            layout: this.props.layout,
+            item: item
           });
-        }
-      } else {
-        return this.renderEmptyMessage();
+        });
+      }
+    } else {
+      return this.renderEmptyMessage();
+    }
+  }
+
+  renderContent(value) {
+    const items = this.renderItems(value);
+    return _react.default.createElement("div", {
+      className: "p-dataview-content"
+    }, _react.default.createElement("div", {
+      className: "p-grid"
+    }, items));
+  }
+
+  processData() {
+    let data = this.props.value;
+
+    if (data && data.length) {
+      if (this.props.sortField) {
+        data = this.sort();
       }
     }
-  }, {
-    key: "renderContent",
-    value: function renderContent(value) {
-      var items = this.renderItems(value);
-      return _react.default.createElement("div", {
-        className: "p-dataview-content"
-      }, _react.default.createElement("div", {
-        className: "p-grid"
-      }, items));
-    }
-  }, {
-    key: "processData",
-    value: function processData() {
-      var data = this.props.value;
 
-      if (data && data.length) {
-        if (this.props.sortField) {
-          data = this.sort();
-        }
-      }
+    return data;
+  }
 
-      return data;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var value = this.processData();
-      var className = (0, _classnames.default)('p-dataview p-component', {
-        'p-dataview-list': this.props.layout === 'list',
-        'p-dataview-grid': this.props.layout === 'grid'
-      }, this.props.className);
-      var topPaginator = this.renderTopPaginator();
-      var bottomPaginator = this.renderBottomPaginator();
-      var header = this.renderHeader();
-      var footer = this.renderFooter();
-      var content = this.renderContent(value);
-      return _react.default.createElement("div", {
-        id: this.props.id,
-        style: this.props.style,
-        className: className
-      }, header, topPaginator, content, bottomPaginator, footer);
-    }
-  }]);
+  render() {
+    const value = this.processData();
+    const className = (0, _classnames.default)('p-dataview p-component', {
+      'p-dataview-list': this.props.layout === 'list',
+      'p-dataview-grid': this.props.layout === 'grid'
+    }, this.props.className);
+    const topPaginator = this.renderTopPaginator();
+    const bottomPaginator = this.renderBottomPaginator();
+    const header = this.renderHeader();
+    const footer = this.renderFooter();
+    const content = this.renderContent(value);
+    return _react.default.createElement("div", {
+      id: this.props.id,
+      style: this.props.style,
+      className: className
+    }, header, topPaginator, content, bottomPaginator, footer);
+  }
 
-  return DataView;
-}(_react.Component);
+}
 
 exports.DataView = DataView;
 

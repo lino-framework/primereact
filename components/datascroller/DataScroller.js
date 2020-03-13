@@ -15,245 +15,196 @@ var _classnames = _interopRequireDefault(require("classnames"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var DataScroller =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(DataScroller, _Component);
-
-  function DataScroller(props) {
-    var _this;
-
-    _classCallCheck(this, DataScroller);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(DataScroller).call(this, props));
-    _this.state = {};
-    _this.dataToRender = [];
-    _this.value = _this.props.value;
-    _this.first = 0;
-    return _this;
+class DataScroller extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.dataToRender = [];
+    this.value = this.props.value;
+    this.first = 0;
   }
 
-  _createClass(DataScroller, [{
-    key: "handleDataChange",
-    value: function handleDataChange() {
-      if (this.props.lazy) {
-        this.dataToRender = this.value;
-        this.setState({
-          dataToRender: this.dataToRender
-        });
-      } else {
-        this.load();
-      }
-    }
-  }, {
-    key: "load",
-    value: function load() {
-      if (this.props.lazy) {
-        if (this.props.onLazyLoad) {
-          this.props.onLazyLoad(this.createLazyLoadMetadata());
-        }
-
-        this.first = this.first + this.props.rows;
-      } else {
-        if (this.value) {
-          for (var i = this.first; i < this.first + this.props.rows; i++) {
-            if (i >= this.value.length) {
-              break;
-            }
-
-            this.dataToRender.push(this.value[i]);
-          }
-
-          this.first = this.first + this.props.rows;
-          this.setState({
-            dataToRender: this.dataToRender
-          });
-        }
-      }
-    }
-  }, {
-    key: "reset",
-    value: function reset() {
-      this.first = 0;
-      this.dataToRender = [];
+  handleDataChange() {
+    if (this.props.lazy) {
+      this.dataToRender = this.value;
       this.setState({
         dataToRender: this.dataToRender
       });
+    } else {
       this.load();
     }
-  }, {
-    key: "isEmpty",
-    value: function isEmpty() {
-      return !this.dataToRender || this.dataToRender.length === 0;
+  }
+
+  load() {
+    if (this.props.lazy) {
+      if (this.props.onLazyLoad) {
+        this.props.onLazyLoad(this.createLazyLoadMetadata());
+      }
+
+      this.first = this.first + this.props.rows;
+    } else {
+      if (this.value) {
+        for (var i = this.first; i < this.first + this.props.rows; i++) {
+          if (i >= this.value.length) {
+            break;
+          }
+
+          this.dataToRender.push(this.value[i]);
+        }
+
+        this.first = this.first + this.props.rows;
+        this.setState({
+          dataToRender: this.dataToRender
+        });
+      }
     }
-  }, {
-    key: "createLazyLoadMetadata",
-    value: function createLazyLoadMetadata() {
-      return {
-        first: this.first,
-        rows: this.props.rows
+  }
+
+  reset() {
+    this.first = 0;
+    this.dataToRender = [];
+    this.setState({
+      dataToRender: this.dataToRender
+    });
+    this.load();
+  }
+
+  isEmpty() {
+    return !this.dataToRender || this.dataToRender.length === 0;
+  }
+
+  createLazyLoadMetadata() {
+    return {
+      first: this.first,
+      rows: this.props.rows
+    };
+  }
+
+  bindScrollListener() {
+    if (this.props.inline) {
+      this.scrollFunction = () => {
+        var scrollTop = this.contentElement.scrollTop,
+            scrollHeight = this.contentElement.scrollHeight,
+            viewportHeight = this.contentElement.clientHeight;
+
+        if (scrollTop >= scrollHeight * this.props.buffer - viewportHeight) {
+          this.load();
+        }
       };
-    }
-  }, {
-    key: "bindScrollListener",
-    value: function bindScrollListener() {
-      var _this2 = this;
 
+      this.contentElement.addEventListener('scroll', this.scrollFunction);
+    } else {
+      this.scrollFunction = () => {
+        var docBody = document.body,
+            docElement = document.documentElement,
+            scrollTop = window.pageYOffset || document.documentElement.scrollTop,
+            winHeight = docElement.clientHeight,
+            docHeight = Math.max(docBody.scrollHeight, docBody.offsetHeight, winHeight, docElement.scrollHeight, docElement.offsetHeight);
+
+        if (scrollTop >= docHeight * this.props.buffer - winHeight) {
+          this.load();
+        }
+      };
+
+      window.addEventListener('scroll', this.scrollFunction);
+    }
+  }
+
+  unbindScrollListener() {
+    if (this.scrollFunction) {
       if (this.props.inline) {
-        this.scrollFunction = function () {
-          var scrollTop = _this2.contentElement.scrollTop,
-              scrollHeight = _this2.contentElement.scrollHeight,
-              viewportHeight = _this2.contentElement.clientHeight;
-
-          if (scrollTop >= scrollHeight * _this2.props.buffer - viewportHeight) {
-            _this2.load();
-          }
-        };
-
-        this.contentElement.addEventListener('scroll', this.scrollFunction);
+        this.contentElement.removeEventListener('scroll', this.scrollFunction);
+        this.contentElement = null;
+      } else if (this.loader && this.isLoaded) {
+        this.loader.removeEventListener('click', this.scrollFunction);
       } else {
-        this.scrollFunction = function () {
-          var docBody = document.body,
-              docElement = document.documentElement,
-              scrollTop = window.pageYOffset || document.documentElement.scrollTop,
-              winHeight = docElement.clientHeight,
-              docHeight = Math.max(docBody.scrollHeight, docBody.offsetHeight, winHeight, docElement.scrollHeight, docElement.offsetHeight);
-
-          if (scrollTop >= docHeight * _this2.props.buffer - winHeight) {
-            _this2.load();
-          }
-        };
-
-        window.addEventListener('scroll', this.scrollFunction);
+        window.removeEventListener('scroll', this.scrollFunction);
       }
     }
-  }, {
-    key: "unbindScrollListener",
-    value: function unbindScrollListener() {
-      if (this.scrollFunction) {
-        if (this.props.inline) {
-          this.contentElement.removeEventListener('scroll', this.scrollFunction);
-          this.contentElement = null;
-        } else if (this.loader && this.isLoaded) {
-          this.loader.removeEventListener('click', this.scrollFunction);
-        } else {
-          window.removeEventListener('scroll', this.scrollFunction);
-        }
-      }
+  }
+
+  componentDidMount() {
+    this.load();
+
+    if (this.props.loader) {
+      this.scrollFunction = () => {
+        this.load();
+      };
+
+      this.loader = _reactDom.default.findDOMNode(this.props.loader);
+      this.loader.addEventListener('click', this.scrollFunction);
+      this.isLoaded = true;
+    } else {
+      this.bindScrollListener();
     }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this3 = this;
+  }
 
-      this.load();
+  componentDidUpdate(prevProps, prevState) {
+    var newValue = this.props.value;
 
-      if (this.props.loader) {
-        this.scrollFunction = function () {
-          _this3.load();
-        };
-
-        this.loader = _reactDom.default.findDOMNode(this.props.loader);
-        this.loader.addEventListener('click', this.scrollFunction);
-        this.isLoaded = true;
-      } else {
-        this.bindScrollListener();
-      }
+    if (newValue && this.value !== newValue) {
+      this.value = newValue;
+      this.handleDataChange();
     }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps, prevState) {
-      var _this4 = this;
 
-      var newValue = this.props.value;
+    if (this.props.loader && !this.isLoaded) {
+      this.unbindScrollListener();
 
-      if (newValue && this.value !== newValue) {
-        this.value = newValue;
-        this.handleDataChange();
-      }
+      this.scrollFunction = () => {
+        this.load();
+      };
 
-      if (this.props.loader && !this.isLoaded) {
-        this.unbindScrollListener();
-
-        this.scrollFunction = function () {
-          _this4.load();
-        };
-
-        this.loader = _reactDom.default.findDOMNode(this.props.loader);
-        this.loader.addEventListener('click', this.scrollFunction);
-        this.isLoaded = true;
-      }
+      this.loader = _reactDom.default.findDOMNode(this.props.loader);
+      this.loader.addEventListener('click', this.scrollFunction);
+      this.isLoaded = true;
     }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      if (this.scrollFunction) {
-        this.unbindScrollListener();
+  }
+
+  componentWillUnmount() {
+    if (this.scrollFunction) {
+      this.unbindScrollListener();
+    }
+  }
+
+  render() {
+    var className = (0, _classnames.default)('p-datascroller p-component', this.props.className, {
+      'p-datascroller-inline': this.props.inline
+    });
+
+    var header = this.props.header && _react.default.createElement("div", {
+      className: "p-datascroller-header"
+    }, " ", this.props.header),
+        footer = this.props.footer && _react.default.createElement("div", {
+      className: "p-datascroller-footer"
+    }, " ", this.props.footer, " "),
+        content = _react.default.createElement("div", {
+      ref: el => this.contentElement = _reactDom.default.findDOMNode(el),
+      className: "p-datascroller-content",
+      style: {
+        'maxHeight': this.props.scrollHeight
       }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this5 = this;
+    }, _react.default.createElement("ul", {
+      className: "p-datascroller-list"
+    }, this.state.dataToRender && this.state.dataToRender.map((val, i) => {
+      var listItemContent = this.props.itemTemplate ? this.props.itemTemplate(val) : val;
+      return _react.default.createElement("li", {
+        key: i + '_datascrollitem'
+      }, listItemContent);
+    })));
 
-      var className = (0, _classnames.default)('p-datascroller p-component', this.props.className, {
-        'p-datascroller-inline': this.props.inline
-      });
+    return _react.default.createElement("div", {
+      id: this.props.id,
+      className: className
+    }, header, content, footer);
+  }
 
-      var header = this.props.header && _react.default.createElement("div", {
-        className: "p-datascroller-header"
-      }, " ", this.props.header),
-          footer = this.props.footer && _react.default.createElement("div", {
-        className: "p-datascroller-footer"
-      }, " ", this.props.footer, " "),
-          content = _react.default.createElement("div", {
-        ref: function ref(el) {
-          return _this5.contentElement = _reactDom.default.findDOMNode(el);
-        },
-        className: "p-datascroller-content",
-        style: {
-          'maxHeight': this.props.scrollHeight
-        }
-      }, _react.default.createElement("ul", {
-        className: "p-datascroller-list"
-      }, this.state.dataToRender && this.state.dataToRender.map(function (val, i) {
-        var listItemContent = _this5.props.itemTemplate ? _this5.props.itemTemplate(val) : val;
-        return _react.default.createElement("li", {
-          key: i + '_datascrollitem'
-        }, listItemContent);
-      })));
-
-      return _react.default.createElement("div", {
-        id: this.props.id,
-        className: className
-      }, header, content, footer);
-    }
-  }]);
-
-  return DataScroller;
-}(_react.Component);
+}
 
 exports.DataScroller = DataScroller;
 

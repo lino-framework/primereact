@@ -23,247 +23,202 @@ var _PickListTransferControls = require("./PickListTransferControls");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var PickList =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(PickList, _Component);
-
-  function PickList(props) {
-    var _this;
-
-    _classCallCheck(this, PickList);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PickList).call(this, props));
-    _this.state = {
+class PickList extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       selectedItemsSource: [],
       selectedItemsTarget: []
     };
-    _this.onSourceReorder = _this.onSourceReorder.bind(_assertThisInitialized(_this));
-    _this.onTargetReorder = _this.onTargetReorder.bind(_assertThisInitialized(_this));
-    _this.onTransfer = _this.onTransfer.bind(_assertThisInitialized(_this));
-    return _this;
+    this.onSourceReorder = this.onSourceReorder.bind(this);
+    this.onTargetReorder = this.onTargetReorder.bind(this);
+    this.onTransfer = this.onTransfer.bind(this);
   }
 
-  _createClass(PickList, [{
-    key: "onSourceReorder",
-    value: function onSourceReorder(event) {
-      this.handleChange(event, event.value, this.props.target);
-      this.reorderedListElement = this.sourceListElement;
-      this.reorderDirection = event.direction;
+  onSourceReorder(event) {
+    this.handleChange(event, event.value, this.props.target);
+    this.reorderedListElement = this.sourceListElement;
+    this.reorderDirection = event.direction;
+  }
+
+  onTargetReorder(event) {
+    this.handleChange(event, this.props.source, event.value);
+    this.reorderedListElement = this.targetListElement;
+    this.reorderDirection = event.direction;
+  }
+
+  handleScrollPosition(listElement, direction) {
+    switch (direction) {
+      case 'up':
+        this.scrollInView(listElement, -1);
+        break;
+
+      case 'top':
+        listElement.scrollTop = 0;
+        break;
+
+      case 'down':
+        this.scrollInView(listElement, 1);
+        break;
+
+      case 'bottom':
+        listElement.scrollTop = listElement.scrollHeight;
+        break;
+
+      default:
+        break;
     }
-  }, {
-    key: "onTargetReorder",
-    value: function onTargetReorder(event) {
-      this.handleChange(event, this.props.source, event.value);
-      this.reorderedListElement = this.targetListElement;
-      this.reorderDirection = event.direction;
-    }
-  }, {
-    key: "handleScrollPosition",
-    value: function handleScrollPosition(listElement, direction) {
-      switch (direction) {
-        case 'up':
-          this.scrollInView(listElement, -1);
-          break;
+  }
 
-        case 'top':
-          listElement.scrollTop = 0;
-          break;
-
-        case 'down':
-          this.scrollInView(listElement, 1);
-          break;
-
-        case 'bottom':
-          listElement.scrollTop = listElement.scrollHeight;
-          break;
-
-        default:
-          break;
-      }
-    }
-  }, {
-    key: "handleChange",
-    value: function handleChange(event, source, target) {
-      if (this.props.onChange) {
-        this.props.onChange({
-          event: event.originalEvent,
-          source: source,
-          target: target
-        });
-      }
-    }
-  }, {
-    key: "onTransfer",
-    value: function onTransfer(event) {
-      switch (event.direction) {
-        case 'toTarget':
-          if (this.props.onMoveToTarget) {
-            this.props.onMoveToTarget({
-              originalEvent: event.originalEvent,
-              value: this.state.selectedItemsSource
-            });
-          }
-
-          break;
-
-        case 'allToTarget':
-          if (this.props.onMoveAllToTarget) {
-            this.props.onMoveAllToTarget({
-              originalEvent: event.originalEvent,
-              value: this.props.source
-            });
-          }
-
-          break;
-
-        case 'toSource':
-          if (this.props.onMoveToSource) {
-            this.props.onMoveToSource({
-              originalEvent: event.originalEvent,
-              value: this.state.selectedItemsTarget
-            });
-          }
-
-          break;
-
-        case 'allToSource':
-          if (this.props.onMoveAllToSource) {
-            this.props.onMoveAllToSource({
-              originalEvent: event.originalEvent,
-              value: this.props.target
-            });
-          }
-
-          break;
-
-        default:
-          break;
-      }
-
-      this.setState({
-        selectedItemsSource: [],
-        selectedItemsTarget: []
+  handleChange(event, source, target) {
+    if (this.props.onChange) {
+      this.props.onChange({
+        event: event.originalEvent,
+        source: source,
+        target: target
       });
-      this.handleChange(event, event.source, event.target);
     }
-  }, {
-    key: "scrollInView",
-    value: function scrollInView(listElement, direction) {
-      var listContainer = _DomHandler.default.findSingle(listElement, '.p-picklist-list');
+  }
 
-      var listItems = listContainer.getElementsByClassName('p-highlight');
-      var listItem;
-      if (direction === -1) listItem = listItems[0];else if (direction === 1) listItem = listItems[listItems.length - 1];
+  onTransfer(event) {
+    switch (event.direction) {
+      case 'toTarget':
+        if (this.props.onMoveToTarget) {
+          this.props.onMoveToTarget({
+            originalEvent: event.originalEvent,
+            value: this.state.selectedItemsSource
+          });
+        }
 
-      _DomHandler.default.scrollInView(listContainer, listItem);
+        break;
+
+      case 'allToTarget':
+        if (this.props.onMoveAllToTarget) {
+          this.props.onMoveAllToTarget({
+            originalEvent: event.originalEvent,
+            value: this.props.source
+          });
+        }
+
+        break;
+
+      case 'toSource':
+        if (this.props.onMoveToSource) {
+          this.props.onMoveToSource({
+            originalEvent: event.originalEvent,
+            value: this.state.selectedItemsTarget
+          });
+        }
+
+        break;
+
+      case 'allToSource':
+        if (this.props.onMoveAllToSource) {
+          this.props.onMoveAllToSource({
+            originalEvent: event.originalEvent,
+            value: this.props.target
+          });
+        }
+
+        break;
+
+      default:
+        break;
     }
-  }, {
-    key: "onSelectionChange",
-    value: function onSelectionChange(e, stateKey, callback) {
-      this.setState(_defineProperty({}, stateKey, e.value));
 
-      if (callback) {
-        callback(e);
-      }
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate() {
-      if (this.reorderedListElement) {
-        this.handleScrollPosition(this.reorderedListElement, this.reorderDirection);
-        this.reorderedListElement = null;
-        this.reorderDirection = null;
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
+    this.setState({
+      selectedItemsSource: [],
+      selectedItemsTarget: []
+    });
+    this.handleChange(event, event.source, event.target);
+  }
 
-      var className = (0, _classnames.default)('p-picklist p-component', this.props.className, {
-        'p-picklist-responsive': this.props.responsive
-      });
-      return _react.default.createElement("div", {
-        id: this.props.id,
-        className: className,
-        style: this.props.style
-      }, this.props.showSourceControls && _react.default.createElement(_PickListControls.PickListControls, {
-        list: this.props.source,
-        selection: this.state.selectedItemsSource,
-        onReorder: this.onSourceReorder,
-        className: "p-picklist-source-controls"
-      }), _react.default.createElement(_PickListSubList.PickListSubList, {
-        ref: function ref(el) {
-          return _this2.sourceListElement = _reactDom.default.findDOMNode(el);
-        },
-        list: this.props.source,
-        selection: this.state.selectedItemsSource,
-        onSelectionChange: function onSelectionChange(e) {
-          return _this2.onSelectionChange(e, 'selectedItemsSource', _this2.props.onSourceSelect);
-        },
-        itemTemplate: this.props.itemTemplate,
-        header: this.props.sourceHeader,
-        style: this.props.sourceStyle,
-        className: "p-picklist-source-wrapper",
-        listClassName: "p-picklist-source",
-        metaKeySelection: this.props.metaKeySelection,
-        tabIndex: this.props.tabIndex
-      }), _react.default.createElement(_PickListTransferControls.PickListTransferControls, {
-        onTransfer: this.onTransfer,
-        source: this.props.source,
-        target: this.props.target,
-        sourceSelection: this.state.selectedItemsSource,
-        targetSelection: this.state.selectedItemsTarget
-      }), _react.default.createElement(_PickListSubList.PickListSubList, {
-        ref: function ref(el) {
-          return _this2.targetListElement = _reactDom.default.findDOMNode(el);
-        },
-        list: this.props.target,
-        selection: this.state.selectedItemsTarget,
-        onSelectionChange: function onSelectionChange(e) {
-          return _this2.onSelectionChange(e, 'selectedItemsTarget', _this2.props.onTargetSelect);
-        },
-        itemTemplate: this.props.itemTemplate,
-        header: this.props.targetHeader,
-        style: this.props.targetStyle,
-        className: "p-picklist-target-wrapper",
-        listClassName: "p-picklist-targe",
-        metaKeySelection: this.props.metaKeySelection,
-        tabIndex: this.props.tabIndex
-      }), this.props.showTargetControls && _react.default.createElement(_PickListControls.PickListControls, {
-        list: this.props.target,
-        selection: this.state.selectedItemsTarget,
-        onReorder: this.onTargetReorder,
-        className: "p-picklist-target-controls"
-      }));
-    }
-  }]);
+  scrollInView(listElement, direction) {
+    let listContainer = _DomHandler.default.findSingle(listElement, '.p-picklist-list');
 
-  return PickList;
-}(_react.Component);
+    let listItems = listContainer.getElementsByClassName('p-highlight');
+    let listItem;
+    if (direction === -1) listItem = listItems[0];else if (direction === 1) listItem = listItems[listItems.length - 1];
+
+    _DomHandler.default.scrollInView(listContainer, listItem);
+  }
+
+  onSelectionChange(e, stateKey, callback) {
+    this.setState({
+      [stateKey]: e.value
+    });
+
+    if (callback) {
+      callback(e);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.reorderedListElement) {
+      this.handleScrollPosition(this.reorderedListElement, this.reorderDirection);
+      this.reorderedListElement = null;
+      this.reorderDirection = null;
+    }
+  }
+
+  render() {
+    let className = (0, _classnames.default)('p-picklist p-component', this.props.className, {
+      'p-picklist-responsive': this.props.responsive
+    });
+    return _react.default.createElement("div", {
+      id: this.props.id,
+      className: className,
+      style: this.props.style
+    }, this.props.showSourceControls && _react.default.createElement(_PickListControls.PickListControls, {
+      list: this.props.source,
+      selection: this.state.selectedItemsSource,
+      onReorder: this.onSourceReorder,
+      className: "p-picklist-source-controls"
+    }), _react.default.createElement(_PickListSubList.PickListSubList, {
+      ref: el => this.sourceListElement = _reactDom.default.findDOMNode(el),
+      list: this.props.source,
+      selection: this.state.selectedItemsSource,
+      onSelectionChange: e => this.onSelectionChange(e, 'selectedItemsSource', this.props.onSourceSelect),
+      itemTemplate: this.props.itemTemplate,
+      header: this.props.sourceHeader,
+      style: this.props.sourceStyle,
+      className: "p-picklist-source-wrapper",
+      listClassName: "p-picklist-source",
+      metaKeySelection: this.props.metaKeySelection,
+      tabIndex: this.props.tabIndex
+    }), _react.default.createElement(_PickListTransferControls.PickListTransferControls, {
+      onTransfer: this.onTransfer,
+      source: this.props.source,
+      target: this.props.target,
+      sourceSelection: this.state.selectedItemsSource,
+      targetSelection: this.state.selectedItemsTarget
+    }), _react.default.createElement(_PickListSubList.PickListSubList, {
+      ref: el => this.targetListElement = _reactDom.default.findDOMNode(el),
+      list: this.props.target,
+      selection: this.state.selectedItemsTarget,
+      onSelectionChange: e => this.onSelectionChange(e, 'selectedItemsTarget', this.props.onTargetSelect),
+      itemTemplate: this.props.itemTemplate,
+      header: this.props.targetHeader,
+      style: this.props.targetStyle,
+      className: "p-picklist-target-wrapper",
+      listClassName: "p-picklist-targe",
+      metaKeySelection: this.props.metaKeySelection,
+      tabIndex: this.props.tabIndex
+    }), this.props.showTargetControls && _react.default.createElement(_PickListControls.PickListControls, {
+      list: this.props.target,
+      selection: this.state.selectedItemsTarget,
+      onReorder: this.onTargetReorder,
+      className: "p-picklist-target-controls"
+    }));
+  }
+
+}
 
 exports.PickList = PickList;
 

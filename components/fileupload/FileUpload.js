@@ -21,549 +21,466 @@ var _classnames = _interopRequireDefault(require("classnames"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var FileUpload =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(FileUpload, _Component);
-
-  function FileUpload(props) {
-    var _this;
-
-    _classCallCheck(this, FileUpload);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(FileUpload).call(this, props));
-    _this.state = {
+class FileUpload extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       files: [],
       msgs: []
     };
-    _this.upload = _this.upload.bind(_assertThisInitialized(_this));
-    _this.clear = _this.clear.bind(_assertThisInitialized(_this));
-    _this.onFileSelect = _this.onFileSelect.bind(_assertThisInitialized(_this));
-    _this.onDragEnter = _this.onDragEnter.bind(_assertThisInitialized(_this));
-    _this.onDragOver = _this.onDragOver.bind(_assertThisInitialized(_this));
-    _this.onDragLeave = _this.onDragLeave.bind(_assertThisInitialized(_this));
-    _this.onDrop = _this.onDrop.bind(_assertThisInitialized(_this));
-    _this.onFocus = _this.onFocus.bind(_assertThisInitialized(_this));
-    _this.onBlur = _this.onBlur.bind(_assertThisInitialized(_this));
-    _this.onSimpleUploaderClick = _this.onSimpleUploaderClick.bind(_assertThisInitialized(_this));
-    return _this;
+    this.upload = this.upload.bind(this);
+    this.clear = this.clear.bind(this);
+    this.onFileSelect = this.onFileSelect.bind(this);
+    this.onDragEnter = this.onDragEnter.bind(this);
+    this.onDragOver = this.onDragOver.bind(this);
+    this.onDragLeave = this.onDragLeave.bind(this);
+    this.onDrop = this.onDrop.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onSimpleUploaderClick = this.onSimpleUploaderClick.bind(this);
   }
 
-  _createClass(FileUpload, [{
-    key: "hasFiles",
-    value: function hasFiles() {
-      return this.state.files && this.state.files.length > 0;
+  hasFiles() {
+    return this.state.files && this.state.files.length > 0;
+  }
+
+  isImage(file) {
+    return /^image\//.test(file.type);
+  }
+
+  remove(index) {
+    this.clearInputElement();
+    let currentFiles = [...this.state.files];
+    currentFiles.splice(index, 1);
+    this.setState({
+      files: currentFiles
+    });
+  }
+
+  clearInputElement() {
+    this.fileInput.value = '';
+
+    if (this.props.mode === 'basic') {
+      this.fileInput.style.display = 'inline';
     }
-  }, {
-    key: "isImage",
-    value: function isImage(file) {
-      return /^image\//.test(file.type);
+  }
+
+  formatSize(bytes) {
+    if (bytes === 0) {
+      return '0 B';
     }
-  }, {
-    key: "remove",
-    value: function remove(index) {
-      this.clearInputElement();
 
-      var currentFiles = _toConsumableArray(this.state.files);
+    let k = 1000,
+        dm = 3,
+        sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+        i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
 
-      currentFiles.splice(index, 1);
-      this.setState({
-        files: currentFiles
-      });
-    }
-  }, {
-    key: "clearInputElement",
-    value: function clearInputElement() {
-      this.fileInput.value = '';
+  onFileSelect(event) {
+    this.setState({
+      msgs: []
+    });
+    this.files = this.state.files || [];
+    let files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
 
-      if (this.props.mode === 'basic') {
-        this.fileInput.style.display = 'inline';
-      }
-    }
-  }, {
-    key: "formatSize",
-    value: function formatSize(bytes) {
-      if (bytes === 0) {
-        return '0 B';
-      }
+    for (let i = 0; i < files.length; i++) {
+      let file = files[i];
 
-      var k = 1000,
-          dm = 3,
-          sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-          i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-    }
-  }, {
-    key: "onFileSelect",
-    value: function onFileSelect(event) {
-      var _this2 = this;
-
-      this.setState({
-        msgs: []
-      });
-      this.files = this.state.files || [];
-      var files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
-
-      for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-
-        if (!this.isFileSelected(file)) {
-          if (this.validate(file)) {
-            if (this.isImage(file)) {
-              file.objectURL = window.URL.createObjectURL(file);
-            }
-
-            this.files.push(file);
+      if (!this.isFileSelected(file)) {
+        if (this.validate(file)) {
+          if (this.isImage(file)) {
+            file.objectURL = window.URL.createObjectURL(file);
           }
+
+          this.files.push(file);
         }
-      }
-
-      this.setState({
-        files: this.files
-      }, function () {
-        if (_this2.hasFiles() && _this2.props.auto) {
-          _this2.upload();
-        }
-      });
-
-      if (this.props.onSelect) {
-        this.props.onSelect({
-          originalEvent: event,
-          files: files
-        });
-      }
-
-      this.clearInputElement();
-
-      if (this.props.mode === 'basic') {
-        this.fileInput.style.display = 'none';
       }
     }
-  }, {
-    key: "isFileSelected",
-    value: function isFileSelected(file) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
 
+    this.setState({
+      files: this.files
+    }, () => {
+      if (this.hasFiles() && this.props.auto) {
+        this.upload();
+      }
+    });
+
+    if (this.props.onSelect) {
+      this.props.onSelect({
+        originalEvent: event,
+        files: files
+      });
+    }
+
+    this.clearInputElement();
+
+    if (this.props.mode === 'basic') {
+      this.fileInput.style.display = 'none';
+    }
+  }
+
+  isFileSelected(file) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = this.state.files[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        let sFile = _step.value;
+        if (sFile.name + sFile.type + sFile.size === file.name + file.type + file.size) return true;
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
       try {
-        for (var _iterator = this.state.files[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var sFile = _step.value;
-          if (sFile.name + sFile.type + sFile.size === file.name + file.type + file.size) return true;
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
         }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
       } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return != null) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
+        if (_didIteratorError) {
+          throw _iteratorError;
         }
+      }
+    }
+
+    return false;
+  }
+
+  validate(file) {
+    if (this.props.maxFileSize && file.size > this.props.maxFileSize) {
+      const message = {
+        severity: 'error',
+        summary: this.props.invalidFileSizeMessageSummary.replace('{0}', file.name),
+        detail: this.props.invalidFileSizeMessageDetail.replace('{0}', this.formatSize(this.props.maxFileSize))
+      };
+
+      if (this.props.mode === 'advanced') {
+        this.messagesUI.show(message);
+      }
+
+      if (this.props.onValidationFail) {
+        this.props.onValidationFail(file);
       }
 
       return false;
     }
-  }, {
-    key: "validate",
-    value: function validate(file) {
-      if (this.props.maxFileSize && file.size > this.props.maxFileSize) {
-        var message = {
-          severity: 'error',
-          summary: this.props.invalidFileSizeMessageSummary.replace('{0}', file.name),
-          detail: this.props.invalidFileSizeMessageDetail.replace('{0}', this.formatSize(this.props.maxFileSize))
-        };
 
-        if (this.props.mode === 'advanced') {
-          this.messagesUI.show(message);
-        }
+    return true;
+  }
 
-        if (this.props.onValidationFail) {
-          this.props.onValidationFail(file);
-        }
-
-        return false;
-      }
-
-      return true;
-    }
-  }, {
-    key: "upload",
-    value: function upload() {
-      var _this3 = this;
-
-      if (this.props.customUpload) {
-        if (this.props.uploadHandler) {
-          this.props.uploadHandler({
-            files: this.state.files
-          });
-        }
-      } else {
-        this.setState({
-          msgs: []
+  upload() {
+    if (this.props.customUpload) {
+      if (this.props.uploadHandler) {
+        this.props.uploadHandler({
+          files: this.state.files
         });
-
-        var _xhr = new XMLHttpRequest();
-
-        var _formData = new FormData();
-
-        if (this.props.onBeforeUpload) {
-          this.props.onBeforeUpload({
-            'xhr': _xhr,
-            'formData': _formData
-          });
-        }
-
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = this.state.files[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var file = _step2.value;
-
-            _formData.append(this.props.name, file, file.name);
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-              _iterator2.return();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-
-        _xhr.upload.addEventListener('progress', function (event) {
-          if (event.lengthComputable) {
-            _this3.setState({
-              progress: Math.round(event.loaded * 100 / event.total)
-            });
-          }
-
-          if (_this3.props.onProgress) {
-            _this3.props.onProgress({
-              originalEvent: event,
-              progress: _this3.progress
-            });
-          }
-
-          ;
-        });
-
-        _xhr.onreadystatechange = function () {
-          if (_xhr.readyState === 4) {
-            _this3.setState({
-              progress: 0
-            });
-
-            if (_xhr.status >= 200 && _xhr.status < 300) {
-              if (_this3.props.onUpload) {
-                _this3.props.onUpload({
-                  xhr: _xhr,
-                  files: _this3.files
-                });
-              }
-            } else {
-              if (_this3.props.onError) {
-                _this3.props.onError({
-                  xhr: _xhr,
-                  files: _this3.files
-                });
-              }
-            }
-
-            _this3.clear();
-          }
-        };
-
-        _xhr.open('POST', this.props.url, true);
-
-        if (this.props.onBeforeSend) {
-          this.props.onBeforeSend({
-            'xhr': _xhr,
-            'formData': _formData
-          });
-        }
       }
+    } else {
+      this.setState({
+        msgs: []
+      });
+      let xhr = new XMLHttpRequest();
+      let formData = new FormData();
 
-      ;
-      xhr.open('POST', this.props.url, true);
-
-      if (this.props.onBeforeSend) {
-        var doSend = this.props.onBeforeSend({
+      if (this.props.onBeforeUpload) {
+        this.props.onBeforeUpload({
           'xhr': xhr,
           'formData': formData
         });
+      }
 
-        if (doSend === false) {
-          return;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this.state.files[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          let file = _step2.value;
+          formData.append(this.props.name, file, file.name);
         }
-      }
-    }
-  }, {
-    key: "clear",
-    value: function clear() {
-      this.setState({
-        files: []
-      });
-
-      if (this.props.onClear) {
-        this.props.onClear();
-      }
-
-      this.clearInputElement();
-    }
-  }, {
-    key: "onFocus",
-    value: function onFocus(event) {
-      _DomHandler.default.addClass(event.currentTarget.parentElement, 'p-focus');
-    }
-  }, {
-    key: "onBlur",
-    value: function onBlur(event) {
-      _DomHandler.default.removeClass(event.currentTarget.parentElement, 'p-focus');
-    }
-  }, {
-    key: "onDragEnter",
-    value: function onDragEnter(event) {
-      if (!this.props.disabled) {
-        event.stopPropagation();
-        event.preventDefault();
-      }
-    }
-  }, {
-    key: "onDragOver",
-    value: function onDragOver(event) {
-      if (!this.props.disabled) {
-        _DomHandler.default.addClass(this.content, 'p-fileupload-highlight');
-
-        event.stopPropagation();
-        event.preventDefault();
-      }
-    }
-  }, {
-    key: "onDragLeave",
-    value: function onDragLeave(event) {
-      if (!this.props.disabled) {
-        _DomHandler.default.removeClass(this.content, 'p-fileupload-highlight');
-      }
-    }
-  }, {
-    key: "onDrop",
-    value: function onDrop(event) {
-      if (!this.props.disabled) {
-        _DomHandler.default.removeClass(this.content, 'p-fileupload-highlight');
-
-        event.stopPropagation();
-        event.preventDefault();
-        var files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
-        var allowDrop = this.props.multiple || files && files.length === 1;
-
-        if (allowDrop) {
-          this.onFileSelect(event);
-        }
-      }
-    }
-  }, {
-    key: "onSimpleUploaderClick",
-    value: function onSimpleUploaderClick() {
-      if (this.hasFiles()) {
-        this.upload();
-      }
-    }
-  }, {
-    key: "renderChooseButton",
-    value: function renderChooseButton() {
-      var _this4 = this;
-
-      var className = (0, _classnames.default)('p-button p-fileupload-choose p-component p-button-text-icon-left');
-      return _react.default.createElement("span", {
-        icon: "pi pi-plus",
-        className: className
-      }, _react.default.createElement("input", {
-        ref: function ref(el) {
-          return _this4.fileInput = el;
-        },
-        type: "file",
-        onChange: this.onFileSelect,
-        onFocus: this.onFocus,
-        onBlur: this.onBlur,
-        multiple: this.props.multiple,
-        accept: this.props.accept,
-        disabled: this.props.disabled
-      }), _react.default.createElement("span", {
-        className: "p-button-icon p-button-icon-left p-clickable pi pi-fw pi-plus"
-      }), _react.default.createElement("span", {
-        className: "p-button-text p-clickable"
-      }, this.props.chooseLabel));
-    }
-  }, {
-    key: "renderFiles",
-    value: function renderFiles() {
-      var _this5 = this;
-
-      return _react.default.createElement("div", {
-        className: "p-fileupload-files"
-      }, this.state.files.map(function (file, index) {
-        var preview = _this5.isImage(file) ? _react.default.createElement("div", null, _react.default.createElement("img", {
-          alt: file.name,
-          role: "presentation",
-          src: file.objectURL,
-          width: _this5.props.previewWidth
-        })) : null;
-
-        var fileName = _react.default.createElement("div", null, file.name);
-
-        var size = _react.default.createElement("div", null, _this5.formatSize(file.size));
-
-        var removeButton = _react.default.createElement("div", null, _react.default.createElement(_Button.Button, {
-          type: "button",
-          icon: "pi pi-times",
-          onClick: function onClick() {
-            return _this5.remove(index);
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+            _iterator2.return();
           }
-        }));
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
 
-        return _react.default.createElement("div", {
-          className: "p-fileupload-row",
-          key: file.name + file.type + file.size
-        }, preview, fileName, size, removeButton);
-      }));
+      xhr.upload.addEventListener('progress', event => {
+        if (event.lengthComputable) {
+          this.setState({
+            progress: Math.round(event.loaded * 100 / event.total)
+          });
+        }
+
+        if (this.props.onProgress) {
+          this.props.onProgress({
+            originalEvent: event,
+            progress: this.progress
+          });
+        }
+
+        ;
+      });
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          this.setState({
+            progress: 0
+          });
+
+          if (xhr.status >= 200 && xhr.status < 300) {
+            if (this.props.onUpload) {
+              this.props.onUpload({
+                xhr: xhr,
+                files: this.files
+              });
+            }
+          } else {
+            if (this.props.onError) {
+              this.props.onError({
+                xhr: xhr,
+                files: this.files
+              });
+            }
+          }
+
+          this.clear();
+        }
+      };
+
+      xhr.open('POST', this.props.url, true);
+
+      if (this.props.onBeforeSend) {
+        this.props.onBeforeSend({
+          'xhr': xhr,
+          'formData': formData
+        });
+      }
     }
-  }, {
-    key: "renderAdvanced",
-    value: function renderAdvanced() {
-      var _this6 = this;
 
-      var className = (0, _classnames.default)('p-fileupload p-component', this.props.className);
-      var uploadButton, cancelButton, filesList, progressBar;
-      var chooseButton = this.renderChooseButton();
+    ;
+    xhr.open('POST', this.props.url, true);
 
-      if (!this.props.auto) {
-        uploadButton = _react.default.createElement(_Button.Button, {
-          label: this.props.uploadLabel,
-          icon: "pi pi-upload",
-          onClick: this.upload,
-          disabled: this.props.disabled || !this.hasFiles()
-        });
-        cancelButton = _react.default.createElement(_Button.Button, {
-          label: this.props.cancelLabel,
-          icon: "pi pi-times",
-          onClick: this.clear,
-          disabled: this.props.disabled || !this.hasFiles()
-        });
+    if (this.props.onBeforeSend) {
+      let doSend = this.props.onBeforeSend({
+        'xhr': xhr,
+        'formData': formData
+      });
+
+      if (doSend === false) {
+        return;
       }
+    }
+  }
 
-      if (this.hasFiles()) {
-        filesList = this.renderFiles();
-        progressBar = _react.default.createElement(_ProgressBar.ProgressBar, {
-          value: this.state.progress,
-          showValue: false
-        });
+  clear() {
+    this.setState({
+      files: []
+    });
+
+    if (this.props.onClear) {
+      this.props.onClear();
+    }
+
+    this.clearInputElement();
+  }
+
+  onFocus(event) {
+    _DomHandler.default.addClass(event.currentTarget.parentElement, 'p-focus');
+  }
+
+  onBlur(event) {
+    _DomHandler.default.removeClass(event.currentTarget.parentElement, 'p-focus');
+  }
+
+  onDragEnter(event) {
+    if (!this.props.disabled) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+  onDragOver(event) {
+    if (!this.props.disabled) {
+      _DomHandler.default.addClass(this.content, 'p-fileupload-highlight');
+
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+  onDragLeave(event) {
+    if (!this.props.disabled) {
+      _DomHandler.default.removeClass(this.content, 'p-fileupload-highlight');
+    }
+  }
+
+  onDrop(event) {
+    if (!this.props.disabled) {
+      _DomHandler.default.removeClass(this.content, 'p-fileupload-highlight');
+
+      event.stopPropagation();
+      event.preventDefault();
+      let files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
+      let allowDrop = this.props.multiple || files && files.length === 1;
+
+      if (allowDrop) {
+        this.onFileSelect(event);
       }
+    }
+  }
+
+  onSimpleUploaderClick() {
+    if (this.hasFiles()) {
+      this.upload();
+    }
+  }
+
+  renderChooseButton() {
+    let className = (0, _classnames.default)('p-button p-fileupload-choose p-component p-button-text-icon-left');
+    return _react.default.createElement("span", {
+      icon: "pi pi-plus",
+      className: className
+    }, _react.default.createElement("input", {
+      ref: el => this.fileInput = el,
+      type: "file",
+      onChange: this.onFileSelect,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur,
+      multiple: this.props.multiple,
+      accept: this.props.accept,
+      disabled: this.props.disabled
+    }), _react.default.createElement("span", {
+      className: "p-button-icon p-button-icon-left p-clickable pi pi-fw pi-plus"
+    }), _react.default.createElement("span", {
+      className: "p-button-text p-clickable"
+    }, this.props.chooseLabel));
+  }
+
+  renderFiles() {
+    return _react.default.createElement("div", {
+      className: "p-fileupload-files"
+    }, this.state.files.map((file, index) => {
+      let preview = this.isImage(file) ? _react.default.createElement("div", null, _react.default.createElement("img", {
+        alt: file.name,
+        role: "presentation",
+        src: file.objectURL,
+        width: this.props.previewWidth
+      })) : null;
+
+      let fileName = _react.default.createElement("div", null, file.name);
+
+      let size = _react.default.createElement("div", null, this.formatSize(file.size));
+
+      let removeButton = _react.default.createElement("div", null, _react.default.createElement(_Button.Button, {
+        type: "button",
+        icon: "pi pi-times",
+        onClick: () => this.remove(index)
+      }));
 
       return _react.default.createElement("div", {
-        id: this.props.id,
-        className: className,
-        style: this.props.style
-      }, _react.default.createElement("div", {
-        className: "p-fileupload-buttonbar"
-      }, chooseButton, uploadButton, cancelButton), _react.default.createElement("div", {
-        ref: function ref(el) {
-          _this6.content = el;
-        },
-        className: "p-fileupload-content",
-        onDragEnter: this.onDragEnter,
-        onDragOver: this.onDragOver,
-        onDragLeave: this.onDragLeave,
-        onDrop: this.onDrop
-      }, progressBar, _react.default.createElement(_Messages.Messages, {
-        ref: function ref(el) {
-          return _this6.messagesUI = el;
-        }
-      }), filesList));
-    }
-  }, {
-    key: "renderBasic",
-    value: function renderBasic() {
-      var _this7 = this;
+        className: "p-fileupload-row",
+        key: file.name + file.type + file.size
+      }, preview, fileName, size, removeButton);
+    }));
+  }
 
-      var buttonClassName = (0, _classnames.default)('p-button p-fileupload-choose p-component p-button-text-icon-left', {
-        'p-fileupload-choose-selected': this.hasFiles()
-      });
-      var iconClassName = (0, _classnames.default)('p-button-icon-left pi', {
-        'pi-plus': !this.hasFiles() || this.props.auto,
-        'pi-upload': this.hasFiles() && !this.props.auto
-      });
-      return _react.default.createElement("span", {
-        className: buttonClassName,
-        onMouseUp: this.onSimpleUploaderClick
-      }, _react.default.createElement("span", {
-        className: iconClassName
-      }), _react.default.createElement("span", {
-        className: "p-button-text p-clickable"
-      }, this.hasFiles() ? this.state.files[0].name : this.props.chooseLabel), _react.default.createElement("input", {
-        ref: function ref(el) {
-          return _this7.fileInput = el;
-        },
-        type: "file",
-        multiple: this.props.multiple,
-        accept: this.props.accept,
-        disabled: this.props.disabled,
-        onChange: this.onFileSelect,
-        onFocus: this.onFocus,
-        onBlur: this.onBlur
-      }));
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      if (this.props.mode === 'advanced') return this.renderAdvanced();else if (this.props.mode === 'basic') return this.renderBasic();
-    }
-  }]);
+  renderAdvanced() {
+    let className = (0, _classnames.default)('p-fileupload p-component', this.props.className);
+    let uploadButton, cancelButton, filesList, progressBar;
+    let chooseButton = this.renderChooseButton();
 
-  return FileUpload;
-}(_react.Component);
+    if (!this.props.auto) {
+      uploadButton = _react.default.createElement(_Button.Button, {
+        label: this.props.uploadLabel,
+        icon: "pi pi-upload",
+        onClick: this.upload,
+        disabled: this.props.disabled || !this.hasFiles()
+      });
+      cancelButton = _react.default.createElement(_Button.Button, {
+        label: this.props.cancelLabel,
+        icon: "pi pi-times",
+        onClick: this.clear,
+        disabled: this.props.disabled || !this.hasFiles()
+      });
+    }
+
+    if (this.hasFiles()) {
+      filesList = this.renderFiles();
+      progressBar = _react.default.createElement(_ProgressBar.ProgressBar, {
+        value: this.state.progress,
+        showValue: false
+      });
+    }
+
+    return _react.default.createElement("div", {
+      id: this.props.id,
+      className: className,
+      style: this.props.style
+    }, _react.default.createElement("div", {
+      className: "p-fileupload-buttonbar"
+    }, chooseButton, uploadButton, cancelButton), _react.default.createElement("div", {
+      ref: el => {
+        this.content = el;
+      },
+      className: "p-fileupload-content",
+      onDragEnter: this.onDragEnter,
+      onDragOver: this.onDragOver,
+      onDragLeave: this.onDragLeave,
+      onDrop: this.onDrop
+    }, progressBar, _react.default.createElement(_Messages.Messages, {
+      ref: el => this.messagesUI = el
+    }), filesList));
+  }
+
+  renderBasic() {
+    let buttonClassName = (0, _classnames.default)('p-button p-fileupload-choose p-component p-button-text-icon-left', {
+      'p-fileupload-choose-selected': this.hasFiles()
+    });
+    let iconClassName = (0, _classnames.default)('p-button-icon-left pi', {
+      'pi-plus': !this.hasFiles() || this.props.auto,
+      'pi-upload': this.hasFiles() && !this.props.auto
+    });
+    return _react.default.createElement("span", {
+      className: buttonClassName,
+      onMouseUp: this.onSimpleUploaderClick
+    }, _react.default.createElement("span", {
+      className: iconClassName
+    }), _react.default.createElement("span", {
+      className: "p-button-text p-clickable"
+    }, this.hasFiles() ? this.state.files[0].name : this.props.chooseLabel), _react.default.createElement("input", {
+      ref: el => this.fileInput = el,
+      type: "file",
+      multiple: this.props.multiple,
+      accept: this.props.accept,
+      disabled: this.props.disabled,
+      onChange: this.onFileSelect,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur
+    }));
+  }
+
+  render() {
+    if (this.props.mode === 'advanced') return this.renderAdvanced();else if (this.props.mode === 'basic') return this.renderBasic();
+  }
+
+}
 
 exports.FileUpload = FileUpload;
 

@@ -124,17 +124,17 @@ export class BodyCell extends Component {
             let valid = this.props.editorValidator(this.props);
             if (valid) {
                 if (this.props.onEditorSubmit) {
-                    this.props.onEditorSubmit(event, this.props)
+                    this.props.onEditorSubmit(event, this.props, this)
                 }
                 this.closeCell();
             } // as per previous version if not valid and another editor is open, keep invalid data editor open.
         }
         else {
             if (submit && this.props.onEditorSubmit) {
-                this.props.onEditorSubmit(event,this.props)
+                this.props.onEditorSubmit(event,this.props, this)
             }
             else if (this.props.onEditorCancel) {
-                this.props.onEditorCancel(event,this.props);
+                this.props.onEditorCancel(event,this.props, this);
             }
             this.closeCell();
         }

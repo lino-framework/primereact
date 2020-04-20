@@ -267,25 +267,18 @@ class FileUpload extends _react.Component {
       xhr.open('POST', this.props.url, true);
 
       if (this.props.onBeforeSend) {
-        this.props.onBeforeSend({
+        let doSend = this.props.onBeforeSend({
           'xhr': xhr,
           'formData': formData
         });
+
+        if (doSend === false) {
+          return;
+        }
       }
-    }
 
-    ;
-    xhr.open('POST', this.props.url, true);
-
-    if (this.props.onBeforeSend) {
-      let doSend = this.props.onBeforeSend({
-        'xhr': xhr,
-        'formData': formData
-      });
-
-      if (doSend === false) {
-        return;
-      }
+      xhr.withCredentials = this.props.withCredentials;
+      xhr.send(formData);
     }
   }
 

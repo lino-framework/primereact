@@ -242,27 +242,20 @@ export class FileUpload extends Component {
                     this.clear();
                 }
             };
-            
+
             xhr.open('POST', this.props.url, true);
-            
-            if(this.props.onBeforeSend) {
-                this.props.onBeforeSend({
+
+            if (this.props.onBeforeSend) {
+                let doSend = this.props.onBeforeSend({
                     'xhr': xhr,
-                    'formData': formData 
+                    'formData': formData
                 });
+                if (doSend === false) {
+                    return
+                }
             }
-        };
-        
-        xhr.open('POST', this.props.url, true);
-		
-        if(this.props.onBeforeSend) {
-            let doSend = this.props.onBeforeSend({
-                'xhr': xhr,
-                'formData': formData 
-            });
-            if (doSend === false) {
-                return
-            }
+            xhr.withCredentials = this.props.withCredentials;
+            xhr.send(formData);
         }
     }
 

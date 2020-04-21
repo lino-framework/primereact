@@ -89,7 +89,7 @@ class BodyCell extends _react.Component {
       }
   }
 
-  onClick() {
+  onClick(e) {
     if (this.props.editMode !== 'row') {
       this.editingCellClick = true;
 
@@ -102,7 +102,7 @@ class BodyCell extends _react.Component {
           this.bindDocumentEditListener();
         }
 
-        this.props.onEditorOpen && this.props.onEditorOpen(this.props);
+        this.props.onEditorOpen && this.props.onEditorOpen(e, this.props);
       }
     }
   }

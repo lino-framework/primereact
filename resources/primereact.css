@@ -2030,31 +2030,6 @@ input[type=text]::-ms-clear {
     -ms-transform: translateX(1.250em);
     transform: translateX(1.250em);
 }
-.p-inputtextarea-resizable {
-    overflow: hidden;
-    resize: none;
-}
-
-.p-fluid .p-inputtextarea {
-    width: 100%;
-}
-
-/* Floating Label */
-.p-float-label > textarea ~ label {
-  left: .25em;
-  top: .75em;
-}
-
-.p-float-label > textarea:focus ~ label,
-.p-float-label > textarea.p-filled ~ label {
-  top:-.75em;
-  font-size:12px;
-}
-
-.p-float-label > textarea:-webkit-autofill ~ label {
-  top:-.75em;
-  font-size:12px;
-}
 .p-inputtext {
     margin: 0;
     outline: medium none;
@@ -2155,6 +2130,31 @@ input[type=text]::-ms-clear {
 }
 
 .p-float-label > input:-webkit-autofill ~ label {
+  top:-.75em;
+  font-size:12px;
+}
+.p-inputtextarea-resizable {
+    overflow: hidden;
+    resize: none;
+}
+
+.p-fluid .p-inputtextarea {
+    width: 100%;
+}
+
+/* Floating Label */
+.p-float-label > textarea ~ label {
+  left: .25em;
+  top: .75em;
+}
+
+.p-float-label > textarea:focus ~ label,
+.p-float-label > textarea.p-filled ~ label {
+  top:-.75em;
+  font-size:12px;
+}
+
+.p-float-label > textarea:-webkit-autofill ~ label {
   top:-.75em;
   font-size:12px;
 }
@@ -4053,6 +4053,46 @@ input[type=text]::-ms-clear {
 .p-splitbutton.p-button-secondary .p-button:first-child {
     border-right: 0 none;
 }
+/** TabMenu **/
+.p-tabmenu .p-tabmenu-nav { 
+    margin: 0;
+    padding: .25em .5em 0 .25em; 
+}
+
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem { 
+    list-style: none; 
+    float: left; 
+    position: relative; 
+    margin: 0 .2em 1px 0;  
+    padding: 0; 
+    white-space: nowrap;
+    display: block;
+    border-bottom: 0;
+    top: 1px; 
+}
+
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem a { 
+    float: left; 
+    padding: 0.5em 1em;
+    text-decoration: none; 
+}
+
+.p-tabmenu .p-tabmenu-nav a { 
+    padding: 0.5em 1em;
+}
+
+.p-tabmenu .p-menuitem-icon  { 
+    margin-right: .25em;
+    vertical-align: middle;
+}
+
+.p-tabmenu .p-menuitem-text  { 
+    vertical-align: middle;
+}
+
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-disabled a {
+     cursor: default;
+}
 .p-steps ul {
     list-style-type: none;
     padding: 0;
@@ -4111,46 +4151,6 @@ input[type=text]::-ms-clear {
 .p-steps .p-steps-item {
      width: 25%;
  }
-/** TabMenu **/
-.p-tabmenu .p-tabmenu-nav { 
-    margin: 0;
-    padding: .25em .5em 0 .25em; 
-}
-
-.p-tabmenu .p-tabmenu-nav .p-tabmenuitem { 
-    list-style: none; 
-    float: left; 
-    position: relative; 
-    margin: 0 .2em 1px 0;  
-    padding: 0; 
-    white-space: nowrap;
-    display: block;
-    border-bottom: 0;
-    top: 1px; 
-}
-
-.p-tabmenu .p-tabmenu-nav .p-tabmenuitem a { 
-    float: left; 
-    padding: 0.5em 1em;
-    text-decoration: none; 
-}
-
-.p-tabmenu .p-tabmenu-nav a { 
-    padding: 0.5em 1em;
-}
-
-.p-tabmenu .p-menuitem-icon  { 
-    margin-right: .25em;
-    vertical-align: middle;
-}
-
-.p-tabmenu .p-menuitem-text  { 
-    vertical-align: middle;
-}
-
-.p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-disabled a {
-     cursor: default;
-}
 .p-tabview {
     padding: .25em; 
 }

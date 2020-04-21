@@ -69,7 +69,7 @@ export class BodyCell extends Component {
         }
     }
     
-    onClick() {
+    onClick(e) {
         if (this.props.editMode !== 'row') {
             this.editingCellClick = true;
 
@@ -81,7 +81,7 @@ export class BodyCell extends Component {
             if (this.props.editorValidatorEvent === 'click') {
                 this.bindDocumentEditListener();
             }
-            this.props.onEditorOpen && this.props.onEditorOpen(this.props)
+            this.props.onEditorOpen && this.props.onEditorOpen(e, this.props)
         }
     }}
 

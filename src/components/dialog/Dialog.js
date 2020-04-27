@@ -16,6 +16,7 @@ export class Dialog extends Component {
         modal: true,
         onHide: null,
         onShow: null,
+        onToggleMaximize: null,
         contentStyle: null,
         closeOnEscape: true,
         dismissableMask: false,
@@ -41,6 +42,7 @@ export class Dialog extends Component {
         modal: PropTypes.bool,
         onHide: PropTypes.func.isRequired,
         onShow: PropTypes.func,
+        onToggleMaximize: PropTypes.func,
         contentStyle: PropTypes.object,
         closeOnEscape: PropTypes.bool,
         dismissableMask: PropTypes.bool,
@@ -125,6 +127,7 @@ export class Dialog extends Component {
         this.setState({
             maximized: !this.state.maximized
         });
+        this.props.onToggleMaximize && this.props.onToggleMaximize(!this.state.maximized, this);
         event.preventDefault();
     }
 

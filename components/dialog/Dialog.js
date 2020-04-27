@@ -93,6 +93,7 @@ class Dialog extends _react.Component {
     this.setState({
       maximized: !this.state.maximized
     });
+    this.props.onToggleMaximize && this.props.onToggleMaximize(!this.state.maximized, this);
     event.preventDefault();
   }
 
@@ -333,6 +334,7 @@ _defineProperty(Dialog, "defaultProps", {
   modal: true,
   onHide: null,
   onShow: null,
+  onToggleMaximize: null,
   contentStyle: null,
   closeOnEscape: true,
   dismissableMask: false,
@@ -358,6 +360,7 @@ _defineProperty(Dialog, "propTypes", {
   modal: _propTypes.default.bool,
   onHide: _propTypes.default.func.isRequired,
   onShow: _propTypes.default.func,
+  onToggleMaximize: _propTypes.default.func,
   contentStyle: _propTypes.default.object,
   closeOnEscape: _propTypes.default.bool,
   dismissableMask: _propTypes.default.bool,

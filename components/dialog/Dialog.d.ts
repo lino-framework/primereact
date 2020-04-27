@@ -22,6 +22,7 @@ interface DialogProps {
     focusOnShow?: boolean;
     onHide(): void;
     onShow?(): void;
+    onToggleMaximize?(): void;
     iconsTemplate?(): JSX.Element | undefined;
 }
 
